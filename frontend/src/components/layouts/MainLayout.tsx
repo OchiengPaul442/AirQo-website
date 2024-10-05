@@ -4,6 +4,7 @@ import ActionButtons from './ActionButtons';
 import Footer from './Footer';
 import Highlight from './Highlight';
 import Navbar from './Navbar';
+import NewsLetter from './NewsLetter';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <Highlight />
         <ActionButtons />
       </div>
+      <NewsLetter />
       <Footer />
     </div>
   );
