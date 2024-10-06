@@ -71,9 +71,9 @@ const Footer = () => {
         </div>
 
         {/* Links Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex justify-between flex-wrap gap-8">
           <div className="flex flex-col">
-            <h3 className="font-semibold text-gray-800 mb-4">Our Work</h3>
+            <h3 className="font-semibold text-gray-800 mb-4">Our Products</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">

@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 
 import ActionButtons from './ActionButtons';
@@ -12,7 +13,7 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen w-full flex flex-col">
       {/* Navbar */}
       <header className="sticky top-0 z-50">
         <Navbar />
@@ -20,7 +21,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
       {/* Main Content */}
       <main className="flex-1 py-8">
-        <div className="max-w-screen-xl mx-auto px-4">{children}</div>
+        <div className="px-4 lg:px-0 text-gray-700">{children}</div>
 
         {/* Highlight Section */}
         <section className="my-8">
@@ -31,15 +32,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <section className="my-8">
           <ActionButtons />
         </section>
+      </main>
 
+      <footer>
         {/* Newsletter Section */}
         <section className="my-16">
           <NewsLetter />
         </section>
-      </main>
 
-      {/* Footer */}
-      <footer>
+        {/* Footer Section */}
         <Footer />
       </footer>
     </div>

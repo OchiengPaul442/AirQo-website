@@ -19,7 +19,7 @@ const ActionButtons = () => {
 
       {/* Card 2 */}
       <Link href="#">
-        <div className="flex flex-col justify-between bg-blue-100 text-blue-600 md:rounded-xl p-8 w-full cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95 focus:scale-105 focus:outline-none">
+        <div className="flex flex-col justify-between bg-blue-50 text-blue-600 md:rounded-xl p-8 w-full cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95 focus:scale-105 focus:outline-none">
           <div>
             <h3 className="text-2xl font-medium mb-4">
               Get involved. Learn about ways you can support our vision.

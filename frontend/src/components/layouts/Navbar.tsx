@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { RiCloseLargeFill } from 'react-icons/ri';
-import { TbMenu } from 'react-icons/tb';
+import { TbChevronDown, TbMenu } from 'react-icons/tb';
 
 import {
   NavigationMenu,
@@ -18,6 +18,11 @@ import {
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+
+  const toggleExpandedMenu = (menuName: string) => {
+    setExpandedMenu(expandedMenu === menuName ? null : menuName);
+  };
 
   return (
     <nav className="w-full bg-white p-4">
@@ -126,7 +131,7 @@ const Navbar = () => {
             {/* Navigation Links */}
             <CustomButton
               onClick={() => alert('Primary Button Clicked')}
-              className="text-blue-600 bg-blue-100 rounded-none hover:bg-blue-200"
+              className="text-blue-600 bg-blue-50 hover:bg-blue-50 rounded-none"
             >
               Get involved
             </CustomButton>
@@ -148,59 +153,107 @@ const Navbar = () => {
           <div className="absolute top-16 left-0 w-full bg-white shadow-lg p-4 md:hidden z-40">
             {/* Products Section - Mobile */}
             <div className="mb-4">
-              <p className="text-gray-800 font-medium mb-2">Products</p>
-              <Link
-                href="/solution-1"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+              <button
+                onClick={() => toggleExpandedMenu('products')}
+                className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
               >
-                Solution 1
-              </Link>
-              <Link
-                href="/solution-2"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                Products
+                <TbChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    expandedMenu === 'products' ? 'rotate-180' : 'rotate-0'
+                  }`}
+                />
+              </button>
+              <div
+                className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
+                  expandedMenu === 'products' ? 'max-h-screen' : 'max-h-0'
+                }`}
               >
-                Solution 2
-              </Link>
+                <Link
+                  href="/solution-1"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Solution 1
+                </Link>
+                <Link
+                  href="/solution-2"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Solution 2
+                </Link>
+              </div>
             </div>
 
             {/* Solutions Section - Mobile */}
             <div className="mb-4">
-              <p className="text-gray-800 font-medium mb-2">Solutions</p>
-              <Link
-                href="/solution-1"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+              <button
+                onClick={() => toggleExpandedMenu('solutions')}
+                className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
               >
-                Solution 1
-              </Link>
-              <Link
-                href="/solution-2"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                Solutions
+                <TbChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    expandedMenu === 'solutions' ? 'rotate-180' : 'rotate-0'
+                  }`}
+                />
+              </button>
+              <div
+                className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
+                  expandedMenu === 'solutions' ? 'max-h-screen' : 'max-h-0'
+                }`}
               >
-                Solution 2
-              </Link>
+                <Link
+                  href="/solution-1"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Solution 1
+                </Link>
+                <Link
+                  href="/solution-2"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Solution 2
+                </Link>
+              </div>
             </div>
 
             {/* About Section - Mobile */}
             <div className="mb-4">
-              <p className="text-gray-800 font-medium mb-2">About</p>
-              <Link
-                href="/about-us"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+              <button
+                onClick={() => toggleExpandedMenu('about')}
+                className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
               >
-                About Us
-              </Link>
-              <Link
-                href="/team"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                About
+                <TbChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    expandedMenu === 'about' ? 'rotate-180' : 'rotate-0'
+                  }`}
+                />
+              </button>
+              <div
+                className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
+                  expandedMenu === 'about' ? 'max-h-screen' : 'max-h-0'
+                }`}
               >
-                Our Team
-              </Link>
+                <Link
+                  href="/about-us"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/team"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Our Team
+                </Link>
+              </div>
             </div>
 
             {/* Navigation Links - Mobile */}
             <CustomButton
               onClick={() => alert('Primary Button Clicked')}
-              className="w-full text-blue-600 bg-blue-100 rounded-none hover:bg-blue-200 mb-2"
+              className="w-full text-blue-600 bg-blue-50 hover:bg-blue-50 rounded-none mb-2"
             >
               Get involved
             </CustomButton>
