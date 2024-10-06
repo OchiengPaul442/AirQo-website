@@ -79,34 +79,13 @@ const menuItems: MenuItems = {
     },
   ],
   'About AirQo': [
-    {
-      title: 'About Us',
-      href: '/about-us',
-    },
-    {
-      title: 'Resources',
-      href: '/resources',
-    },
-    {
-      title: 'Careers',
-      href: '/careers',
-    },
-    {
-      title: 'Contact Us',
-      href: '/contact-us',
-    },
-    {
-      title: 'Events',
-      href: '/events',
-    },
-    {
-      title: 'Press',
-      href: '/press',
-    },
-    {
-      title: 'CLEAN-Air Forum',
-      href: '/clean-air-forum',
-    },
+    { title: 'About Us', href: '/about-us' },
+    { title: 'Resources', href: '/resources' },
+    { title: 'Careers', href: '/careers' },
+    { title: 'Contact Us', href: '/contact-us' },
+    { title: 'Events', href: '/events' },
+    { title: 'Press', href: '/press' },
+    { title: 'CLEAN-Air Forum', href: '/clean-air-forum' },
   ],
 };
 
@@ -135,7 +114,10 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
             {colItems.map((item) => (
               <li key={item.href}>
                 <NavigationMenuLink asChild>
-                  <Link href={item.href} className="block">
+                  <Link
+                    href={item.href}
+                    className="block p-2 rounded-xl hover:bg-blue-50 transition"
+                  >
                     <div className="text-lg font-semibold text-gray-800">
                       {item.title}
                     </div>
@@ -203,7 +185,7 @@ const Navbar: React.FC = () => {
             {/* Navigation Links */}
             <CustomButton
               onClick={() => alert('Primary Button Clicked')}
-              className="text-blue-600 bg-blue-50 hover:bg-blue-50 rounded-none"
+              className="text-blue-600 bg-blue-50 hover:bg-blue-100 transition rounded-none"
             >
               Get involved
             </CustomButton>
@@ -231,9 +213,7 @@ const Navbar: React.FC = () => {
                 >
                   {title}
                   <TbChevronDown
-                    className={`ml-2 transition-transform duration-300 ${
-                      expandedMenu === title ? 'rotate-180' : 'rotate-0'
-                    }`}
+                    className={`ml-2 transition-transform duration-300 ${expandedMenu === title ? 'rotate-180' : 'rotate-0'}`}
                   />
                 </button>
                 <div
@@ -245,7 +225,7 @@ const Navbar: React.FC = () => {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition rounded"
                     >
                       {item.title}
                     </Link>
@@ -257,7 +237,7 @@ const Navbar: React.FC = () => {
             {/* Navigation Links - Mobile */}
             <CustomButton
               onClick={() => alert('Primary Button Clicked')}
-              className="w-full text-blue-600 bg-blue-50 hover:bg-blue-50 rounded-none mb-2"
+              className="w-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition rounded-none mb-2"
             >
               Get involved
             </CustomButton>
