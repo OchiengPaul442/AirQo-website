@@ -33,27 +33,27 @@ const menuItems: MenuItems = {
     {
       title: 'Binos Monitor',
       description: 'Built in Africa for African cities',
-      href: '/products/monitor',
+      href: '/monitor',
     },
     {
       title: 'Analytics Dashboard',
       description: 'Air quality analytics for African cities',
-      href: '/products/analytics',
+      href: '/analytics',
     },
     {
       title: 'Mobile App',
       description: 'Discover the quality of air around you',
-      href: '/products/mobile-app',
+      href: '/mobile-app',
     },
     {
       title: 'Air Quality API',
       description: 'Access raw and calibrated data',
-      href: '/products/api',
+      href: '/api',
     },
     {
       title: 'AirQalibrate',
       description: 'Calibrate your low-cost sensor data',
-      href: '/products/calibrate',
+      href: '/calibrate',
     },
     {
       title: 'Air Quality Reporting Tool',

@@ -149,8 +149,8 @@ const HomeStatsSection: React.FC = () => {
               className={`px-6 py-3 ${
                 activeTab === 'cities'
                   ? 'bg-[#2E3A59] text-white z-10 scale-105 rounded-lg'
-                  : 'bg-[#E7EDF3] text-[#2E3A59] -ml-1 rounded-l-lg'
-              } border border-[#E7EDF3]`}
+                  : 'bg-[#DFE8F9] text-[#2E3A59] -ml-1 rounded-l-lg'
+              } border border-[#DFE8F9]`}
             >
               For African cities
             </CustomButton>
@@ -161,8 +161,8 @@ const HomeStatsSection: React.FC = () => {
               className={`px-6 py-3 ${
                 activeTab === 'communities'
                   ? 'bg-[#2E3A59] text-white z-10 scale-105 rounded-lg'
-                  : 'bg-[#E7EDF3] text-[#2E3A59] -ml-1 rounded-r-lg'
-              } border border-[#E7EDF3]`}
+                  : 'bg-[#DFE8F9] text-[#2E3A59] -ml-1 rounded-r-lg'
+              } border border-[#DFE8F9]`}
             >
               For Communities
             </CustomButton>
