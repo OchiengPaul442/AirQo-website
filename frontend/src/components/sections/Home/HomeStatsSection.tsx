@@ -35,7 +35,7 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
       {items.map((item, index) => (
         <div
           key={index}
-          className={`${openItem === index ? 'bg-[#E7EDF3] rounded-xl' : ''} transition-all`}
+          className={`${openItem === index ? 'bg-[#DFE8F9] rounded-xl' : ''} transition-all`}
         >
           <button
             onClick={() => toggleItem(index)}
@@ -46,7 +46,7 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
           <div
             className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${
               openItem === index
-                ? 'max-h-screen bg-[#E7EDF3] rounded-b-lg px-4 py-2'
+                ? 'max-h-screen rounded-b-lg px-4 py-2'
                 : 'max-h-0'
             }`}
           >
@@ -103,7 +103,7 @@ const HomeStatsSection: React.FC = () => {
   };
 
   return (
-    <section className="py-8 px-6 w-full space-y-20 bg-[#f3f5f9]">
+    <section className="py-8 px-6 w-full space-y-20 bg-[#ECF2FF]">
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Partner Logos Section */}
         <section className="max-w-6xl mx-auto py-12 px-4">
