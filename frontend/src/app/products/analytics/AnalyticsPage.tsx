@@ -131,7 +131,7 @@ const AnalyticsPage = () => {
         </div>
       </section>
 
-      <section className="bg-blue-100 py-16 px-4">
+      <section className="bg-blue-100 py-16 px-4 overflow-hidden">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center flex flex-col items-center space-y-6">
             <h2 className="text-[32px] font-bold">
