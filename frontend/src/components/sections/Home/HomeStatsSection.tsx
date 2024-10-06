@@ -103,7 +103,7 @@ const HomeStatsSection: React.FC = () => {
   };
 
   return (
-    <section className="py-8 px-6 w-full space-y-20 bg-[#ECF2FF]">
+    <section className="py-8 px-4 w-full space-y-20 bg-[#ECF2FF]">
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Partner Logos Section */}
         <section className="max-w-6xl mx-auto py-12 px-4">

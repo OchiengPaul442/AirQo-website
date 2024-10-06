@@ -16,8 +16,146 @@ import {
   NavigationMenuViewport,
 } from '@/components/ui';
 
-const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+// Type definitions
+type MenuItem = {
+  title: string;
+  description?: string;
+  href: string;
+};
+
+type MenuItems = {
+  [key: string]: MenuItem[];
+};
+
+// Data for menu items
+const menuItems: MenuItems = {
+  Products: [
+    {
+      title: 'Binos Monitor',
+      description: 'Built in Africa for African cities',
+      href: '/products/monitor',
+    },
+    {
+      title: 'Analytics Dashboard',
+      description: 'Air quality analytics for African cities',
+      href: '/products/analytics',
+    },
+    {
+      title: 'Mobile App',
+      description: 'Discover the quality of air around you',
+      href: '/products/mobile-app',
+    },
+    {
+      title: 'Air Quality API',
+      description: 'Access raw and calibrated data',
+      href: '/products/api',
+    },
+    {
+      title: 'AirQalibrate',
+      description: 'Calibrate your low-cost sensor data',
+      href: '/products/calibrate',
+    },
+    {
+      title: 'Air Quality Reporting Tool',
+      description: 'Generate and download reports',
+      href: 'https://platform.airqo.net/reports/login',
+    },
+  ],
+  Solutions: [
+    {
+      title: 'For African Cities',
+      description: 'Advancing air quality management in African Cities',
+      href: '/for-african-cities',
+    },
+    {
+      title: 'For Communities',
+      description: 'Empowering communities with air quality information',
+      href: '/for-communities',
+    },
+    {
+      title: 'For Research',
+      description: 'Free access to air quality analytics',
+      href: '/for-research',
+    },
+  ],
+  'About AirQo': [
+    {
+      title: 'About Us',
+      href: '/about-us',
+    },
+    {
+      title: 'Resources',
+      href: '/resources',
+    },
+    {
+      title: 'Careers',
+      href: '/careers',
+    },
+    {
+      title: 'Contact Us',
+      href: '/contact-us',
+    },
+    {
+      title: 'Events',
+      href: '/events',
+    },
+    {
+      title: 'Press',
+      href: '/press',
+    },
+    {
+      title: 'CLEAN-Air Forum',
+      href: '/clean-air-forum',
+    },
+  ],
+};
+
+// Helper component for rendering dropdown items
+interface DropdownMenuContentProps {
+  title: string;
+  items: MenuItem[];
+}
+
+const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
+  title,
+  items,
+}) => (
+  <NavigationMenuContent className="bg-white shadow-lg md:w-[400px] lg:w-[600px] rounded-md p-4">
+    <div className="text-gray-500 mb-4">{title}</div>
+    <div className="flex gap-8">
+      {items
+        .reduce<MenuItem[][]>((acc, item, idx) => {
+          const colIdx = Math.floor(idx / Math.ceil(items.length / 2));
+          if (!acc[colIdx]) acc[colIdx] = [];
+          acc[colIdx].push(item);
+          return acc;
+        }, [])
+        .map((colItems, index) => (
+          <ul key={index} className="flex-1 space-y-3">
+            {colItems.map((item) => (
+              <li key={item.href}>
+                <NavigationMenuLink asChild>
+                  <Link href={item.href} className="block">
+                    <div className="text-lg font-semibold text-gray-800">
+                      {item.title}
+                    </div>
+                    {item.description && (
+                      <div className="text-sm text-gray-600">
+                        {item.description}
+                      </div>
+                    )}
+                  </Link>
+                </NavigationMenuLink>
+              </li>
+            ))}
+          </ul>
+        ))}
+    </div>
+  </NavigationMenuContent>
+);
+
+const Navbar: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
   const toggleExpandedMenu = (menuName: string) => {
@@ -53,80 +191,14 @@ const Navbar = () => {
         {/* Navigation Menu - Desktop */}
         <NavigationMenu className="hidden md:flex space-x-6 items-center">
           <NavigationMenuList className="space-x-3">
-            {/* Dropdown Menu 1 */}
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-gray-800 font-medium hover:text-blue-600 transition-colors">
-                Products
-              </NavigationMenuTrigger>
-              <NavigationMenuContent className="bg-white shadow-lg rounded-md p-4">
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/solution-1"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Solution 1
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/solution-2"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Solution 2
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            {/* Dropdown Menu 2 */}
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-gray-800 font-medium hover:text-blue-600 transition-colors">
-                Solutions
-              </NavigationMenuTrigger>
-              <NavigationMenuContent className="bg-white shadow-lg rounded-md p-4">
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/solution-1"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Solution 1
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/solution-2"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Solution 2
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            {/* Dropdown Menu 3 */}
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-gray-800 font-medium hover:text-blue-600 transition-colors">
-                About
-              </NavigationMenuTrigger>
-              <NavigationMenuContent className="bg-white shadow-lg rounded-md p-4">
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/about-us"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    About Us
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/team"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Our Team
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
+            {Object.entries(menuItems).map(([title, items]) => (
+              <NavigationMenuItem key={title}>
+                <NavigationMenuTrigger className="text-gray-800 font-medium hover:text-blue-600 transition-colors">
+                  {title}
+                </NavigationMenuTrigger>
+                <DropdownMenuContent title={title} items={items} />
+              </NavigationMenuItem>
+            ))}
 
             {/* Navigation Links */}
             <CustomButton
@@ -151,104 +223,36 @@ const Navbar = () => {
         {/* Navigation Menu - Mobile & Tablet */}
         {menuOpen && (
           <div className="absolute top-16 left-0 w-full bg-white shadow-lg p-4 md:hidden z-40">
-            {/* Products Section - Mobile */}
-            <div className="mb-4">
-              <button
-                onClick={() => toggleExpandedMenu('products')}
-                className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
-              >
-                Products
-                <TbChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    expandedMenu === 'products' ? 'rotate-180' : 'rotate-0'
+            {Object.entries(menuItems).map(([title, items]) => (
+              <div key={title} className="mb-4">
+                <button
+                  onClick={() => toggleExpandedMenu(title)}
+                  className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
+                >
+                  {title}
+                  <TbChevronDown
+                    className={`ml-2 transition-transform duration-300 ${
+                      expandedMenu === title ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
+                    expandedMenu === title ? 'max-h-screen' : 'max-h-0'
                   }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
-                  expandedMenu === 'products' ? 'max-h-screen' : 'max-h-0'
-                }`}
-              >
-                <Link
-                  href="/solution-1"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
-                  Solution 1
-                </Link>
-                <Link
-                  href="/solution-2"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Solution 2
-                </Link>
+                  {items.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      {item.title}
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            {/* Solutions Section - Mobile */}
-            <div className="mb-4">
-              <button
-                onClick={() => toggleExpandedMenu('solutions')}
-                className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
-              >
-                Solutions
-                <TbChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    expandedMenu === 'solutions' ? 'rotate-180' : 'rotate-0'
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
-                  expandedMenu === 'solutions' ? 'max-h-screen' : 'max-h-0'
-                }`}
-              >
-                <Link
-                  href="/solution-1"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Solution 1
-                </Link>
-                <Link
-                  href="/solution-2"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Solution 2
-                </Link>
-              </div>
-            </div>
-
-            {/* About Section - Mobile */}
-            <div className="mb-4">
-              <button
-                onClick={() => toggleExpandedMenu('about')}
-                className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
-              >
-                About
-                <TbChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    expandedMenu === 'about' ? 'rotate-180' : 'rotate-0'
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
-                  expandedMenu === 'about' ? 'max-h-screen' : 'max-h-0'
-                }`}
-              >
-                <Link
-                  href="/about-us"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  About Us
-                </Link>
-                <Link
-                  href="/team"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Our Team
-                </Link>
-              </div>
-            </div>
+            ))}
 
             {/* Navigation Links - Mobile */}
             <CustomButton

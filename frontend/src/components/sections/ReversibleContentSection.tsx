@@ -34,7 +34,7 @@ const ReversibleContentSection: React.FC<ReversibleContentSectionProps> = ({
   imageClassName = 'object-contain lg:object-cover',
 }) => {
   return (
-    <section className={cn(backgroundColor, 'py-16')}>
+    <section className={cn(backgroundColor, 'py-16 px-4')}>
       <div
         className={cn(
           'max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 px-6',

@@ -21,7 +21,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
       {/* Main Content */}
       <main className="flex-1 py-8">
-        <div className="px-4 lg:px-0 text-gray-700">{children}</div>
+        <div className="lg:px-0 text-gray-700">{children}</div>
 
         {/* Highlight Section */}
         <section className="my-8">

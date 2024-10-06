@@ -26,7 +26,7 @@ const AnalyticsContentSection: React.FC<AnalyticsContentSectionProps> = ({
   subtitleBgColor = 'bg-gray-200',
 }) => {
   return (
-    <section className={cn(backgroundColor, 'pt-16')}>
+    <section className={cn(backgroundColor, 'pt-16 px-4')}>
       <div className="max-w-5xl mx-auto flex flex-col items-center gap-4">
         {/* Top Text Section */}
         <div className="flex flex-col lg:flex-row w-full items-start lg:items-center lg:justify-between gap-8 lg:gap-12">
