@@ -61,7 +61,7 @@ const AnalyticsContentSection: React.FC<AnalyticsContentSectionProps> = ({
             <Image
               src={imageUrl}
               alt={title}
-              layout="fill"
+              fill
               className="object-contain"
               priority
             />

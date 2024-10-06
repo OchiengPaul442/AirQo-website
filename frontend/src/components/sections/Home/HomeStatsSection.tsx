@@ -186,8 +186,8 @@ const HomeStatsSection: React.FC = () => {
                     : 'https://res.cloudinary.com/dbibjvyhm/image/upload/v1726578795/website/photos/ForCommunities_oepvth.webp'
                 }`}
                 alt="Air quality monitor installation"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: 'cover' }}
                 className="rounded-lg object-contain"
                 loading="eager"
               />

@@ -1,6 +1,7 @@
 'use client';
 import AnalyticsContentSection from '@components/sections/Home/AnalyticsContentSection';
 import AppDownloadSection from '@components/sections/Home/AppDownloadSection';
+import FeaturedCarousel from '@components/sections/Home/FeaturedCarousel';
 import HomePlayerSection from '@components/sections/Home/HomePlayerSection';
 import StatisticsSection from '@components/sections/Home/HomeStatsSection';
 import ReversibleContentSection from '@components/sections/ReversibleContentSection';
@@ -59,12 +60,14 @@ const HomePage = () => {
       />
 
       <AppDownloadSection
-        appTitle="Download the app"
-        description="Discover the quality of air you are breathing."
-        appStoreLink="https://apps.apple.com"
-        googlePlayLink="https://play.google.com"
-        imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132436/website/photos/get-app-sm_bknad9.png"
+        title="Download the app"
+        description="Discover the quality of air you are breathing"
+        appStoreLink="https://apps.apple.com/your-app"
+        googlePlayLink="https://play.google.com/store/your-app"
+        mockupImage="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132436/website/photos/get-app-sm_bknad9.png"
       />
+
+      <FeaturedCarousel />
     </div>
   );
 };

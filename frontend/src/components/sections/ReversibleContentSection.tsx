@@ -58,6 +58,7 @@ const ReversibleContentSection: React.FC<ReversibleContentSectionProps> = ({
             {title}
           </h2>
           <p className="text-lg text-gray-600">{description}</p>
+
           <a
             href={buttonLink}
             className="inline-block text-blue-600 font-medium hover:underline mt-4"
@@ -77,7 +78,7 @@ const ReversibleContentSection: React.FC<ReversibleContentSectionProps> = ({
             <Image
               src={imageUrl}
               alt={title}
-              layout="fill"
+              fill
               className={cn(imageClassName)}
               priority
               loading="eager"
