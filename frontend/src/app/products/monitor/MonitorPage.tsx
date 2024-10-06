@@ -1,3 +1,5 @@
+'use client';
+import { CustomButton } from '@components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -7,7 +9,7 @@ const MonitorPage = () => {
   return (
     <div className="pb-16 flex flex-col w-full space-y-20">
       {/* Hero Section */}
-      <section className="bg-blue-100 py-16 px-4">
+      <section className="bg-blue-50 py-16 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <p className="text-gray-500 mb-2 text-[14px]">
@@ -66,10 +68,10 @@ const MonitorPage = () => {
               for IoT SIM cards.
             </p>
             <Link href="/manuals/maintenance" passHref>
-              <button className="flex items-center justify-center border-2 border-black px-4 py-3 bg-none w-full  font-semibold">
+              <CustomButton className="flex items-center justify-center bg-transparent text-gray-700 border border-black px-4 py-3 bg-none w-full  font-semibold">
                 Maintenance Manual
                 <BiDownload className="ml-2 text-xl" />
-              </button>
+              </CustomButton>
             </Link>
           </div>
 
@@ -182,10 +184,10 @@ const MonitorPage = () => {
               </ol>
             </div>
             <Link href="/guides/installation" passHref>
-              <button className="flex items-center justify-center border-2 mt-6 border-black px-4 py-3 bg-none w-full font-semibold">
+              <CustomButton className="flex items-center justify-center text-gray-700 bg-transparent border mt-6 border-black px-4 py-3 bg-none w-full font-semibold">
                 Installation Guide
                 <BiDownload className="ml-2 text-xl" />
-              </button>
+              </CustomButton>
             </Link>
           </div>
 

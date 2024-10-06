@@ -1,3 +1,4 @@
+'use client';
 import { CustomButton } from '@components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +9,7 @@ const AnalyticsPage = () => {
   return (
     <div className="pb-16 flex flex-col w-full space-y-20 overflow-hidden">
       {/* Hero Section */}
-      <section className="bg-blue-100 py-16 px-4">
+      <section className="bg-blue-50 py-16 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <p className="text-gray-500 mb-2 text-[14px]">
@@ -67,10 +68,10 @@ const AnalyticsPage = () => {
               inform data-driven decisions to tackle air pollution.
             </p>
             <Link href="/guides/user-guide" passHref>
-              <button className="flex items-center justify-center border-2 border-black px-4 py-3 bg-none w-full font-semibold">
+              <CustomButton className="flex items-center justify-center bg-transparent text-gray-700 border-2 border-black px-4 py-3 bg-none w-full font-semibold">
                 User Guide
                 <BiDownload className="ml-2 text-xl" />
-              </button>
+              </CustomButton>
             </Link>
           </div>
 
@@ -131,7 +132,7 @@ const AnalyticsPage = () => {
         </div>
       </section>
 
-      <section className="bg-blue-100 py-16 px-4 overflow-hidden">
+      <section className="bg-blue-50 py-16 px-4 overflow-hidden">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center flex flex-col items-center space-y-6">
             <h2 className="text-[32px] font-bold">

@@ -1,3 +1,4 @@
+'use client';
 import { CustomButton } from '@components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -115,10 +116,10 @@ const CalibratePage = () => {
               calibration process is completed.
             </p>
             <Link href="/calibrate-data" passHref>
-              <button className="flex items-center justify-center border-2 mt-6 border-black px-4 py-3 bg-none w-full font-semibold">
+              <CustomButton className="flex items-center justify-center bg-transparent text-gray-700 border mt-6 border-black px-4 py-3 bg-none w-full font-semibold">
                 Calibrate your data
                 <span className="ml-2 text-xl">&#8599;</span>
-              </button>
+              </CustomButton>
             </Link>
           </div>
         </div>

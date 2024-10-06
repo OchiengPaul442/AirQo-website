@@ -1,3 +1,4 @@
+'use client';
 import AppDownloadSection from '@components/sections/Home/AppDownloadSection';
 import Image from 'next/image';
 import React from 'react';

@@ -65,17 +65,17 @@ const menuItems: MenuItems = {
     {
       title: 'For African Cities',
       description: 'Advancing air quality management in African Cities',
-      href: '/for-african-cities',
+      href: '/solutions/african-cities',
     },
     {
       title: 'For Communities',
       description: 'Empowering communities with air quality information',
-      href: '/for-communities',
+      href: '/solutions/communities',
     },
     {
       title: 'For Research',
       description: 'Free access to air quality analytics',
-      href: '/for-research',
+      href: '/solutions/research',
     },
   ],
   'About AirQo': [
