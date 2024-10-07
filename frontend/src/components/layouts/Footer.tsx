@@ -22,7 +22,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="py-8 px-4 max-w-5xl mx-auto">
+    <footer className="py-8 px-4 max-w-5xl mx-auto text-[14px]">
       {/* Top Section with Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Logo and Social Media */}
@@ -31,7 +31,7 @@ const Footer = () => {
             <Image
               src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728138368/website/Logos/logo_rus4my.png"
               alt="AirQo"
-              width={100}
+              width={70}
               height={60}
             />
             <p className="text-gray-800 mt-4">
@@ -72,33 +72,45 @@ const Footer = () => {
 
         {/* Links Section */}
         <div className="flex justify-between flex-wrap gap-8">
+          {/* Products Section */}
           <div className="flex flex-col">
-            <h3 className="font-semibold text-gray-800 mb-4">Our Products</h3>
+            <h3 className="font-semibold text-gray-800 mb-4">Products</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
-                  Air Quality Network
+                  Binos Monitor
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
-                  Air Quality Analytics
+                  Analytics Dashboard
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
-                  AirQo Map
+                  Air Quality API
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-gray-600 hover:underline">
+                  Mobile App
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-gray-600 hover:underline">
+                  AirQalibrate
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* Solutions Section */}
           <div className="flex flex-col">
             <h3 className="font-semibold text-gray-800 mb-4">Solutions</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
-                  For African cities
+                  For African Cities
                 </Link>
               </li>
               <li>
@@ -114,22 +126,38 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* About Section */}
           <div className="flex flex-col">
             <h3 className="font-semibold text-gray-800 mb-4">About</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
-                  About
+                  About AirQo
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
-                  Contact
+                  Resources
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-gray-600 hover:underline">
+                  Events
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-gray-600 hover:underline">
                   Press
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-gray-600 hover:underline">
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-gray-600 hover:underline">
+                  Contact Us
                 </Link>
               </li>
               <li>

@@ -1,5 +1,6 @@
 import '@/Styles/globals.scss';
 
+import ScrollToTopButton from '@components/layouts/ScrollToTopButton';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -31,7 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${interFont.variable} antialiased`}>{children}</body>
+      <body className={`${interFont.variable} antialiased`}>
+        {children}
+        <ScrollToTopButton />
+      </body>
     </html>
   );
 }

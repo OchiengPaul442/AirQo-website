@@ -23,7 +23,7 @@ const FormPage: React.FC = () => {
   return (
     <div
       className="flex flex-col lg:flex-row w-full lg:space-x-8 p-4 lg:p-8 bg-[#F9FAFB]"
-      style={{ height: 'calc(100vh - 85px)' }}
+      style={{ height: 'calc(100vh - 132px)' }}
     >
       {/* Contact Information Section */}
       <section className="flex-1 flex items-center justify-center bg-white p-8 rounded-lg shadow-md mb-8 lg:mb-0 lg:h-auto h-full">

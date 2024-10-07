@@ -23,7 +23,10 @@ const SuccessPage: React.FC = () => {
   }, [countdown, router]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-[calc(100vh-85px)] bg-[#F9FAFB] p-8">
+    <div
+      className="flex flex-col items-center justify-center w-full h-[calc(100vh-85px)] bg-[#F9FAFB] p-8"
+      style={{ height: 'calc(100vh - 132px)' }}
+    >
       {/* Success Image */}
       <div className="flex items-center justify-center mb-8">
         <Image
