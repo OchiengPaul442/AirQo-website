@@ -33,3 +33,4 @@ export {
   navigationMenuTriggerStyle,
   NavigationMenuViewport,
 } from './navigation-menu';
+export { default as Pagination } from './Pagination';

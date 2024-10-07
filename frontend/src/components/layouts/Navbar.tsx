@@ -82,7 +82,7 @@ const menuItems: MenuItems = {
     { title: 'About Us', href: '/about-us' },
     { title: 'Resources', href: '/resources' },
     { title: 'Careers', href: '/careers' },
-    { title: 'Contact Us', href: '/contact-us' },
+    { title: 'Contact Us', href: '/contact' },
     { title: 'Events', href: '/events' },
     { title: 'Press', href: '/press' },
     { title: 'CLEAN-Air Forum', href: '/clean-air-forum' },
@@ -100,7 +100,7 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
   items,
 }) => (
   <NavigationMenuContent className="bg-white shadow-lg md:w-[400px] lg:w-[600px] rounded-md p-4">
-    <div className="text-gray-500 mb-4">{title}</div>
+    <div className="text-gray-400 mb-4">{title}</div>
     <div className="flex gap-8">
       {items
         .reduce<MenuItem[][]>((acc, item, idx) => {
@@ -118,7 +118,7 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
                     href={item.href}
                     className="block p-2 rounded-xl hover:bg-blue-50 transition"
                   >
-                    <div className="text-lg font-semibold text-gray-800">
+                    <div className="text-lg font-medium text-gray-800">
                       {item.title}
                     </div>
                     {item.description && (

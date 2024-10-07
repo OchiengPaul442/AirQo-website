@@ -3,7 +3,7 @@ import React from 'react';
 
 const NewsLetter = () => {
   return (
-    <section className="bg-blue-50 py-16 px-4">
+    <section className="bg-blue-50 py-28 px-4">
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center lg:items-start lg:justify-between gap-12">
         {/* Header Section */}
         <div className="lg:w-1/2 text-center lg:text-left space-y-4">
@@ -23,14 +23,14 @@ const NewsLetter = () => {
               type="text"
               name="firstName"
               placeholder="First name"
-              className="flex-1 p-3 border border-gray-300 outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <input
               type="text"
               name="lastName"
               placeholder="Last name"
-              className="flex-1 p-3 border border-gray-300 outline-none focus:ring-2 focus:ring-blue-500 mt-4 md:mt-0"
+              className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500 mt-4 md:mt-0"
               required
             />
           </div>
@@ -39,7 +39,7 @@ const NewsLetter = () => {
               type="email"
               name="email"
               placeholder="Enter your email"
-              className="flex-grow p-3 border border-gray-300 outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-grow p-3 outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <CustomButton type="submit" className="rounded-none">

@@ -1,4 +1,5 @@
 'use client';
+import Divider from '@components/sections/Divider';
 import { CustomButton } from '@components/ui';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -32,7 +33,7 @@ const ResearchPage = () => {
         </p>
       </section>
 
-      <div className="py-2 max-w-5xl mx-auto px-4 w-full bg-[#E9F7EF]"></div>
+      <Divider className="bg-[#E9F7EF]" />
 
       {/* Collaboration Section */}
       <section className="max-w-5xl mx-auto px-4 space-y-16">
@@ -95,7 +96,7 @@ const ResearchPage = () => {
           </div>
         </div>
 
-        <div className="py-2 max-w-5xl mx-auto px-4 w-full bg-[#E9F7EF]"></div>
+        <Divider className="bg-[#E9F7EF]" />
 
         {/* Collaboration with universities and academic institutions */}
         <div className="flex flex-col lg:flex-row gap-8 items-center relative">

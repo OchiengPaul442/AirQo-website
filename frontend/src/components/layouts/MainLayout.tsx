@@ -20,11 +20,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 py-8">
+      <main className="flex-1 pb-8">
         <div className="lg:px-0 text-gray-700">{children}</div>
 
         {/* Highlight Section */}
-        <section className="my-8">
+        <section className="mt-32 mb-8">
           <Highlight />
         </section>
 

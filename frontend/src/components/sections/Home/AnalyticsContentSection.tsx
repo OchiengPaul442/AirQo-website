@@ -56,8 +56,8 @@ const AnalyticsContentSection: React.FC<AnalyticsContentSectionProps> = ({
         </div>
 
         {/* Image Section */}
-        <div className="w-full flex justify-center">
-          <div className="relative md:top-16 w-full max-w-5xl h-[200px] md:h-[500px] lg:h-[600px] overflow-hidden">
+        <div className="w-full flex justify-center overflow-hidden">
+          <div className="relative md:top-16 w-full max-w-5xl h-[200px] md:h-[500px] lg:h-[600px]">
             <Image
               src={imageUrl}
               alt={title}

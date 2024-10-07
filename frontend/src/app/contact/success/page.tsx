@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ResourcePage from './ResourcePage';
+import SuccessPage from './SuccessPage';
 
 const page = () => {
   return (
     <div>
-      <ResourcePage />
+      <SuccessPage />
     </div>
   );
 };

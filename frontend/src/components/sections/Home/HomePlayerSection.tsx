@@ -1,7 +1,8 @@
 'use client';
+import PlayIcon from '@public/assets/icons/playIcon.png';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import React, { useState } from 'react';
-import { AiFillPlayCircle } from 'react-icons/ai';
 
 import { CustomButton } from '../../ui';
 
@@ -20,7 +21,7 @@ const HomePlayerSection = () => {
   };
 
   return (
-    <div className="flex flex-col-reverse px-4 lg:flex-row items-center justify-between max-w-5xl mx-auto gap-8">
+    <div className="flex flex-col-reverse px-4 lg:flex-row items-center justify-between max-w-5xl mx-auto mt-8 gap-8">
       {/* Text Section */}
       <div className="lg:w-1/2 w-full flex flex-col justify-center gap-4">
         <h1 className="text-[32px] lg:text-[56px] font-semibold">
@@ -59,10 +60,7 @@ const HomePlayerSection = () => {
             onClick={handlePlayButtonClick}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <AiFillPlayCircle
-              size={65}
-              className="text-blue-600 bg-white rounded-full hover:text-blue-700 transition"
-            />
+            <Image src={PlayIcon} alt="Play Icon" width={65} height={65} />
           </button>
         </div>
       </div>

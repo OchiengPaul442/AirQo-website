@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ResourcePage from './ResourcePage';
+import CareerPage from './CareerPage';
 
 const page = () => {
   return (
     <div>
-      <ResourcePage />
+      <CareerPage />
     </div>
   );
 };

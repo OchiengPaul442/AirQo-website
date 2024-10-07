@@ -1,4 +1,5 @@
 'use client';
+import Divider from '@components/sections/Divider';
 import { CustomButton } from '@components/ui';
 import React from 'react';
 
@@ -30,7 +31,7 @@ const AfricanCityPage = () => {
         </p>
       </section>
 
-      <div className="bg-blue-50 py-2 max-w-5xl mx-auto px-4 w-full"></div>
+      <Divider />
 
       {/* Approach Section */}
       <section className="max-w-5xl mx-auto px-4">
@@ -94,7 +95,7 @@ const AfricanCityPage = () => {
         </div>
       </section>
 
-      <div className="bg-blue-50 py-2 max-w-5xl mx-auto px-4 w-full"></div>
+      <Divider />
 
       {/* Publications Section */}
       <section className="bg-blue-50 p-16 space-y-6 rounded-lg max-w-5xl mx-auto">

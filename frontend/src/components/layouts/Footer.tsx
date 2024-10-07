@@ -42,28 +42,28 @@ const Footer = () => {
             <Link
               href="#"
               aria-label="Facebook"
-              className="text-blue-600 bg-blue-100 rounded-full p-2 hover:bg-blue-200 transition-all"
+              className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaFacebookF size={14} />
             </Link>
             <Link
               href="#"
               aria-label="YouTube"
-              className="text-blue-600 bg-blue-100 rounded-full p-2 hover:bg-blue-200 transition-all"
+              className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaYoutube size={14} />
             </Link>
             <Link
               href="#"
               aria-label="LinkedIn"
-              className="text-blue-600 bg-blue-100 rounded-full p-2 hover:bg-blue-200 transition-all"
+              className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaLinkedinIn size={14} />
             </Link>
             <Link
               href="#"
               aria-label="Twitter"
-              className="text-blue-600 bg-blue-100 rounded-full p-2 hover:bg-blue-200 transition-all"
+              className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaTwitter size={14} />
             </Link>
