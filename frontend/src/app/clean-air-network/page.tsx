@@ -1,7 +1,13 @@
 import React from 'react';
 
+import CleanAirPage from './CleanAirPage';
+
 const page = () => {
-  return <div>page</div>;
+  return (
+    <div>
+      <CleanAirPage />
+    </div>
+  );
 };
 
 export default page;

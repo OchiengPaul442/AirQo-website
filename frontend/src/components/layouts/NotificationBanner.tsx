@@ -13,7 +13,7 @@ const NotificationBanner: React.FC = () => {
       <div className="py-[11px] px-4 lg:px-0 flex justify-between items-center max-w-5xl mx-auto">
         {/* Language Selector */}
         <div className="flex items-center space-x-2">
-          <FiGlobe className="w-5 h-5" />
+          <FiGlobe className="w-4 h-4" />
           <span className="text-sm font-medium">English</span>
         </div>
 

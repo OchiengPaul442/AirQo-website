@@ -1,7 +1,13 @@
 import React from 'react';
 
+import MemberPage from './MemberPage';
+
 const page = () => {
-  return <div>page</div>;
+  return (
+    <div>
+      <MemberPage />
+    </div>
+  );
 };
 
 export default page;

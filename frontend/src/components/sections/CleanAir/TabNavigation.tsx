@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 const TabNavigation: React.FC = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('about');
+  const [activeTab, setActiveTab] = useState('/');
 
   const tabs = [
     { label: 'About', value: '/' },
@@ -19,7 +19,7 @@ const TabNavigation: React.FC = () => {
   };
 
   return (
-    <div className="border-y pt-4 border-gray-200">
+    <div className="border-y pt-4 bg-white border-gray-200">
       <div className="flex space-x-8 max-w-5xl mx-auto px-4 lg:px-0">
         {tabs.map((tab) => (
           <button
