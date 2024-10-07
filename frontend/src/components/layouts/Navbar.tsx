@@ -78,7 +78,7 @@ const menuItems: MenuItems = {
       href: '/solutions/research',
     },
   ],
-  'About AirQo': [
+  About: [
     { title: 'About Us', href: '/about-us' },
     { title: 'Resources', href: '/resources' },
     { title: 'Careers', href: '/careers' },
