@@ -77,27 +77,42 @@ const Footer = () => {
             <h3 className="font-semibold text-gray-800 mb-4">Products</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/products/monitor"
+                  className="text-gray-600 hover:underline"
+                >
                   Binos Monitor
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/products/analytics"
+                  className="text-gray-600 hover:underline"
+                >
                   Analytics Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/products/api"
+                  className="text-gray-600 hover:underline"
+                >
                   Air Quality API
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/products/mobile-app"
+                  className="text-gray-600 hover:underline"
+                >
                   Mobile App
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/products/calibrate"
+                  className="text-gray-600 hover:underline"
+                >
                   AirQalibrate
                 </Link>
               </li>
@@ -109,17 +124,26 @@ const Footer = () => {
             <h3 className="font-semibold text-gray-800 mb-4">Solutions</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/solutions/african-cities"
+                  className="text-gray-600 hover:underline"
+                >
                   For African Cities
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/solutions/communities"
+                  className="text-gray-600 hover:underline"
+                >
                   For Communities
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/solutions/research"
+                  className="text-gray-600 hover:underline"
+                >
                   For Research
                 </Link>
               </li>
@@ -131,32 +155,38 @@ const Footer = () => {
             <h3 className="font-semibold text-gray-800 mb-4">About</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/about-us"
+                  className="text-gray-600 hover:underline"
+                >
                   About AirQo
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="/resources"
+                  className="text-gray-600 hover:underline"
+                >
                   Resources
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link href="/events" className="text-gray-600 hover:underline">
                   Events
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link href="/press" className="text-gray-600 hover:underline">
                   Press
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link href="/careers" className="text-gray-600 hover:underline">
                   Careers
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link href="/contact" className="text-gray-600 hover:underline">
                   Contact Us
                 </Link>
               </li>
@@ -215,9 +245,21 @@ const Footer = () => {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
         {/* Footer Bottom Links */}
         <div className="text-center lg:text-left text-gray-600">
-          &copy; 2021 AirQo &nbsp;|&nbsp;{' '}
-          <Link href="#" className="hover:underline">
+          &copy; {new Date().getFullYear()} AirQo &nbsp;|&nbsp;{' '}
+          <Link href="/legal/terms-of-service" className="hover:underline">
             Terms of service
+          </Link>
+          &nbsp;|&nbsp;{' '}
+          <Link href="/legal/privacy-policy" className="hover:underline">
+            Privacy Policy
+          </Link>
+          &nbsp;|&nbsp;{' '}
+          <Link href="/legal/airqo-data" className="hover:underline">
+            AirQo Data
+          </Link>
+          &nbsp;|&nbsp;{' '}
+          <Link href="/legal/payment-refund-policy" className="hover:underline">
+            Payment Terms
           </Link>
         </div>
 

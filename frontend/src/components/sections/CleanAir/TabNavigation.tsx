@@ -1,21 +1,22 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const TabNavigation: React.FC = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('/');
+  const pathname = usePathname();
+  const [activeTab, setActiveTab] = useState(pathname);
 
   const tabs = [
-    { label: 'About', value: '/' },
-    { label: 'Membership', value: 'membership' },
-    { label: 'Events', value: 'events' },
-    { label: 'Resources', value: 'resources' },
+    { label: 'About', value: '/clean-air-network/' },
+    { label: 'Membership', value: '/clean-air-network/membership' },
+    { label: 'Events', value: '/clean-air-network/events' },
+    { label: 'Resources', value: '/clean-air-network/resources' },
   ];
 
   const handleTabClick = (value: string) => {
     setActiveTab(value);
-    router.push(`/clean-air-network/${value}`);
+    router.push(value);
   };
 
   return (
