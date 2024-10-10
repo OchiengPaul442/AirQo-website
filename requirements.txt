@@ -1,11 +1,12 @@
 Django>=4.2,<5.0
 djangorestframework
-psycopg2        
-python-dotenv   
-dj-database-url  
-django-ckeditor
+psycopg2
+python-dotenv
+dj-database-url
+django-quill-editor
 whitenoise
 cloudinary
 django-cloudinary-storage
 django-extensions
-django-cors-headers
+django-cors-headers 
+Pillow  # for image processing

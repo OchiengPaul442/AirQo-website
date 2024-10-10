@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     # Custom apps
     'apps.press',
     'apps.impact',
-    'apps.event'
+    'apps.event',
 
     # Third-party apps
     'corsheaders',
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'rest_framework',
     'django_extensions',
+    'django_quill',
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,17 @@ if DEBUG:
     print(f"Media files are stored in: {MEDIA_ROOT}")
 else:
     print("Production mode is ON")
+
+
+# Ckeditor5 configuration (updated for CKEditor5)
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # Toolbar settings ('basic', 'standard', 'full')
+        'height': 400,
+        'width': '100%',
+        'removePlugins': 'image',  # Add any plugin to exclude if needed
+        'blockToolbar': ["heading", "blockQuote"],
+        'inlineToolbar': ["bold", "italic"],
+        'extraPlugins': 'autogrow',
+    }
+}
