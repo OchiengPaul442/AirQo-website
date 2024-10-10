@@ -31,13 +31,11 @@ INSTALLED_APPS = [
     # Custom apps
     'apps.press',
     'apps.impact',
-    'apps.author',
 
     # Third-party apps
     'cloudinary',
     'cloudinary_storage',
-
-    # Other apps
+    'rest_framework',  # Added Django Rest Framework here
     'django_extensions',
 ]
 
@@ -73,7 +71,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database configuration
-# Use different settings for development and production
 if DEBUG:
     DATABASES = {
         'default': {
@@ -117,11 +114,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files configuration
 if DEBUG:
-    # In development, media files are stored locally
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'assets/media'
 else:
-    # In production, media files are stored in Cloudinary
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
@@ -132,3 +127,16 @@ else:
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django Rest Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        # Enables the browsable API in development
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # Update this based on your app's needs (e.g., IsAuthenticated)
+        'rest_framework.permissions.AllowAny',
+    ],
+}

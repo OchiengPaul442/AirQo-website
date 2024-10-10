@@ -1,27 +1,37 @@
+from django.conf import settings
 from django.db import models
 from backend.utils.models import BaseModel
-from author.decorators import with_author
 from cloudinary.models import CloudinaryField
 
 
-@with_author
 class Press(BaseModel):
     article_title = models.CharField(max_length=100)
     article_intro = models.CharField(max_length=200, null=True, blank=True)
     article_link = models.URLField(null=True, blank=True)
 
-    # Publication details
     date_published = models.DateField()
 
-    # Publisher logo using Cloudinary for image storage
     publisher_logo = CloudinaryField(
         "PublisherLogo", overwrite=True, resource_type="image", null=True, blank=True
     )
 
-    # Order field for ordering articles
     order = models.IntegerField(default=1)
 
-    # Website category choices
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='created_press_articles'
+    )
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='modified_press_articles'
+    )
+
     class WebsiteCategory(models.TextChoices):
         AIRQO = "airqo", "AirQo"
         CLEAN_AIR = "cleanair", "CleanAir"
@@ -34,7 +44,6 @@ class Press(BaseModel):
         blank=True
     )
 
-    # Article tag choices
     class ArticleTag(models.TextChoices):
         UNTAGGED = "none", "None"
         FEATURED = "featured", "Featured"
@@ -47,10 +56,10 @@ class Press(BaseModel):
         blank=True
     )
 
-    # Meta class for model configuration
     class Meta:
-        ordering = ['order', '-id']  # Order by 'order' field and reverse id
+        ordering = ['order', '-id']
+        verbose_name = 'Press Article'
+        verbose_name_plural = 'Press Articles'
 
-    # String representation of the Press object
     def __str__(self):
         return self.article_title

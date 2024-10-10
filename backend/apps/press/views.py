@@ -8,8 +8,14 @@ class PressViewSet(viewsets.ModelViewSet):
     serializer_class = PressSerializer
     lookup_field = 'id'
 
+    def perform_create(self, serializer):
+        # Automatically assign the current user as the creator of the record
+        serializer.save(created_by=self.request.user,
+                        modified_by=self.request.user)
+
+    def perform_update(self, serializer):
+        # Automatically assign the current user as the modifier of the record
+        serializer.save(modified_by=self.request.user)
+
     def perform_destroy(self, instance):
-        """
-        Override the delete method to perform a soft delete instead of hard delete.
-        """
         instance.soft_delete()

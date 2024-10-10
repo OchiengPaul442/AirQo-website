@@ -17,6 +17,9 @@ class PressSerializer(serializers.ModelSerializer):
             'order',
             'is_deleted',
             'created',
-            'modified'
+            'modified',
+            'created_by',
+            'modified_by'
         ]
-        read_only_fields = ['created', 'modified', 'is_deleted']
+        read_only_fields = ['created', 'modified',
+                            'is_deleted', 'created_by', 'modified_by']

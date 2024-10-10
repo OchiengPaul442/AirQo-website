@@ -135,3 +135,8 @@ venv
 venv/
 ENV/
 env/
+
+
+# DB sqlite files
+*.sqlite
+*.sqlite3
