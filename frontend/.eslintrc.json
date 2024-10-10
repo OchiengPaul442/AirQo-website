@@ -8,6 +8,7 @@
   "rules": {
     // Prettier formatting rules
     "prettier/prettier": "error",
+    "@typescript-eslint/no-explicit-any": "off",
 
     // Import sorting rules
     "simple-import-sort/imports": "error",

@@ -32,3 +32,25 @@ export const getImpactNumbers = async () => {
     throw error;
   }
 };
+
+// Function to fetch all events
+export const getAllEvents = async () => {
+  try {
+    const response = await apiClient.get('/events/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    throw error;
+  }
+};
+
+// Function to fetch a single event by ID
+export const getEventDetails = async (id: string) => {
+  try {
+    const response = await apiClient.get(`/events/${id}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching event details:', error);
+    throw error;
+  }
+};

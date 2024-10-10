@@ -3,10 +3,9 @@ djangorestframework
 psycopg2
 python-dotenv
 dj-database-url
-django-quill-editor
 whitenoise
 cloudinary
 django-cloudinary-storage
 django-extensions
 django-cors-headers 
-Pillow  # for image processing
+django-ckeditor

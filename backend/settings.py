@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'rest_framework',
     'django_extensions',
-    'django_quill',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +122,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 if DEBUG:
     # Development media files stored locally
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'assets/media'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'  # Local storage
 else:
     # Production media files stored in Cloudinary
@@ -155,16 +156,53 @@ if DEBUG:
 else:
     print("Production mode is ON")
 
+# CKEditor configurations
+CKEDITOR_UPLOAD_PATH = "uploads/"  # Local upload path (for development)
+CKEDITOR_IMAGE_BACKEND = "pillow"  # Image processing backend
 
-# Ckeditor5 configuration (updated for CKEditor5)
-CKEDITOR_5_CONFIGS = {
+CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',  # Toolbar settings ('basic', 'standard', 'full')
-        'height': 400,
-        'width': '100%',
-        'removePlugins': 'image',  # Add any plugin to exclude if needed
-        'blockToolbar': ["heading", "blockQuote"],
-        'inlineToolbar': ["bold", "italic"],
-        'extraPlugins': 'autogrow',
+        'toolbar': 'full',  # Full toolbar with all free features
+        'height': 300,  # Set minimum height, will expand as needed
+        'width': 'auto',  # Auto width to fit container
+        'extraPlugins': ','.join([
+            'uploadimage',  # Allows image uploads
+            'autolink',  # Automatically converts URLs to links
+            'autoembed',  # Automatically embeds media (e.g., YouTube)
+            'codesnippet',  # For code snippets
+            'image2',  # Enhanced image plugin
+        ]),
+        'removePlugins': 'flash',  # Remove outdated plugins
+        'filebrowserUploadUrl': '/ckeditor/upload/',  # URL for file uploads
+        'filebrowserBrowseUrl': '/ckeditor/browse/',  # URL for browsing uploaded files
+        'toolbarGroups': [
+            {'name': 'clipboard', 'groups': ['clipboard', 'undo']},
+            {'name': 'editing', 'groups': [
+                'find', 'selection', 'spellchecker']},
+            {'name': 'links'},
+            {'name': 'insert'},
+            {'name': 'forms'},
+            {'name': 'tools'},
+            {'name': 'document', 'groups': ['mode', 'document', 'doctools']},
+            {'name': 'others'},
+            '/',
+            {'name': 'basicstyles', 'groups': ['basicstyles', 'cleanup']},
+            {'name': 'paragraph', 'groups': [
+                'list', 'indent', 'blocks', 'align', 'bidi']},
+            {'name': 'styles'},
+            {'name': 'colors'},
+            {'name': 'about'},
+        ],
+        'tabSpaces': 4,
+        'extraAllowedContent': 'img[alt,border,vspace,hspace,width,height,align];a[!href];',
     }
 }
+
+
+# Cloudinary-specific folder setup for CKEditor uploads in production
+if not DEBUG:
+    # Folder for event-related uploads
+    CKEDITOR_UPLOAD_PATH = "website/uploads/"
+
+
+SILENCED_SYSTEM_CHECKS = ['ckeditor.W001']
