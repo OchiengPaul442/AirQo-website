@@ -68,16 +68,31 @@ class Press(BaseModel):
 
     def delete(self, *args, **kwargs):
         """
-        Overriding the delete method to remove the associated Cloudinary file
+        Override the delete method to remove the associated Cloudinary file
         before deleting the Press article instance.
         """
-
         if self.publisher_logo:
-            # Extract the public_id from the Cloudinary URL
-            public_id = self.publisher_logo.public_id if hasattr(
-                self.publisher_logo, 'public_id') else None
+            # CloudinaryField provides the public_id directly
+            public_id = self.publisher_logo.public_id
 
             if public_id:
+                # Delete the Cloudinary image using its public_id
                 cloudinary.uploader.destroy(public_id)
 
+        # Call the superclass delete method to delete the Press instance
         super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        """
+        Optionally override save() to update the `modified_by` field.
+        """
+        # Ensure the modified_by field is updated with the current user
+        if not self.pk:  # Object is being created
+            if not self.created_by:
+                # Set the creator (This could be set from the request context)
+                self.created_by = self.modified_by
+
+        # Always update modified_by when saving
+        self.modified_by = self.modified_by
+
+        super().save(*args, **kwargs)

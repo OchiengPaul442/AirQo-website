@@ -34,21 +34,27 @@ INSTALLED_APPS = [
     'apps.impact',
 
     # Third-party apps
+    'corsheaders',
     'cloudinary',
     'cloudinary_storage',
-    'rest_framework',  # Django Rest Framework
-    'django_extensions',  # Django Extensions (for shell_plus, etc.)
+    'rest_framework',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
 ]
 
 # Root URL configuration

@@ -3,6 +3,8 @@ from django.utils.html import format_html
 from .models import Press
 import cloudinary.uploader
 
+# Ensure Press is registered only once
+
 
 @admin.register(Press)
 class PressAdmin(admin.ModelAdmin):
