@@ -11,7 +11,9 @@ const HomePage = () => {
   return (
     <div className="space-y-20">
       <HomePlayerSection />
+
       <StatisticsSection />
+
       <ReversibleContentSection
         title="High-resolution air quality monitoring network"
         subtitle="Air Quality Monitor"

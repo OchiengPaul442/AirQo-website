@@ -21,3 +21,14 @@ export const getPressArticles = async () => {
     throw error;
   }
 };
+
+// Function to fetch impact numbers
+export const getImpactNumbers = async () => {
+  try {
+    const response = await apiClient.get('/impact-number/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching impact numbers:', error);
+    throw error;
+  }
+};

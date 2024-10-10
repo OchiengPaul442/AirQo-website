@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # Custom apps
     'apps.press',
     'apps.impact',
+    'apps.event'
 
     # Third-party apps
     'corsheaders',

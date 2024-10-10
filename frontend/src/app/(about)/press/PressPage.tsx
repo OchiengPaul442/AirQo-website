@@ -3,7 +3,6 @@ import { CustomButton, Pagination } from '@components/ui';
 import { getPressArticles } from '@services/apiService';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import { PressArticle } from '@/types';
@@ -14,7 +13,6 @@ const PressPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const itemsPerPage = 4;
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,7 +114,7 @@ const PressPage: React.FC = () => {
               </h2>
               <p className="text-sm">{article.article_intro}</p>
               <CustomButton
-                onClick={() => router.push(article.article_link || '#')}
+                onClick={() => window.open(article.article_link, '_blank')}
                 className="text-black px-4 py-2 bg-transparent border border-black transition-colors mt-4"
               >
                 Read article →

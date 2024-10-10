@@ -1,3 +1,4 @@
+'use client';
 import Enabel from '@public/assets/images/partners/enabel.svg';
 import Google from '@public/assets/images/partners/google.svg';
 import UN from '@public/assets/images/partners/UN.svg';
@@ -9,8 +10,9 @@ import Network from '@public/assets/svgs/ImpactNumbers/Network.svg';
 import Partners from '@public/assets/svgs/ImpactNumbers/Partners.svg';
 import Publications from '@public/assets/svgs/ImpactNumbers/Publications.svg';
 import Records from '@public/assets/svgs/ImpactNumbers/Records.svg';
+import { getImpactNumbers } from '@services/apiService';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CustomButton } from '../../ui';
 
@@ -35,7 +37,9 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
       {items.map((item, index) => (
         <div
           key={index}
-          className={`${openItem === index ? 'bg-[#DFE8F9] rounded-xl' : ''} transition-all`}
+          className={`${
+            openItem === index ? 'bg-[#DFE8F9] rounded-xl' : ''
+          } transition-all`}
         >
           <button
             onClick={() => toggleItem(index)}
@@ -64,6 +68,30 @@ const HomeStatsSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'cities' | 'communities'>(
     'cities',
   );
+  const [impactNumbers, setImpactNumbers] = useState({
+    african_cities: 0,
+    champions: 0,
+    deployed_monitors: 0,
+    data_records: 0,
+    research_papers: 0,
+    partners: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchImpactNumbers = async () => {
+      try {
+        const data = await getImpactNumbers();
+        setImpactNumbers(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching impact numbers:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchImpactNumbers();
+  }, []);
 
   const accordionItems: { [key: string]: AccordionItem[] } = {
     cities: [
@@ -101,6 +129,25 @@ const HomeStatsSection: React.FC = () => {
       },
     ],
   };
+
+  const skeletonLoader = (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+      {Array(6)
+        .fill(0)
+        .map((_, index) => (
+          <div
+            key={index}
+            className="h-[240px] p-6 bg-gray-200 rounded-lg flex flex-col justify-between items-start space-y-4 animate-pulse"
+          >
+            <div className="text-left flex flex-col items-start space-y-2">
+              <div className="w-16 h-8 bg-gray-300 rounded"></div>
+              <div className="w-24 h-4 bg-gray-300 rounded"></div>
+            </div>
+            <div className="flex items-center justify-center w-12 h-12 bg-gray-300 rounded-full"></div>
+          </div>
+        ))}
+    </div>
+  );
 
   return (
     <section className="py-8 px-4 w-full space-y-20 bg-[#ECF2FF]">
@@ -195,54 +242,64 @@ const HomeStatsSection: React.FC = () => {
           </div>
         </div>
       </div>
+
       {/* Statistics Section */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-        {[
-          {
-            label: 'African Cities',
-            value: '8+',
-            icon: Network,
-          },
-          {
-            label: 'Community Champions',
-            value: '1500+',
-            icon: Community,
-          },
-          {
-            label: 'Monitor Installations',
-            value: '250+',
-            icon: Monitor,
-          },
-          {
-            label: 'Data records',
-            value: '67.4M+',
-            icon: Records,
-          },
-          {
-            label: 'Research papers',
-            value: '10+',
-            icon: Publications,
-          },
-          {
-            label: 'Partners',
-            value: '300+',
-            icon: Partners,
-          },
-        ].map((stat, index) => (
-          <div
-            key={index}
-            className="h-[240px] p-6 bg-[#DFE8F9] rounded-lg flex flex-col justify-between items-start space-y-4"
-          >
-            <div className="text-left flex flex-col items-start">
-              <p className="text-3xl font-bold">{stat.value}</p>
-              <p className="text-gray-600">{stat.label}</p>
+      {loading ? (
+        skeletonLoader
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+          {[
+            {
+              label: 'African Cities',
+              value: `${impactNumbers.african_cities}+`,
+              icon: Network,
+            },
+            {
+              label: 'Community Champions',
+              value: `${impactNumbers.champions}+`,
+              icon: Community,
+            },
+            {
+              label: 'Monitor Installations',
+              value: `${impactNumbers.deployed_monitors}+`,
+              icon: Monitor,
+            },
+            {
+              label: 'Data records',
+              value: `${impactNumbers.data_records}M+`,
+              icon: Records,
+            },
+            {
+              label: 'Research papers',
+              value: `${impactNumbers.research_papers}+`,
+              icon: Publications,
+            },
+            {
+              label: 'Partners',
+              value: `${impactNumbers.partners}+`,
+              icon: Partners,
+            },
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="h-[240px] p-6 bg-[#DFE8F9] rounded-lg flex flex-col justify-between items-start space-y-4"
+            >
+              <div className="text-left flex flex-col items-start">
+                <p className="text-3xl font-bold">{stat.value}</p>
+                <p className="text-gray-600">{stat.label}</p>
+              </div>
+              <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full">
+                <Image
+                  src={stat.icon}
+                  alt={stat.label}
+                  width={30}
+                  height={30}
+                />
+              </div>
             </div>
-            <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full">
-              <Image src={stat.icon} alt={stat.label} width={30} height={30} />
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
