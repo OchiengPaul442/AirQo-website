@@ -21,6 +21,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 INSTALLED_APPS = [
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,13 +36,13 @@ INSTALLED_APPS = [
     # Third-party apps
     'cloudinary',
     'cloudinary_storage',
-    'rest_framework',  # Added Django Rest Framework here
-    'django_extensions',
+    'rest_framework',  # Django Rest Framework
+    'django_extensions',  # Django Extensions (for shell_plus, etc.)
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -50,13 +51,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Root URL configuration
 ROOT_URLCONF = 'backend.urls'
 
+# Templates configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Add directories for templates if necessary
-        'APP_DIRS': True,
+        'DIRS': [],  # Add directories for custom templates if necessary
+        'APP_DIRS': True,  # Ensure it finds templates from installed apps
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -68,9 +71,10 @@ TEMPLATES = [
     },
 ]
 
+# WSGI application configuration
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database configuration
+# Database configuration: Separate for development (SQLite) and production (Postgres)
 if DEBUG:
     DATABASES = {
         'default': {
@@ -83,26 +87,19 @@ else:
         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 
-# Password validation
+# Password validation configuration
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en-us')
 TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -112,11 +109,14 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise configuration for serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files configuration
+# Media files configuration (Development uses local storage, Production uses Cloudinary)
 if DEBUG:
+    # Development media files stored locally
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'assets/media'
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'  # Local storage
 else:
+    # Production media files stored in Cloudinary
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
@@ -132,11 +132,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        # Enables the browsable API in development
+        # Browsable API during development
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        # Update this based on your app's needs (e.g., IsAuthenticated)
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',  # Allow access without authentication
     ],
 }
+
+# Debug logging (Optional)
+if DEBUG:
+    print(f"Debug mode is: {DEBUG}")
+    print(f"Media files are stored in: {MEDIA_ROOT}")
+else:
+    print("Production mode is ON")
