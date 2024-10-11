@@ -76,3 +76,36 @@ export const getHighlights = async () => {
     throw error;
   }
 };
+
+// Function to fetch careers
+export const getCareers = async () => {
+  try {
+    const response = await apiClient.get('/careers/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching careers:', error);
+    throw error;
+  }
+};
+
+// Function to fetch a single career by ID
+export const getCareerDetails = async (id: string) => {
+  try {
+    const response = await apiClient.get(`/careers/${id}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching career details:', error);
+    throw error;
+  }
+};
+
+// Function to get departments
+export const getDepartments = async () => {
+  try {
+    const response = await apiClient.get('/departments/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching departments:', error);
+    throw error;
+  }
+};

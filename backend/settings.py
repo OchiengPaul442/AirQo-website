@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'apps.impact',
     'apps.event',
     'apps.highlights',
+    'apps.career',
 
     # Third-party apps
     'corsheaders',

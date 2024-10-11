@@ -1,47 +1,64 @@
 'use client';
-import React, { useState } from 'react';
+import { CustomButton } from '@components/ui';
+import { getCareers, getDepartments } from '@services/apiService';
+import { isBefore, parseISO } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 
-const categories = [
-  'Open positions',
-  'All',
-  'Administrative',
-  'Engineering',
-  'Product',
-  'Data Science',
-  'Policy',
-  'Business Development',
-  'Machine Learning & AI',
-  'Hardware',
-  'Design',
-  'Marketing',
-  'Communications',
-];
-
-const jobs = [
-  {
-    category: 'Engineering',
-    title: 'DevOps Engineer',
-    type: 'Full Time, Remote',
-  },
-  { category: 'Engineering', title: 'Front End Engineer', type: 'Full Time' },
-  { category: 'Hardware', title: 'DevOps Engineer', type: 'Full Time' },
-  { category: 'Hardware', title: 'DevOps Engineer', type: 'Full Time' },
-  { category: 'Hardware', title: 'DevOps Engineer', type: 'Full Time' },
-];
-
 const CareerPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] =
-    useState<string>('Open positions');
+  const router = useRouter();
+  const [departments, setDepartments] = useState<any[]>([]);
+  const [careers, setCareers] = useState<any[]>([]);
+  const [selectedDepartmentId, setSelectedDepartmentId] =
+    useState<string>('all'); // Default to All
+  const [loading, setLoading] = useState(true); // Loading state
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
+  // Fetch departments and careers when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const departmentsResponse = await getDepartments();
+        const careersResponse = await getCareers();
+
+        setDepartments([
+          { id: 'all', name: 'Open positions' },
+          ...departmentsResponse,
+        ]);
+        setCareers(careersResponse);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Function to check if the position is still open (closing date in the future)
+  const isJobOpen = (closingDate: string) => {
+    return isBefore(new Date(), parseISO(closingDate));
   };
 
-  const filteredJobs =
-    selectedCategory === 'All' || selectedCategory === 'Open positions'
-      ? jobs
-      : jobs.filter((job) => job.category === selectedCategory);
+  // Filter jobs based on the selected department ID and show only open positions
+  const filteredJobs = careers.filter((career) => {
+    const isOpen = isJobOpen(career.closing_date);
+    if (selectedDepartmentId === 'all') return isOpen;
+    return isOpen && career.department === selectedDepartmentId;
+  });
+
+  // Group the jobs by department and filter only open jobs
+  const groupedJobsByDepartment = filteredJobs.reduce((acc: any, job: any) => {
+    const department = departments.find((dept) => dept.id === job.department);
+    const departmentName = department ? department.name : 'Open positions';
+    if (!acc[departmentName]) {
+      acc[departmentName] = { jobs: [], openCount: 0 };
+    }
+    acc[departmentName].openCount++;
+    acc[departmentName].jobs.push(job);
+    return acc;
+  }, {});
 
   return (
     <div className="flex flex-col w-full space-y-16 bg-[#F2F1F6]">
@@ -69,57 +86,97 @@ const CareerPage: React.FC = () => {
       <section className="max-w-5xl mx-auto px-4 lg:px-8">
         <h2 className="text-3xl font-normal mb-8">Categories</h2>
         <div className="flex flex-wrap gap-4">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => handleCategoryClick(category)}
-              className={`px-6 py-2 rounded-full transition-colors ${
-                selectedCategory === category
-                  ? 'bg-[#0CE87E] text-black'
-                  : 'bg-[#FFFFFF80] text-gray-600 hover:bg-green-500 hover:text-white'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+          {/* Display loading skeleton for categories */}
+          {loading
+            ? [...Array(5)].map((_, idx) => (
+                <div
+                  key={idx}
+                  className="w-32 h-10 bg-gray-300 rounded-full animate-pulse"
+                ></div>
+              ))
+            : departments.map((department: any) => (
+                <button
+                  key={department.id}
+                  onClick={() => setSelectedDepartmentId(department.id)}
+                  className={`px-6 py-2 rounded-full transition-colors ${
+                    selectedDepartmentId === department.id
+                      ? 'bg-[#0CE87E] text-black'
+                      : 'bg-[#FFFFFF80] text-gray-600 hover:bg-green-500 hover:text-white'
+                  }`}
+                >
+                  {department.name}
+                </button>
+              ))}
         </div>
       </section>
 
-      {/* Job Listings Section */}
-      <section className="max-w-5xl mx-auto w-full px-4 lg:px-8 space-y-12">
-        {filteredJobs
-          .reduce((acc, job) => {
-            if (!acc.includes(job.category)) acc.push(job.category);
-            return acc;
-          }, [] as string[])
-          .map((category) => (
-            <div key={category} className="cursor-pointer">
-              <h3 className="text-2xl text-gray-400 font-semibold mb-4">
-                {category} (
-                {filteredJobs.filter((job) => job.category === category).length}
-                )
-              </h3>
-              <div className="space-y-4">
-                {filteredJobs
-                  .filter((job) => job.category === category)
-                  .map((job, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between p-4 lg:p-6 bg-[#FFFFFF80] rounded-lg shadow-sm hover:shadow-md transition-shadow"
-                    >
-                      <div>
-                        <h4 className="text-lg font-semibold">{job.title}</h4>
-                      </div>
-                      <p className="text-gray-500">{job.type}</p>
-                      <button className="text-gray-700 hover:text-black">
-                        <FiArrowRight size={24} />
-                      </button>
-                    </div>
-                  ))}
+      {/* Loading Skeleton for Job Listings */}
+      {loading && (
+        <section className="max-w-5xl mx-auto w-full px-4 lg:px-8 space-y-12">
+          <div className="space-y-4">
+            {[...Array(3)].map((_, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between p-4 lg:p-6 bg-[#E0E0E0] rounded-lg animate-pulse"
+              >
+                <div className="h-6 bg-gray-300 w-1/3 rounded"></div>
+                <div className="h-6 bg-gray-300 w-1/6 rounded"></div>
+                <div className="h-6 bg-gray-300 w-8 rounded-full"></div>
               </div>
-            </div>
-          ))}
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Job Listings Section */}
+      {!loading && (
+        <section className="max-w-5xl mx-auto w-full px-4 lg:px-8 space-y-12">
+          {/* Group by department and show number of open jobs */}
+          {Object.keys(groupedJobsByDepartment).length === 0 ? (
+            <p className="text-center text-lg text-gray-500">
+              No open positions found.
+            </p>
+          ) : (
+            Object.keys(groupedJobsByDepartment).map((departmentName) => (
+              <div key={departmentName} className="cursor-pointer">
+                <h3 className="text-2xl text-gray-400 font-semibold mb-4">
+                  {departmentName} (
+                  {groupedJobsByDepartment[departmentName].openCount})
+                </h3>
+                <div className="space-y-4">
+                  {groupedJobsByDepartment[departmentName].jobs.map(
+                    (job: any, idx: number) => (
+                      <CustomButton
+                        key={idx}
+                        onClick={() => router.push(`careers/${job.id}`)}
+                        className="flex items-center justify-between p-4 lg:p-6 text-black w-full bg-[#FFFFFF80] rounded-lg shadow-sm hover:shadow-md"
+                      >
+                        <div className="text-left">
+                          <h4 className="text-lg font-semibold">{job.title}</h4>
+                          {/* Display if the job is open or closed */}
+                          <p
+                            className={`text-sm ${
+                              isJobOpen(job.closing_date)
+                                ? 'text-green-500'
+                                : 'text-red-500'
+                            }`}
+                          >
+                            {isJobOpen(job.closing_date) ? 'Open' : 'Closed'}
+                          </p>
+                        </div>
+                        <p className="text-gray-500">{job.type}</p>
+                        <span className="text-gray-700 hover:text-black">
+                          <FiArrowRight size={24} />
+                        </span>
+                      </CustomButton>
+                    ),
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </section>
+      )}
 
       {/* Contact Section */}
       <footer className="bg-[#F2F1F6] py-16 text-center">
