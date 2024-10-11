@@ -65,3 +65,14 @@ export const getEventDetails = async (id: string) => {
     throw error;
   }
 };
+
+// Function to fetch highlights
+export const getHighlights = async () => {
+  try {
+    const response = await apiClient.get('/highlights/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching highlights:', error);
+    throw error;
+  }
+};

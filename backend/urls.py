@@ -8,6 +8,7 @@ urlpatterns = [
     path('api/', include('apps.press.urls')),
     path('api/', include('apps.impact.urls')),
     path('api/', include('apps.event.urls')),
+    path('api/', include('apps.highlights.urls')),
 
     # CKEditor routes for file upload and management
     path('ckeditor/', include('ckeditor_uploader.urls')),

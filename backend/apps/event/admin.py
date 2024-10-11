@@ -57,6 +57,7 @@ class EventAdmin(nested_admin.NestedModelAdmin):
         'order'
     )
     search_fields = ('title', 'location_name')
+    list_editable = ('order',)
     ordering = ('order', '-start_date')
     inlines = [
         InquiryInline,

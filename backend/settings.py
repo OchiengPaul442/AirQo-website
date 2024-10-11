@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'apps.press',
     'apps.impact',
     'apps.event',
+    'apps.highlights',
 
     # Third-party apps
     'corsheaders',
