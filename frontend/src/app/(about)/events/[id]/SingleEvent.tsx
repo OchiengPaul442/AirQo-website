@@ -128,7 +128,7 @@ const SingleEvent: React.FC<any> = ({ id }) => {
       {/* Header Section */}
       {event.background_image_url && (
         <section
-          className="relative h-[400px] bg-cover bg-center flex items-center justify-center text-white"
+          className="relative h-[250px] lg:h-[400px] bg-cover bg-center flex items-center justify-center text-white"
           style={{
             backgroundImage: `url(${event.background_image_url})`,
           }}
@@ -177,7 +177,7 @@ const SingleEvent: React.FC<any> = ({ id }) => {
                   alt={partner.name}
                   width={150}
                   height={100}
-                  className="object-contain"
+                  className="object-contain mix-blend-multiply"
                   loading="lazy"
                 />
               </div>

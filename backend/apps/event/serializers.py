@@ -2,6 +2,8 @@
 from rest_framework import serializers
 from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 from cloudinary.utils import cloudinary_url
+# Ensure CKEditor is installed and configured
+from ckeditor.fields import RichTextField
 
 
 class PartnerLogoSerializer(serializers.ModelSerializer):
@@ -57,13 +59,39 @@ class InquirySerializer(serializers.ModelSerializer):
         fields = ['id', 'inquiry', 'role', 'email', 'order']
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventListSerializer(serializers.ModelSerializer):
+    event_tag = serializers.CharField(source='get_event_tag_display')
+    event_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = [
+            'id',
+            'title',
+            'title_subtext',
+            'start_date',
+            'end_date',
+            'start_time',
+            'end_time',
+            'event_tag',
+            'event_image_url',
+        ]
+
+    def get_event_image_url(self, obj):
+        if obj.event_image:
+            return cloudinary_url(obj.event_image.public_id, secure=True)[0]
+        return None
+
+
+class EventDetailSerializer(serializers.ModelSerializer):
     event_image_url = serializers.SerializerMethodField()
     background_image_url = serializers.SerializerMethodField()
     inquiries = InquirySerializer(many=True, read_only=True)
     programs = ProgramSerializer(many=True, read_only=True)
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
     resources = ResourceSerializer(many=True, read_only=True)
+    # To display human-readable tag
+    event_tag = serializers.CharField(source='get_event_tag_display')
 
     class Meta:
         model = Event
@@ -84,7 +112,7 @@ class EventSerializer(serializers.ModelSerializer):
             'background_image_url',
             'location_name',
             'location_link',
-            'event_details',  # Now a TextField
+            'event_details',
             'order',
             'inquiries',
             'programs',

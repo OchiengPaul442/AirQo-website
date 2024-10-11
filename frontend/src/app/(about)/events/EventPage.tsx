@@ -28,7 +28,7 @@ const EventPage: React.FC = () => {
           (event: any) => new Date(event.end_date) <= new Date(),
         );
         const featured = events.filter(
-          (event: any) => event.event_tag === 'featured',
+          (event: any) => event.event_tag === 'Featured',
         );
 
         setUpcomingEvents(upcoming);
@@ -97,7 +97,7 @@ const EventPage: React.FC = () => {
                 <p className="text-lg text-gray-600 mb-6">
                   {firstFeaturedEvent.title_subtext}
                 </p>
-                <div className="flex flex-wrap gap-4 lg:items-center mb-6">
+                <div className="flex flex-col flex-wrap gap-4 mb-6">
                   <div className="flex items-center space-x-2">
                     <FiCalendar className="text-gray-500 w-5 h-5" />
                     <p className="text-gray-600">
