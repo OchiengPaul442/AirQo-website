@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'apps.highlights',
     'apps.career',
     'apps.publications',
+    'apps.team',
+    'apps.externalTeam',
+    'apps.board',
 
     # Third-party apps
     'corsheaders',
