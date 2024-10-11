@@ -1,39 +1,21 @@
 'use client';
+
+import EventCard from '@components/sections/CleanAir/EventCard';
+import EventSkeleton from '@components/sections/CleanAir/EventSkeleton';
 import RegisterBanner from '@components/sections/CleanAir/RegisterBanner';
+import { getCleanAirEvents } from '@services/apiService';
 import { format, isAfter, isBefore } from 'date-fns';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 import {
-  CustomButton,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   Pagination,
 } from '@/components/ui';
-
-// Dummy data for events
-const events = [
-  {
-    title: 'Climate and Clean Air Conference 2024',
-    description: 'Healthy Air for All? Responding to a changing environment.',
-    date: '2024-02-21',
-    image:
-      'https://images.unsplash.com/photo-1719937050640-71cfd3d851be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8',
-    category: 'Environment',
-  },
-
-  {
-    title: 'Climate and Clean Air Conference 2025',
-    description: 'Healthy Air for All? Responding to a changing environment.',
-    date: '2025-02-21',
-    image:
-      'https://images.unsplash.com/photo-1719937050640-71cfd3d851be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8',
-    category: 'Environment',
-  },
-];
 
 const months = [
   'January',
@@ -50,59 +32,154 @@ const months = [
   'December',
 ];
 
-const categories = ['Environment', 'Health', 'Technology'];
+const categories = [
+  {
+    name: 'All Categories',
+    value: '',
+  },
+  {
+    name: 'Webinar',
+    value: 'webinar',
+  },
+  {
+    name: 'Workshop',
+    value: 'workshop',
+  },
+  {
+    name: 'Marathon',
+    value: 'marathon',
+  },
+  {
+    name: 'Conference',
+    value: 'conference',
+  },
+  {
+    name: 'Summit',
+    value: 'summit',
+  },
+  {
+    name: 'Commemoration',
+    value: 'commemoration',
+  },
+  {
+    name: 'In-Person',
+    value: 'in-person',
+  },
+  {
+    name: 'Hybrid',
+    value: 'hybrid',
+  },
+];
 
-const EventsPage = () => {
+const EventsPage: React.FC = () => {
+  const [events, setEvents] = useState<any[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showUpcoming, setShowUpcoming] = useState(true);
   const [showPast, setShowPast] = useState(true);
   const [currentUpcomingPage, setCurrentUpcomingPage] = useState(1);
   const [currentPastPage, setCurrentPastPage] = useState(1);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const itemsPerPage = 4;
+  console.log(error);
 
   const currentDate = new Date();
 
+  // Fetch events on component mount
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const fetchedEvents = await getCleanAirEvents();
+        setEvents(fetchedEvents);
+        setFilteredEvents(fetchedEvents);
+      } catch (err) {
+        setError('Failed to load events. Please try again later.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  // Handle month selection
   const handleMonthChange = (month: string) => {
     setSelectedMonth(month);
   };
 
+  // Handle category selection
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
   };
 
-  // Filter events based on the selected month and category
-  const filteredEvents = events.filter((event) => {
-    const eventDate = new Date(event.date);
-    const matchesMonth = selectedMonth
-      ? format(eventDate, 'MMMM') === selectedMonth
-      : true;
-    const matchesCategory = selectedCategory
-      ? event.category === selectedCategory
-      : true;
-    return matchesMonth && matchesCategory;
-  });
+  // Apply filters whenever selectedMonth or selectedCategory changes
+  useEffect(() => {
+    let tempEvents = [...events];
+
+    // Filter by month
+    if (selectedMonth) {
+      tempEvents = tempEvents.filter((event) => {
+        const eventDate = new Date(event.start_date);
+        return format(eventDate, 'MMMM') === selectedMonth;
+      });
+    }
+
+    // Filter by category
+    if (selectedCategory) {
+      tempEvents = tempEvents.filter(
+        (event) => event.event_category === selectedCategory,
+      );
+    }
+
+    setFilteredEvents(tempEvents);
+    setCurrentUpcomingPage(1);
+    setCurrentPastPage(1);
+  }, [selectedMonth, selectedCategory, events]);
 
   // Split events into upcoming and past based on date comparison
-  const upcomingEvents = filteredEvents.filter((event) =>
-    isAfter(new Date(event.date), currentDate),
+  const upcomingEvents = useMemo(
+    () =>
+      filteredEvents.filter((event) =>
+        event.start_date
+          ? isAfter(new Date(event.start_date), currentDate)
+          : false,
+      ),
+    [filteredEvents, currentDate],
   );
-  const pastEvents = filteredEvents.filter((event) =>
-    isBefore(new Date(event.date), currentDate),
+
+  const pastEvents = useMemo(
+    () =>
+      filteredEvents.filter((event) =>
+        event.start_date
+          ? isBefore(new Date(event.start_date), currentDate)
+          : false,
+      ),
+    [filteredEvents, currentDate],
   );
 
   // Pagination logic
   const totalUpcomingPages = Math.ceil(upcomingEvents.length / itemsPerPage);
   const totalPastPages = Math.ceil(pastEvents.length / itemsPerPage);
 
-  const paginatedUpcomingEvents = upcomingEvents.slice(
-    (currentUpcomingPage - 1) * itemsPerPage,
-    currentUpcomingPage * itemsPerPage,
+  const paginatedUpcomingEvents = useMemo(
+    () =>
+      upcomingEvents.slice(
+        (currentUpcomingPage - 1) * itemsPerPage,
+        currentUpcomingPage * itemsPerPage,
+      ),
+    [upcomingEvents, currentUpcomingPage, itemsPerPage],
   );
 
-  const paginatedPastEvents = pastEvents.slice(
-    (currentPastPage - 1) * itemsPerPage,
-    currentPastPage * itemsPerPage,
+  const paginatedPastEvents = useMemo(
+    () =>
+      pastEvents.slice(
+        (currentPastPage - 1) * itemsPerPage,
+        currentPastPage * itemsPerPage,
+      ),
+    [pastEvents, currentPastPage, itemsPerPage],
   );
 
   return (
@@ -117,7 +194,7 @@ const EventsPage = () => {
               alt="Air Quality Management Banner"
               width={800}
               height={400}
-              className="rounded-lg object-contain w-full"
+              className="rounded-lg object-cover w-full"
             />
           </div>
 
@@ -150,6 +227,12 @@ const EventsPage = () => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                  <DropdownMenuItem
+                    onClick={() => setSelectedMonth(null)}
+                    className="font-semibold"
+                  >
+                    All Months
+                  </DropdownMenuItem>
                   {months.map((month) => (
                     <DropdownMenuItem
                       key={month}
@@ -161,20 +244,26 @@ const EventsPage = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Filter Dropdown */}
+              {/* Category Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="px-4 py-2 bg-gray-200 rounded-lg focus:outline-none">
-                    Filters
+                    Category
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                  <DropdownMenuItem
+                    onClick={() => setSelectedCategory(null)}
+                    className="font-semibold"
+                  >
+                    All Categories
+                  </DropdownMenuItem>
                   {categories.map((category) => (
                     <DropdownMenuItem
-                      key={category}
-                      onClick={() => handleCategoryChange(category)}
+                      key={category.value}
+                      onClick={() => handleCategoryChange(category.value)}
                     >
-                      {category}
+                      {category.name}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -193,44 +282,21 @@ const EventsPage = () => {
             </div>
             {showUpcoming && (
               <div className="space-y-4 mt-4">
-                {paginatedUpcomingEvents.length > 0 ? (
-                  paginatedUpcomingEvents.map((event, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col lg:flex-row bg-white rounded-xl p-4"
-                    >
-                      <div className="w-full lg:w-1/4">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          width={231}
-                          height={204}
-                          className="rounded-lg object-cover w-full"
-                        />
-                      </div>
-                      <div className="ml-0 lg:ml-4 w-full lg:w-3/4 mt-4 lg:mt-0">
-                        <h3 className="text-xl lg:text-[32px] font-semibold">
-                          {event.title}
-                        </h3>
-                        <p className="text-gray-600">{event.description}</p>
-                        <p className="mt-2 text-[24px]">
-                          {format(new Date(event.date), 'dd MMMM, yyyy')}
-                        </p>
-                        <CustomButton
-                          onClick={() => console.log('Read more')}
-                          className="mt-4 p-0 text-blue-600 hover:underline bg-transparent border-none"
-                        >
-                          Read more
-                        </CustomButton>
-                      </div>
-                    </div>
+                {loading ? (
+                  // Display skeletons
+                  Array.from({ length: itemsPerPage }).map((_, index) => (
+                    <EventSkeleton key={index} />
+                  ))
+                ) : paginatedUpcomingEvents.length > 0 ? (
+                  paginatedUpcomingEvents.map((event) => (
+                    <EventCard key={event.id} event={event} />
                   ))
                 ) : (
                   <p className="text-gray-600">No upcoming events</p>
                 )}
 
                 {/* Pagination for upcoming events */}
-                {upcomingEvents.length > itemsPerPage && (
+                {!loading && upcomingEvents.length > itemsPerPage && (
                   <Pagination
                     totalPages={totalUpcomingPages}
                     currentPage={currentUpcomingPage}
@@ -240,6 +306,8 @@ const EventsPage = () => {
               </div>
             )}
           </div>
+
+          <div className="w-full h-px bg-gray-300"></div>
 
           {/* Past Events Section */}
           <div>
@@ -252,44 +320,21 @@ const EventsPage = () => {
             </div>
             {showPast && (
               <div className="space-y-4 mt-4">
-                {paginatedPastEvents.length > 0 ? (
-                  paginatedPastEvents.map((event, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col lg:flex-row bg-white rounded-xl p-4"
-                    >
-                      <div className="w-full lg:w-1/4">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          width={231}
-                          height={204}
-                          className="rounded-lg object-cover w-full"
-                        />
-                      </div>
-                      <div className="ml-0 lg:ml-4 w-full lg:w-3/4 mt-4 lg:mt-0">
-                        <h3 className="text-xl lg:text-[32px] font-semibold">
-                          {event.title}
-                        </h3>
-                        <p className="text-gray-600">{event.description}</p>
-                        <p className="mt-2 text-[24px]">
-                          {format(new Date(event.date), 'dd MMMM, yyyy')}
-                        </p>
-                        <CustomButton
-                          onClick={() => console.log('Read more')}
-                          className="mt-4 p-0 text-blue-600 hover:underline bg-transparent border-none"
-                        >
-                          Read more
-                        </CustomButton>
-                      </div>
-                    </div>
+                {loading ? (
+                  // Display skeletons
+                  Array.from({ length: itemsPerPage }).map((_, index) => (
+                    <EventSkeleton key={index} />
+                  ))
+                ) : paginatedPastEvents.length > 0 ? (
+                  paginatedPastEvents.map((event) => (
+                    <EventCard key={event.id} event={event} />
                   ))
                 ) : (
                   <p className="text-gray-600">No past events</p>
                 )}
 
                 {/* Pagination for past events */}
-                {pastEvents.length > itemsPerPage && (
+                {!loading && pastEvents.length > itemsPerPage && (
                   <Pagination
                     totalPages={totalPastPages}
                     currentPage={currentPastPage}

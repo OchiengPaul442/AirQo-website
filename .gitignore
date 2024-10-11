@@ -129,45 +129,14 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# virtualenv
+.venv
+venv
+venv/
+ENV/
+env/
+
 
 # DB sqlite files
 *.sqlite
 *.sqlite3
-
-
-# Python cache
-*.pyc
-*.pyo
-__pycache__/
-
-# Virtual environments
-venv/
-env/
-.venv/
-
-# Django secret files
-.env
-settings_local.py
-
-# Databases
-*.sqlite3
-
-# Static and media files
-static/
-media/
-
-# Migrations
-*.py[cod]
-
-# Log files
-*.log
-
-# IDE and editor settings
-.vscode/
-.idea/
-*.sublime-workspace
-*.sublime-project
-
-# OS generated files
-.DS_Store
-Thumbs.db
