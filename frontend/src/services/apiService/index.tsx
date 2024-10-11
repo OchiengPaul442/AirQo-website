@@ -120,3 +120,36 @@ export const getPublications = async () => {
     throw error;
   }
 };
+
+// Function to get board members
+export const getBoardMembers = async () => {
+  try {
+    const response = await apiClient.get('/board-members/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching board members:', error);
+    throw error;
+  }
+};
+
+// Function to get team members
+export const getTeamMembers = async () => {
+  try {
+    const response = await apiClient.get('/team/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    throw error;
+  }
+};
+
+// Function to get external team members
+export const getExternalTeamMembers = async () => {
+  try {
+    const response = await apiClient.get('/external-team-members/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching external team members:', error);
+    throw error;
+  }
+};

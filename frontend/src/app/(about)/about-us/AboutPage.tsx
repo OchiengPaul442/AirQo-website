@@ -1,8 +1,14 @@
 'use client';
+
 import Divider from '@components/sections/Divider';
+import {
+  getBoardMembers,
+  getExternalTeamMembers,
+  getTeamMembers,
+} from '@services/apiService';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaTwitter } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
 
@@ -15,76 +21,232 @@ import {
   DialogTrigger,
 } from '@/components/ui/';
 
-const AboutPage = () => {
+/** Type Definitions **/
+
+// Interface for individual member descriptions
+interface MemberDescription {
+  description: string;
+}
+
+// Interface for a team member
+interface TeamMember {
+  picture_url: string;
+  name: string;
+  title: string;
+  twitter?: string;
+  descriptions: MemberDescription[];
+}
+
+/** Skeleton Loader Component **/
+
+const SkeletonCard: React.FC = () => (
+  <div className="flex flex-col items-center space-y-4">
+    <div className="w-[310px] h-[390px] bg-gray-300 rounded-lg animate-pulse"></div>
+    <div className="flex items-center w-full justify-between">
+      <div className="text-left w-2/3">
+        <div className="h-4 bg-gray-300 rounded w-1/2 mb-2 animate-pulse"></div>
+        <div className="h-3 bg-gray-300 rounded w-1/3 animate-pulse"></div>
+      </div>
+      <div className="h-6 w-6 bg-gray-300 rounded-full animate-pulse"></div>
+    </div>
+  </div>
+);
+
+/** Main AboutPage Component **/
+
+const AboutPage: React.FC = () => {
+  // State definitions with TypeScript types
+  const [boardMembers, setBoardMembers] = useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [externalTeamMembers, setExternalTeamMembers] = useState<TeamMember[]>(
+    [],
+  );
+
+  const [loadingTeam, setLoadingTeam] = useState<boolean>(true);
+  const [loadingExternalTeam, setLoadingExternalTeam] = useState<boolean>(true);
+  const [loadingBoard, setLoadingBoard] = useState<boolean>(true);
+
   useEffect(() => {
+    // Smooth scrolling
     document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Fetch data for board, team, and external team
+    const fetchData = async () => {
+      try {
+        const [boardData, teamData, externalTeamData] = await Promise.all([
+          getBoardMembers(),
+          getTeamMembers(),
+          getExternalTeamMembers(),
+        ]);
+
+        setBoardMembers(boardData || []);
+        setTeamMembers(teamData || []);
+        setExternalTeamMembers(externalTeamData || []);
+      } catch (error) {
+        console.error('Error fetching team data:', error);
+      } finally {
+        setLoadingBoard(false);
+        setLoadingTeam(false);
+        setLoadingExternalTeam(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const members = [
-    {
-      name: 'Alice A.',
-      title: 'Air Quality Analyst',
-      imgSrc:
-        'https://images.unsplash.com/photo-1590295102042-7a639d4a4b63?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      twitterUrl: 'https://twitter.com/alice',
-      description:
-        'Alice is a dedicated Air Quality Analyst with expertise in environmental science and data analytics.',
-    },
-    {
-      name: 'John B.',
-      title: 'Data Scientist',
-      imgSrc:
-        'https://images.unsplash.com/photo-1672201050789-0b5454271405?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      description:
-        'John has extensive experience in data science and contributes to the data-driven analysis at AirQo.',
-    },
-    {
-      name: 'Mary C.',
-      title: 'Environmental Scientist',
-      imgSrc:
-        'https://images.unsplash.com/photo-1711000142551-ca65827c57c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      twitterUrl: 'https://twitter.com/mary',
-      description:
-        'Mary is an Environmental Scientist focused on sustainable development and air quality improvement.',
-    },
-    {
-      name: 'Paul D.',
-      title: 'Field Coordinator',
-      imgSrc:
-        'https://images.unsplash.com/photo-1672863601285-253fc82db868?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      description:
-        'Paul oversees field operations, ensuring accurate data collection and smooth logistics.',
-    },
-  ];
+  /** Helper Function to Render Member Sections **/
+  const renderMembersSection = (
+    members: TeamMember[],
+    loading: boolean,
+    sectionId: string,
+    title: string,
+  ) => {
+    if (loading) {
+      // Display Skeleton Loaders
+      return (
+        <section
+          id={sectionId}
+          className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[100px]"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <SkeletonCard key={idx} />
+            ))}
+          </div>
+        </section>
+      );
+    }
 
-  const board = [
-    {
-      name: 'Alice A.',
-      title: 'Air Quality Analyst',
-      imgSrc:
-        'https://images.unsplash.com/photo-1590295102042-7a639d4a4b63?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      twitterUrl: 'https://twitter.com/alice',
-      description:
-        'Alice is a dedicated Air Quality Analyst with expertise in environmental science and data analytics.',
-    },
-    {
-      name: 'John B.',
-      title: 'Data Scientist',
-      imgSrc:
-        'https://images.unsplash.com/photo-1672201050789-0b5454271405?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      description:
-        'John has extensive experience in data science and contributes to the data-driven analysis at AirQo.',
-    },
-    {
-      name: 'Mary C.',
-      title: 'Environmental Scientist',
-      imgSrc:
-        'https://images.unsplash.com/photo-1711000142551-ca65827c57c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D',
-      twitterUrl: 'https://twitter.com/mary',
-      description:
-        'Mary is an Environmental Scientist focused on sustainable development and air quality improvement.',
-    },
-  ];
+    if (!loading && members.length === 0) {
+      // Do not render the section if there's no data
+      return null;
+    }
+
+    // Render the actual member cards
+    return (
+      <section
+        id={sectionId}
+        className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[200px]"
+      >
+        <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
+          {/* Title */}
+          <h2 className="text-3xl lg:text-[48px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">
+            {title}
+          </h2>
+
+          {/* Content */}
+          <div className="space-y-6 w-full max-w-[556px]">
+            {title === 'Meet the team' && (
+              <>
+                <p>
+                  This is our team, a community of spirited individuals who work
+                  hard to bridge the gap in air quality monitoring in Africa.
+                </p>
+                <Link href="/team" className="flex items-center text-blue-700">
+                  <span>Join the team </span>
+                  <FaArrowRightLong className="inline-block ml-2 " />
+                </Link>
+              </>
+            )}
+            {title === 'External team' && (
+              <p>
+                A team of enthusiastic experts that offer guidance to enhance
+                our growth and realisation of our goals.
+              </p>
+            )}
+            {title === 'Meet the Board' && (
+              <p>
+                A team of enthusiastic experts that offer guidance to enhance
+                our growth and realisation of our goals.
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
+          {members.map((member, idx) => (
+            <Dialog key={idx}>
+              <DialogTrigger asChild>
+                <div className="flex flex-col items-center space-y-4 cursor-pointer">
+                  <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
+                    <Image
+                      src={member.picture_url}
+                      alt={member.name}
+                      width={310}
+                      height={390}
+                      className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
+                    />
+                  </div>
+                  <div className="flex items-center w-full justify-between">
+                    <div className="text-left">
+                      <h3 className="text-xl font-bold">{member.name}</h3>
+                      <p className="text-gray-500">{member.title}</p>
+                    </div>
+                    {/* Optional Social Media Icon */}
+                    {member.twitter && (
+                      <a
+                        href={member.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:text-blue-600 transition"
+                      >
+                        <FaTwitter size={24} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </DialogTrigger>
+
+              {/* Content Section */}
+              <DialogContent className="max-w-[1024px] p-6">
+                {/* Header */}
+                <DialogHeader className="mb-4">
+                  <div className="flex flex-col items-start gap-4">
+                    <div>
+                      <DialogTitle className="text-2xl font-bold">
+                        {member.name}
+                      </DialogTitle>
+                      <p className="text-lg text-gray-500">{member.title}</p>
+                    </div>
+                    {/* Optional Social Media Icon */}
+                    {member.twitter && (
+                      <a
+                        href={member.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:text-blue-600 transition"
+                      >
+                        <FaTwitter size={24} />
+                      </a>
+                    )}
+                  </div>
+                </DialogHeader>
+                <div className="flex flex-col lg:flex-row items-start gap-6">
+                  {/* Image Section */}
+                  <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
+                    <Image
+                      src={member.picture_url}
+                      alt={member.name}
+                      width={300}
+                      height={300}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    {/* Description */}
+                    <DialogDescription className="leading-relaxed overflow-y-auto">
+                      {member.descriptions.map((desc, idx) => (
+                        <p key={idx}>{desc.description}</p>
+                      ))}
+                    </DialogDescription>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          ))}
+        </div>
+      </section>
+    );
+  };
 
   return (
     <div className="pb-16 flex flex-col w-full space-y-16">
@@ -137,6 +299,7 @@ const AboutPage = () => {
         </div>
       </section>
 
+      {/* Introduction Section */}
       <section className="max-w-5xl mx-auto w-full px-4 lg:px-0 scroll-mt-[100px]">
         <p className="text-2xl lg:text-[48px] max-w-[800px] leading-[48px] font-medium text-left">
           At AirQo, we empower communities across Africa with accurate,
@@ -206,7 +369,7 @@ const AboutPage = () => {
       {/* Story Section */}
       <section
         id="story"
-        className="max-w-5xl mx-auto w-full px-4 space-y-8 scroll-mt-[100px]"
+        className="max-w-5xl mx-auto w-full px-4 space-y-8 scroll-mt-[150px]"
       >
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
           {/* Title */}
@@ -246,7 +409,7 @@ const AboutPage = () => {
       {/* Mission Section */}
       <section
         id="mission"
-        className="max-w-5xl mx-auto w-full px-4 space-y-4 scroll-mt-[100px]"
+        className="max-w-5xl mx-auto w-full px-4 space-y-4 scroll-mt-[150px]"
       >
         <p className="text-lg lg:text-[48px] leading-[56px] font-medium text-left">
           Our mission is to efficiently collect, analyze and forecast air
@@ -261,7 +424,7 @@ const AboutPage = () => {
       {/* Values Section */}
       <section
         id="values"
-        className="max-w-5xl mx-auto w-full px-4 space-y-8 scroll-mt-[100px]"
+        className="max-w-5xl mx-auto w-full px-4 space-y-8 scroll-mt-[150px]"
       >
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
           {/* Title */}
@@ -302,214 +465,27 @@ const AboutPage = () => {
       <Divider className="bg-black w-full p-0 h-[1px] mx-auto" />
 
       {/* Team Section */}
-      <section
-        id="team"
-        className="max-w-5xl mx-auto w-full px-4 space-y-8 scroll-mt-[100px]"
-      >
-        <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
-          {/* Title */}
-          <h2 className="text-3xl lg:text-[48px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">
-            Meet the <br />
-            team
-          </h2>
+      {renderMembersSection(teamMembers, loadingTeam, 'team', 'Meet the team')}
 
-          {/* Content */}
-          <div className="space-y-6 w-full max-w-[556px]">
-            <p>
-              This is our team, a community of spirited individuals who work
-              hard to bridge the gap in air quality monitoring in Africa.
-            </p>
-            <Link href="/team" className="flex items-center text-blue-700">
-              <span>Join the team </span>
-              <FaArrowRightLong className="inline-block ml-2 " />
-            </Link>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-          {members.map((member, idx) => (
-            <Dialog key={idx}>
-              <DialogTrigger asChild>
-                <div className="flex flex-col md:justify-start max-w-[310px] w-full items-center space-y-4 cursor-pointer">
-                  <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
-                    <Image
-                      src={member.imgSrc}
-                      alt={member.name}
-                      width={310}
-                      height={390}
-                      className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
-                    />
-                  </div>
-                  <div className="flex items-center w-full justify-between">
-                    <div className="text-left">
-                      <h3 className="text-xl font-bold">{member.name}</h3>
-                      <p className="text-gray-500">{member.title}</p>
-                    </div>
-                    {/* Optional Social Media Icon */}
-                    {member.twitterUrl && (
-                      <a
-                        href={member.twitterUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 transition"
-                      >
-                        <FaTwitter size={24} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </DialogTrigger>
+      <Divider className="bg-black w-full p-0 h-[1px] mx-auto" />
 
-              {/* Content Section */}
-              <DialogContent className="max-w-[1024px] p-6">
-                {/* Header */}
-                <DialogHeader className="mb-4">
-                  <div className="flex flex-col items-start gap-4">
-                    <div>
-                      <DialogTitle className="text-2xl font-bold">
-                        {member.name}
-                      </DialogTitle>
-                      <p className="text-lg text-gray-500">{member.title}</p>
-                    </div>
-                    {/* Optional Social Media Icon */}
-                    {member.twitterUrl && (
-                      <a
-                        href={member.twitterUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 transition"
-                      >
-                        <FaTwitter size={24} />
-                      </a>
-                    )}
-                  </div>
-                </DialogHeader>
-                <div className="flex flex-col lg:flex-row items-start gap-6">
-                  {/* Image Section */}
-                  <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
-                    <Image
-                      src={member.imgSrc}
-                      alt={member.name}
-                      width={300}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    {/* Description */}
-                    <DialogDescription className="leading-relaxed overflow-y-auto">
-                      {member.description}
-                    </DialogDescription>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          ))}
-        </div>
-      </section>
+      {/* External Team Section */}
+      {renderMembersSection(
+        externalTeamMembers,
+        loadingExternalTeam,
+        'external-team',
+        'External team',
+      )}
 
       <Divider className="bg-black w-full p-0 h-[1px] mx-auto" />
 
       {/* Board Section */}
-      <section
-        id="team"
-        className="max-w-5xl mx-auto w-full px-4 space-y-8 scroll-mt-[100px]"
-      >
-        <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
-          {/* Title */}
-          <h2 className="text-3xl lg:text-[48px] leading-[46px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">
-            Meet the
-            <br /> Board
-          </h2>
-
-          {/* Content */}
-          <div className="w-full max-w-[556px]">
-            <p>
-              A team of enthusiastic experts that offer guidance to enhance our
-              growth and realisation of our goals.
-            </p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-          {board.map((member, idx) => (
-            <Dialog key={idx}>
-              <DialogTrigger asChild>
-                <div className="flex flex-col items-center space-y-4 cursor-pointer">
-                  <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
-                    <Image
-                      src={member.imgSrc}
-                      alt={member.name}
-                      width={310}
-                      height={390}
-                      className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
-                    />
-                  </div>
-                  <div className="flex items-center w-full justify-between">
-                    <div className="text-left">
-                      <h3 className="text-xl font-bold">{member.name}</h3>
-                      <p className="text-gray-500">{member.title}</p>
-                    </div>
-                    {/* Optional Social Media Icon */}
-                    {member.twitterUrl && (
-                      <a
-                        href={member.twitterUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 transition"
-                      >
-                        <FaTwitter size={24} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </DialogTrigger>
-
-              {/* Content Section */}
-              <DialogContent className="max-w-[1024px] p-6">
-                {/* Header */}
-                <DialogHeader className="mb-4">
-                  <div className="flex flex-col items-start gap-4">
-                    <div>
-                      <DialogTitle className="text-2xl font-bold">
-                        {member.name}
-                      </DialogTitle>
-                      <p className="text-lg text-gray-500">{member.title}</p>
-                    </div>
-                    {/* Optional Social Media Icon */}
-                    {member.twitterUrl && (
-                      <a
-                        href={member.twitterUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 transition"
-                      >
-                        <FaTwitter size={24} />
-                      </a>
-                    )}
-                  </div>
-                </DialogHeader>
-                <div className="flex flex-col lg:flex-row items-start gap-6">
-                  {/* Image Section */}
-                  <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
-                    <Image
-                      src={member.imgSrc}
-                      alt={member.name}
-                      width={300}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    {/* Description */}
-                    <DialogDescription className="leading-relaxed overflow-y-auto">
-                      {member.description}
-                    </DialogDescription>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          ))}
-        </div>
-      </section>
+      {renderMembersSection(
+        boardMembers,
+        loadingBoard,
+        'board',
+        'Meet the Board',
+      )}
     </div>
   );
 };
