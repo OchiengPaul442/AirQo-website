@@ -122,7 +122,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 if DEBUG:
     # Development media files stored locally
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'assets')
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'  # Local storage
 else:
     # Production media files stored in Cloudinary
