@@ -9,7 +9,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { FaTwitter } from 'react-icons/fa';
+import { FaLinkedinIn, FaTwitter } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
 
 import {
@@ -34,6 +34,7 @@ interface TeamMember {
   name: string;
   title: string;
   twitter?: string;
+  linked_in?: string;
   descriptions: MemberDescription[];
 }
 
@@ -182,16 +183,28 @@ const AboutPage: React.FC = () => {
                       <p className="text-gray-500">{member.title}</p>
                     </div>
                     {/* Optional Social Media Icon */}
-                    {member.twitter && (
-                      <a
-                        href={member.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 transition"
-                      >
-                        <FaTwitter size={24} />
-                      </a>
-                    )}
+                    <div className="flex items-center space-x-2">
+                      {member.twitter && (
+                        <a
+                          href={member.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-600 transition"
+                        >
+                          <FaTwitter size={24} />
+                        </a>
+                      )}
+                      {member.linked_in && (
+                        <a
+                          href={member.linked_in}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-600 transition"
+                        >
+                          <FaLinkedinIn size={24} />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </DialogTrigger>
@@ -208,16 +221,28 @@ const AboutPage: React.FC = () => {
                       <p className="text-lg text-gray-500">{member.title}</p>
                     </div>
                     {/* Optional Social Media Icon */}
-                    {member.twitter && (
-                      <a
-                        href={member.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 transition"
-                      >
-                        <FaTwitter size={24} />
-                      </a>
-                    )}
+                    <div className="flex items-center space-x-2">
+                      {member.twitter && (
+                        <a
+                          href={member.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-600 transition"
+                        >
+                          <FaTwitter size={24} />
+                        </a>
+                      )}
+                      {member.linked_in && (
+                        <a
+                          href={member.linked_in}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-600 transition"
+                        >
+                          <FaLinkedinIn size={24} />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </DialogHeader>
                 <div className="flex flex-col lg:flex-row items-start gap-6">
