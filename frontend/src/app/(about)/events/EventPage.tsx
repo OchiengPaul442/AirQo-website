@@ -1,7 +1,7 @@
 'use client';
 import EventCardsSection from '@components/sections/Events/EventCardsSection';
 import { CustomButton } from '@components/ui';
-import { getAllEvents } from '@services/apiService';
+import { getAirQoEvents } from '@services/apiService';
 import { format, isSameMonth, parse } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -19,7 +19,7 @@ const EventPage: React.FC = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const events = await getAllEvents();
+        const events = await getAirQoEvents();
 
         const upcoming = events.filter(
           (event: any) => new Date(event.end_date) > new Date(),

@@ -34,9 +34,20 @@ export const getImpactNumbers = async () => {
 };
 
 // Function to fetch all events
-export const getAllEvents = async () => {
+export const getAirQoEvents = async () => {
   try {
-    const response = await apiClient.get('/events/');
+    const response = await apiClient.get('/events/?category=airqo');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    throw error;
+  }
+};
+
+// Function to fetch all clean air events
+export const getCleanAirEvents = async () => {
+  try {
+    const response = await apiClient.get('/events/?category=cleanair');
     return response.data;
   } catch (error) {
     console.error('Error fetching events:', error);

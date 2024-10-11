@@ -1,3 +1,4 @@
+import uuid
 from django.conf import settings
 from django.db import models
 from backend.utils.models import BaseModel
@@ -5,7 +6,21 @@ from cloudinary.models import CloudinaryField
 import cloudinary.uploader
 
 
-class Press(BaseModel):
+def generate_uuid():
+    return uuid.uuid4().hex
+
+
+# Base Model with UUID primary key
+class UUIDBaseModel(BaseModel):
+    id = models.CharField(
+        primary_key=True, default=generate_uuid, editable=False, max_length=32
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Press(UUIDBaseModel):
     article_title = models.CharField(max_length=100)
     article_intro = models.CharField(max_length=200, null=True, blank=True)
     article_link = models.URLField(null=True, blank=True)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'ckeditor',
     'ckeditor_uploader',
+    'nested_admin',
 ]
 
 MIDDLEWARE = [
