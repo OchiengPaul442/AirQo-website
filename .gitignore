@@ -140,3 +140,8 @@ env/
 # DB sqlite files
 *.sqlite
 *.sqlite3
+
+    
+# DB mysql files
+
+/assets/
