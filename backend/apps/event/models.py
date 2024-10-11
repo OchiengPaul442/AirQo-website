@@ -1,5 +1,6 @@
 # models.py
 import uuid
+from django.conf import settings
 from django.db import models
 from backend.utils.models import BaseModel
 from cloudinary.models import CloudinaryField
@@ -80,18 +81,33 @@ class Event(UUIDBaseModel):
         blank=True,
     )
 
-    event_image = CloudinaryField(
-        "EventImage",
-        overwrite=True,
-        folder="website/uploads/events/images",
-        resource_type="image",
-    )
-    background_image = CloudinaryField(
-        "BackgroundImage",
-        overwrite=True,
-        folder="website/uploads/events/images",
-        resource_type="image",
-    )
+    if settings.DEBUG:
+        # In development, store files locally
+        event_image = models.FileField(
+            upload_to='events/images/',
+            null=True,
+            blank=True
+        )
+        background_image = models.FileField(
+            upload_to='events/images/',
+            null=True,
+            blank=True
+        )
+    else:
+        # In production, store files in Cloudinary
+        event_image = CloudinaryField(
+            "EventImage",
+            overwrite=True,
+            folder="website/uploads/events/images",
+            resource_type="image",
+        )
+        background_image = CloudinaryField(
+            "BackgroundImage",
+            overwrite=True,
+            folder="website/uploads/events/images",
+            resource_type="image",
+        )
+
     location_name = models.CharField(max_length=100, null=True, blank=True)
     location_link = models.URLField(null=True, blank=True)
     # Reverted to RichTextField for rich text capabilities
@@ -187,12 +203,21 @@ class Session(UUIDBaseModel):
 
 # PartnerLogo Model
 class PartnerLogo(UUIDBaseModel):
-    partner_logo = CloudinaryField(
-        "PartnerImage",
-        overwrite=True,
-        folder="website/uploads/events/logos",
-        resource_type="image",
-    )
+    if settings.DEBUG:
+        # In development, store files locally
+        partner_logo = models.FileField(
+            upload_to='events/logos/',
+            null=True,
+            blank=True
+        )
+    else:
+        # In production, store files in Cloudinary
+        partner_logo = CloudinaryField(
+            "PartnerImage",
+            overwrite=True,
+            folder="website/uploads/events/logos",
+            resource_type="image",
+        )
     name = models.CharField(max_length=70)
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
@@ -214,7 +239,24 @@ class PartnerLogo(UUIDBaseModel):
 class Resource(UUIDBaseModel):
     title = models.CharField(max_length=100)
     link = models.URLField(null=True, blank=True)
-    resource = models.FileField(upload_to="events/", null=True, blank=True)
+
+    if settings.DEBUG:
+        # In development, store files locally
+        resource = models.FileField(
+            upload_to='publications/files/',
+            null=True,
+            blank=True
+        )
+    else:
+        # In production, store files in Cloudinary
+        resource = CloudinaryField(
+            'raw',
+            folder="website/uploads/events/files",
+            resource_type="auto",
+            null=True,
+            blank=True
+        )
+
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
         Event,

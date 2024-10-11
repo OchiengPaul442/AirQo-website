@@ -2,6 +2,7 @@
 
 import uuid
 from django.db import models
+from django.conf import settings
 from cloudinary.models import CloudinaryField
 from backend.utils.models import BaseModel
 
@@ -35,12 +36,23 @@ class Tag(UUIDBaseModel):
 class Highlight(UUIDBaseModel):
     title = models.CharField(max_length=110)
     tags = models.ManyToManyField(Tag, related_name='highlights')
-    image = CloudinaryField(
-        "Image",
-        overwrite=True,
-        resource_type="image",
-        folder="website/uploads/highlights/images",
-    )
+
+    if settings.DEBUG:
+        # In development, store files locally
+        image = models.FileField(
+            upload_to='highlights/images/',
+            null=True,
+            blank=True
+        )
+    else:
+        # In production, store files in Cloudinary
+        image = CloudinaryField(
+            "Image",
+            overwrite=True,
+            resource_type="image",
+            folder="website/uploads/highlights/images",
+        )
+
     link = models.URLField()
     link_title = models.CharField(max_length=20, blank=True)
     order = models.IntegerField(default=1)

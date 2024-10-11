@@ -27,10 +27,18 @@ class Press(UUIDBaseModel):
 
     date_published = models.DateField()
 
-    # Specify the Cloudinary folder for press logos
-    publisher_logo = CloudinaryField(
-        "PublisherLogo", overwrite=True, resource_type="image", folder="website/uploads/press/logos", null=True, blank=True
-    )
+    if settings.DEBUG:
+        # In development, store files locally
+        publisher_logo = models.FileField(
+            upload_to='press/logos/',
+            null=True,
+            blank=True
+        )
+    else:
+        # In production, store files in Cloudinary
+        publisher_logo = CloudinaryField(
+            "PublisherLogo", overwrite=True, resource_type="image", folder="website/uploads/press/logos", null=True, blank=True
+        )
 
     order = models.IntegerField(default=1)
 

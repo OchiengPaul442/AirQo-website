@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'apps.event',
     'apps.highlights',
     'apps.career',
+    'apps.publications',
 
     # Third-party apps
     'corsheaders',
@@ -126,7 +127,7 @@ if DEBUG:
     # Development media files stored locally
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'assets')
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'  # Local storage
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 else:
     # Production media files stored in Cloudinary
     CLOUDINARY_STORAGE = {

@@ -109,3 +109,14 @@ export const getDepartments = async () => {
     throw error;
   }
 };
+
+// Function to get publications
+export const getPublications = async () => {
+  try {
+    const response = await apiClient.get('/publications/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching publications:', error);
+    throw error;
+  }
+};
