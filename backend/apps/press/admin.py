@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Press
 import cloudinary.uploader
-
-# Ensure Press is registered only once
+from django.conf import settings
 
 
 @admin.register(Press)
@@ -30,16 +29,14 @@ class PressAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="150" height="150" />', obj.publisher_logo.url)
         return "No image available"
 
-    # Sets the column name in the admin list view
     image_preview.short_description = 'Image Preview'
 
-    # Override delete_queryset to handle bulk deletion
     def delete_queryset(self, request, queryset):
-        # Loop through each selected object in the queryset
         for obj in queryset:
-            # Check if the object has an image in Cloudinary
-            if obj.publisher_logo:
-                # Delete the Cloudinary image
-                cloudinary.uploader.destroy(obj.publisher_logo.public_id)
-            # Perform the soft delete or actual delete
+            # Check if the object has a publisher_logo and if it's a CloudinaryField (production)
+            if obj.publisher_logo and not settings.DEBUG:
+                # Check if the CloudinaryField has a public_id before deleting
+                if hasattr(obj.publisher_logo, 'public_id'):
+                    cloudinary.uploader.destroy(obj.publisher_logo.public_id)
+            # Perform the actual deletion (soft delete or complete delete)
             obj.delete()

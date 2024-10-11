@@ -1,6 +1,7 @@
 from cloudinary.utils import cloudinary_url
 from rest_framework import serializers
 from .models import Press
+from django.conf import settings
 
 
 class PressSerializer(serializers.ModelSerializer):
@@ -30,9 +31,15 @@ class PressSerializer(serializers.ModelSerializer):
 
     def get_publisher_logo_url(self, obj):
         """
-        Return the full Cloudinary URL for the publisher_logo.
+        Return the full URL for the publisher_logo, depending on the environment.
         """
         if obj.publisher_logo:
-            # Ensure the public_id is used to generate the Cloudinary URL
-            return cloudinary_url(obj.publisher_logo.public_id, secure=True)[0]
+            if settings.DEBUG:
+                # In development, return the local file URL
+                request = self.context.get('request')
+                if request:
+                    return request.build_absolute_uri(obj.publisher_logo.url)
+            else:
+                # In production, return the Cloudinary URL
+                return cloudinary_url(obj.publisher_logo.public_id, secure=True)[0]
         return None

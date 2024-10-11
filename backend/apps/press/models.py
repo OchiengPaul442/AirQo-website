@@ -24,7 +24,6 @@ class Press(UUIDBaseModel):
     article_title = models.CharField(max_length=100)
     article_intro = models.CharField(max_length=200, null=True, blank=True)
     article_link = models.URLField(null=True, blank=True)
-
     date_published = models.DateField()
 
     if settings.DEBUG:
@@ -91,16 +90,19 @@ class Press(UUIDBaseModel):
 
     def delete(self, *args, **kwargs):
         """
-        Override the delete method to remove the associated Cloudinary file
+        Override the delete method to remove the associated Cloudinary file or local file
         before deleting the Press article instance.
         """
         if self.publisher_logo:
-            # CloudinaryField provides the public_id directly
-            public_id = self.publisher_logo.public_id
-
-            if public_id:
-                # Delete the Cloudinary image using its public_id
-                cloudinary.uploader.destroy(public_id)
+            if isinstance(self.publisher_logo, CloudinaryField):
+                # Only delete from Cloudinary in production
+                public_id = self.publisher_logo.public_id
+                if public_id:
+                    # Delete the Cloudinary image using its public_id
+                    cloudinary.uploader.destroy(public_id)
+            else:
+                # If not using CloudinaryField, delete the file locally
+                self.publisher_logo.delete(save=False)
 
         # Call the superclass delete method to delete the Press instance
         super().delete(*args, **kwargs)
