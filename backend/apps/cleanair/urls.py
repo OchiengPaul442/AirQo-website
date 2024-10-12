@@ -23,5 +23,5 @@ router.register(r'engagements', EngagementViewSet)
 router.register(r'objectives', ObjectiveViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]

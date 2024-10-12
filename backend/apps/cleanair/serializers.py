@@ -80,11 +80,11 @@ class EngagementSerializer(serializers.ModelSerializer):
 
 
 class ForumEventSerializer(serializers.ModelSerializer):
-    programs = ProgramSerializer(many=True, read_only=True)
-    persons = PersonSerializer(many=True, read_only=True)
-    partners = PartnerSerializer(many=True, read_only=True)
-    forum_resources = ForumResourceSerializer(many=True, read_only=True)
-    supports = SupportSerializer(many=True, read_only=True)
+    # programs = ProgramSerializer(many=True, read_only=True)
+    # persons = PersonSerializer(many=True, read_only=True)
+    # partners = PartnerSerializer(many=True, read_only=True)
+    # forum_resources = ForumResourceSerializer(many=True, read_only=True)
+    # supports = SupportSerializer(many=True, read_only=True)
     engagements = EngagementSerializer(many=True, read_only=True)
 
     class Meta:
@@ -98,8 +98,8 @@ class ForumEventSerializer(serializers.ModelSerializer):
             'sponsorship_packages', 'travel_logistics_vaccination_details',
             'travel_logistics_visa_details', 'travel_logistics_accommodation_details',
             'glossary_details', 'background_image', 'location_name',
-            'location_link', 'order', 'programs', 'persons', 'partners',
-            'forum_resources', 'supports', 'engagements'
+            'location_link', 'engagements'
+            # to include the other add their fields here
         ]
 
 

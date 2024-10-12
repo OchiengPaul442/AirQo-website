@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 

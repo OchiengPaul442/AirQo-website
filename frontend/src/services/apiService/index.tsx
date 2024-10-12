@@ -176,3 +176,25 @@ export const getPartnerDetails = async (id: string) => {
     throw error;
   }
 };
+
+// Function to get Forum events
+export const getForumEvents = async () => {
+  try {
+    const response = await apiClient.get('/forum-events/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching forum events:', error);
+    throw error;
+  }
+};
+
+// Function to get a Forum event by ID
+export const getForumEventDetails = async (id: string) => {
+  try {
+    const response = await apiClient.get(`/forum-events/${id}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching forum event details:', error);
+    throw error;
+  }
+};

@@ -8,7 +8,7 @@ const TabNavigation: React.FC = () => {
   const [activeTab, setActiveTab] = useState(pathname);
 
   const tabs = [
-    { label: 'About', value: '/clean-air-network/' },
+    { label: 'About', value: '/clean-air-network' },
     { label: 'Membership', value: '/clean-air-network/membership' },
     { label: 'Events', value: '/clean-air-network/events' },
     { label: 'Resources', value: '/clean-air-network/resources' },
