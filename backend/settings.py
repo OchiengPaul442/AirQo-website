@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.externalTeam',
     'apps.board',
     'apps.partners',
+    'apps.cleanair',
 
     # Third-party apps
     'corsheaders',

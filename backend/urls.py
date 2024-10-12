@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/', include('apps.board.urls')),
     path('api/', include('apps.externalTeam.urls')),
     path('api/', include('apps.partners.urls')),
+    path('api/', include('apps.cleanair.urls')),
 
     # CKEditor routes for file upload and management
     path('ckeditor/', include('ckeditor_uploader.urls')),
