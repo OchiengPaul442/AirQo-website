@@ -1,9 +1,11 @@
 'use client';
 
+import PaginatedSection from '@components/sections/CleanAir/PaginatedSection';
 import Divider from '@components/sections/Divider';
 import {
   getBoardMembers,
   getExternalTeamMembers,
+  getPartners,
   getTeamMembers,
 } from '@services/apiService';
 import Image from 'next/image';
@@ -62,6 +64,7 @@ const AboutPage: React.FC = () => {
   const [externalTeamMembers, setExternalTeamMembers] = useState<TeamMember[]>(
     [],
   );
+  const [partners, setPartners] = useState<any[]>([]);
 
   const [loadingTeam, setLoadingTeam] = useState<boolean>(true);
   const [loadingExternalTeam, setLoadingExternalTeam] = useState<boolean>(true);
@@ -74,15 +77,22 @@ const AboutPage: React.FC = () => {
     // Fetch data for board, team, and external team
     const fetchData = async () => {
       try {
-        const [boardData, teamData, externalTeamData] = await Promise.all([
-          getBoardMembers(),
-          getTeamMembers(),
-          getExternalTeamMembers(),
-        ]);
+        const [boardData, teamData, externalTeamData, partnersData] =
+          await Promise.all([
+            getBoardMembers(),
+            getTeamMembers(),
+            getExternalTeamMembers(),
+            getPartners(),
+          ]);
+
+        const filteredPartners = partnersData.filter(
+          (partner: any) => partner.website_category === 'airqo',
+        );
 
         setBoardMembers(boardData || []);
         setTeamMembers(teamData || []);
         setExternalTeamMembers(externalTeamData || []);
+        setPartners(filteredPartners || []);
       } catch (error) {
         console.error('Error fetching team data:', error);
       } finally {
@@ -94,6 +104,14 @@ const AboutPage: React.FC = () => {
 
     fetchData();
   }, []);
+
+  // filter out from partners to get an array of the image url links from partner_logo_url and also the id of the partner
+  const partnerLogoLinks = partners.map((partner: any) => {
+    return {
+      id: partner.id,
+      logoUrl: partner.partner_logo_url,
+    };
+  });
 
   /** Helper Function to Render Member Sections **/
   const renderMembersSection = (
@@ -513,6 +531,35 @@ const AboutPage: React.FC = () => {
         loadingBoard,
         'board',
         'Meet the Board',
+      )}
+
+      {/* Partners Section */}
+      {partners && (
+        <section className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[200px]">
+          <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
+            {/* Title */}
+            <h2 className="text-3xl lg:text-[48px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">
+              Our <br />
+              partners
+            </h2>
+
+            {/* Content */}
+            <div className="space-y-6 w-full max-w-[556px]">
+              <p>
+                Together with our partners, we are solving large, complex air
+                quality monitoring challenges across Africa. We are providing
+                much-needed air quality data to Governments and individuals in
+                the continent to facilitate policy changes that combat air
+                pollution.
+              </p>
+              <Link href="/team" className="flex items-center text-blue-700">
+                <span>Partner with Us </span>
+                <FaArrowRightLong className="inline-block ml-2 " />
+              </Link>
+            </div>
+          </div>
+          <PaginatedSection logos={partnerLogoLinks} />
+        </section>
       )}
     </div>
   );

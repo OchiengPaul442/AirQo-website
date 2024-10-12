@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
 
 import { Pagination } from '../../ui';
@@ -6,9 +7,9 @@ import { Pagination } from '../../ui';
 const logosPerPage = 8;
 
 type PaginatedSectionProps = {
-  title: ReactNode;
-  description: ReactNode;
-  logos: { src: string; alt: string }[];
+  title?: ReactNode;
+  description?: ReactNode;
+  logos: any[];
   bgColor?: string; // Optional background color
 };
 
@@ -16,8 +17,9 @@ const PaginatedSection: React.FC<PaginatedSectionProps> = ({
   title,
   description,
   logos,
-  bgColor = '', // Default is no background color
+  bgColor = '',
 }) => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(logos.length / logosPerPage);
 
@@ -28,21 +30,24 @@ const PaginatedSection: React.FC<PaginatedSectionProps> = ({
     <section className={`${bgColor} py-14`}>
       <div className="max-w-5xl mx-auto px-4 lg:px-0 w-full">
         <div className="flex flex-col gap-8 items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <div>{title}</div>
-            <div>{description}</div>
-          </div>
+          {title && description && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              <div>{title}</div>
+              <div>{description}</div>
+            </div>
+          )}
 
           <div className="w-full flex justify-start">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full">
               {paginatedLogos.map((partner, index) => (
                 <div
                   key={index}
-                  className="flex justify-center items-center w-full h-[144px] border border-gray-300 py-4"
+                  onClick={() => router.push(`/partners/${partner.id}`)}
+                  className="flex justify-center items-center cursor-pointer w-full h-[144px] border border-gray-300 px-2 py-4"
                 >
                   <Image
-                    src={partner.src}
-                    alt={partner.alt}
+                    src={partner.logoUrl}
+                    alt={'logo'}
                     width={271}
                     height={144}
                     className="object-contain w-full h-full mix-blend-multiply"

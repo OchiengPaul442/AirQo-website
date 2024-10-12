@@ -153,3 +153,26 @@ export const getExternalTeamMembers = async () => {
     throw error;
   }
 };
+
+// Functiont to get partners
+export const getPartners = async () => {
+  try {
+    const response = await apiClient.get('/partners/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching partners:', error);
+    throw error;
+  }
+};
+
+// function to get a single partner by ID
+
+export const getPartnerDetails = async (id: string) => {
+  try {
+    const response = await apiClient.get(`/partners/${id}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching partner details:', error);
+    throw error;
+  }
+};
