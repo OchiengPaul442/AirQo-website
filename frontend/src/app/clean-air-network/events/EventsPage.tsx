@@ -85,7 +85,7 @@ const EventsPage: React.FC = () => {
   const itemsPerPage = 4;
   console.log(error);
 
-  const currentDate = new Date();
+  const currentDate = useMemo(() => new Date(), []);
 
   // Fetch events on component mount
   useEffect(() => {

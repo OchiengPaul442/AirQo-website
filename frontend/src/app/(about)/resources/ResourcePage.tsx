@@ -2,7 +2,7 @@
 import { CustomButton, Pagination } from '@components/ui';
 import { getPublications } from '@services/apiService';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
 
 const ResourcePage: React.FC = () => {
@@ -10,11 +10,14 @@ const ResourcePage: React.FC = () => {
   const searchParams = useSearchParams();
 
   // Tabs mapped to categories from the Publication model
-  const tabs = [
-    { name: 'Research Publications', value: 'research' },
-    { name: 'Technical Reports and Policy Documents', value: 'technical' },
-    { name: 'Guides and Manuals', value: 'guide' },
-  ];
+  const tabs = useMemo(
+    () => [
+      { name: 'Research Publications', value: 'research' },
+      { name: 'Technical Reports and Policy Documents', value: 'technical' },
+      { name: 'Guides and Manuals', value: 'guide' },
+    ],
+    [],
+  );
 
   // State management
   const [selectedTab, setSelectedTab] = useState<string>(
@@ -54,7 +57,7 @@ const ResourcePage: React.FC = () => {
     if (tabs.some((tab) => tab.value === selectedTab)) {
       setCurrentPage(1);
     }
-  }, [selectedTab]);
+  }, [selectedTab, tabs]);
 
   // Handle tab click
   const handleTabClick = (tabValue: string) => {

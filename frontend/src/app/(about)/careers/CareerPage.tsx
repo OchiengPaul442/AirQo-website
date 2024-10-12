@@ -72,7 +72,7 @@ const CareerPage: React.FC = () => {
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="relative max-w-5xl mx-auto w-full space-y-6 px-4 lg:px-8 pt-20 text-white">
-          <p className="text-sm lg:text-lg">Careers &gt; Welcome to AirQo</p>
+          <p className="text-sm">Careers &gt; Welcome to AirQo</p>
           <h1 className="text-4xl lg:text-5xl font-bold mt-2">Join our team</h1>
           <p className="text-sm lg:text-xl mt-4">
             Be part of a team pioneering air quality monitoring in Africa.

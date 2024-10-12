@@ -59,6 +59,11 @@ const FeaturedCarousel = () => {
     );
   }
 
+  // If no highlights, do not display the section
+  if (highlights.length === 0 && !loading) {
+    return null;
+  }
+
   // Display error message if something goes wrong
   if (error) {
     return (
@@ -66,11 +71,6 @@ const FeaturedCarousel = () => {
         <p className="text-red-500">{error}</p>
       </div>
     );
-  }
-
-  // If no highlights, do not display the section
-  if (highlights.length === 0) {
-    return null;
   }
 
   return (

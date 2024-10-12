@@ -85,7 +85,9 @@ const PressPage: React.FC = () => {
             <ArticleSkeleton />
           </>
         ) : error ? (
-          <p>Failed to load articles. Please try again later.</p>
+          <p className="text-lg">
+            Failed to load articles. Please try again later.
+          </p>
         ) : displayedArticles.length > 0 ? (
           displayedArticles.map((article, idx) => (
             <div
@@ -122,7 +124,7 @@ const PressPage: React.FC = () => {
             </div>
           ))
         ) : (
-          <p>No press articles available at the moment.</p>
+          <p className="text-lg">No press articles available at the moment.</p>
         )}
       </section>
 

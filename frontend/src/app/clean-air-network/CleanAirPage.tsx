@@ -186,15 +186,7 @@ const CleanAirPage = () => {
         </div>
       </section>
 
-      <FeaturedEvent
-        title="Championing Liveable Urban Environments Through African Networks for Air (CLEAN AIR)"
-        subtitle="Extended workshop and launchpad for regional collaborations"
-        date="3rd - 5th April 2023"
-        time="8:00am - 5:00pm"
-        imgSrc="https://images.unsplash.com/photo-1667956494595-b80bea8c310b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGV2ZW50c3xlbnwwfHwwfHx8MA%3D%3D"
-        buttonText="Read more"
-        buttonLink="/events/clean-air"
-      />
+      <FeaturedEvent />
     </div>
   );
 };

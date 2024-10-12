@@ -119,157 +119,164 @@ const AboutPage: React.FC = () => {
     }
 
     if (!loading && members.length === 0) {
-      // Do not render the section if there's no data
       return null;
     }
 
     // Render the actual member cards
     return (
-      <section
-        id={sectionId}
-        className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[200px]"
-      >
-        <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
-          {/* Title */}
-          <h2 className="text-3xl lg:text-[48px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">
-            {title}
-          </h2>
+      <>
+        <section
+          id={sectionId}
+          className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[200px]"
+        >
+          <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
+            {/* Title */}
+            <h2 className="text-3xl lg:text-[48px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">
+              {title}
+            </h2>
 
-          {/* Content */}
-          <div className="space-y-6 w-full max-w-[556px]">
-            {title === 'Meet the team' && (
-              <>
+            {/* Content */}
+            <div className="space-y-6 w-full max-w-[556px]">
+              {title === 'Meet the team' && (
+                <>
+                  <p>
+                    This is our team, a community of spirited individuals who
+                    work hard to bridge the gap in air quality monitoring in
+                    Africa.
+                  </p>
+                  <Link
+                    href="/team"
+                    className="flex items-center text-blue-700"
+                  >
+                    <span>Join the team </span>
+                    <FaArrowRightLong className="inline-block ml-2 " />
+                  </Link>
+                </>
+              )}
+              {title === 'External team' && (
                 <p>
-                  This is our team, a community of spirited individuals who work
-                  hard to bridge the gap in air quality monitoring in Africa.
+                  A team of enthusiastic experts that offer guidance to enhance
+                  our growth and realisation of our goals.
                 </p>
-                <Link href="/team" className="flex items-center text-blue-700">
-                  <span>Join the team </span>
-                  <FaArrowRightLong className="inline-block ml-2 " />
-                </Link>
-              </>
-            )}
-            {title === 'External team' && (
-              <p>
-                A team of enthusiastic experts that offer guidance to enhance
-                our growth and realisation of our goals.
-              </p>
-            )}
-            {title === 'Meet the Board' && (
-              <p>
-                A team of enthusiastic experts that offer guidance to enhance
-                our growth and realisation of our goals.
-              </p>
-            )}
+              )}
+              {title === 'Meet the Board' && (
+                <p>
+                  A team of enthusiastic experts that offer guidance to enhance
+                  our growth and realisation of our goals.
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-          {members.map((member, idx) => (
-            <Dialog key={idx}>
-              <DialogTrigger asChild>
-                <div className="flex flex-col items-center space-y-4 cursor-pointer">
-                  <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
-                    <Image
-                      src={member.picture_url}
-                      alt={member.name}
-                      width={310}
-                      height={390}
-                      className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
-                    />
-                  </div>
-                  <div className="flex items-center w-full justify-between">
-                    <div className="text-left">
-                      <h3 className="text-xl font-bold">{member.name}</h3>
-                      <p className="text-gray-500">{member.title}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
+            {members.map((member, idx) => (
+              <Dialog key={idx}>
+                <DialogTrigger asChild>
+                  <div className="flex flex-col items-center space-y-4 cursor-pointer">
+                    <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
+                      <Image
+                        src={member.picture_url}
+                        alt={member.name}
+                        width={310}
+                        height={390}
+                        className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
+                      />
                     </div>
-                    {/* Optional Social Media Icon */}
-                    <div className="flex items-center space-x-2">
-                      {member.twitter && (
-                        <a
-                          href={member.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-600 transition"
-                        >
-                          <FaTwitter size={24} />
-                        </a>
-                      )}
-                      {member.linked_in && (
-                        <a
-                          href={member.linked_in}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-600 transition"
-                        >
-                          <FaLinkedinIn size={24} />
-                        </a>
-                      )}
+                    <div className="flex items-center w-full justify-between">
+                      <div className="text-left">
+                        <h3 className="text-xl font-bold">{member.name}</h3>
+                        <p className="text-gray-500">{member.title}</p>
+                      </div>
+                      {/* Optional Social Media Icon */}
+                      <div className="flex items-center space-x-2">
+                        {member.twitter && (
+                          <a
+                            href={member.twitter}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-600 transition"
+                          >
+                            <FaTwitter size={24} />
+                          </a>
+                        )}
+                        {member.linked_in && (
+                          <a
+                            href={member.linked_in}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-600 transition"
+                          >
+                            <FaLinkedinIn size={24} />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </DialogTrigger>
+                </DialogTrigger>
 
-              {/* Content Section */}
-              <DialogContent className="max-w-[1024px] p-6">
-                {/* Header */}
-                <DialogHeader className="mb-4">
-                  <div className="flex flex-col items-start gap-4">
-                    <div>
-                      <DialogTitle className="text-2xl font-bold">
-                        {member.name}
-                      </DialogTitle>
-                      <p className="text-lg text-gray-500">{member.title}</p>
+                {/* Content Section */}
+                <DialogContent className="max-w-[1024px] p-6">
+                  {/* Header */}
+                  <DialogHeader className="mb-4">
+                    <div className="flex flex-col items-start gap-4">
+                      <div>
+                        <DialogTitle className="text-2xl font-bold">
+                          {member.name}
+                        </DialogTitle>
+                        <p className="text-lg text-gray-500">{member.title}</p>
+                      </div>
+                      {/* Optional Social Media Icon */}
+                      <div className="flex items-center space-x-2">
+                        {member.twitter && (
+                          <a
+                            href={member.twitter}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-600 transition"
+                          >
+                            <FaTwitter size={24} />
+                          </a>
+                        )}
+                        {member.linked_in && (
+                          <a
+                            href={member.linked_in}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-600 transition"
+                          >
+                            <FaLinkedinIn size={24} />
+                          </a>
+                        )}
+                      </div>
                     </div>
-                    {/* Optional Social Media Icon */}
-                    <div className="flex items-center space-x-2">
-                      {member.twitter && (
-                        <a
-                          href={member.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-600 transition"
-                        >
-                          <FaTwitter size={24} />
-                        </a>
-                      )}
-                      {member.linked_in && (
-                        <a
-                          href={member.linked_in}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-600 transition"
-                        >
-                          <FaLinkedinIn size={24} />
-                        </a>
-                      )}
+                  </DialogHeader>
+                  <div className="flex flex-col lg:flex-row items-start gap-6">
+                    {/* Image Section */}
+                    <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
+                      <Image
+                        src={member.picture_url}
+                        alt={member.name}
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      {/* Description */}
+                      <DialogDescription className="leading-relaxed overflow-y-auto">
+                        {member.descriptions.map((desc, idx) => (
+                          <p key={idx}>{desc.description}</p>
+                        ))}
+                      </DialogDescription>
                     </div>
                   </div>
-                </DialogHeader>
-                <div className="flex flex-col lg:flex-row items-start gap-6">
-                  {/* Image Section */}
-                  <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
-                    <Image
-                      src={member.picture_url}
-                      alt={member.name}
-                      width={300}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    {/* Description */}
-                    <DialogDescription className="leading-relaxed overflow-y-auto">
-                      {member.descriptions.map((desc, idx) => (
-                        <p key={idx}>{desc.description}</p>
-                      ))}
-                    </DialogDescription>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          ))}
-        </div>
-      </section>
+                </DialogContent>
+              </Dialog>
+            ))}
+          </div>
+        </section>
+
+        <Divider className="bg-black w-full p-0 h-[1px] mx-auto" />
+      </>
     );
   };
 
@@ -492,8 +499,6 @@ const AboutPage: React.FC = () => {
       {/* Team Section */}
       {renderMembersSection(teamMembers, loadingTeam, 'team', 'Meet the team')}
 
-      <Divider className="bg-black w-full p-0 h-[1px] mx-auto" />
-
       {/* External Team Section */}
       {renderMembersSection(
         externalTeamMembers,
@@ -501,8 +506,6 @@ const AboutPage: React.FC = () => {
         'external-team',
         'External team',
       )}
-
-      <Divider className="bg-black w-full p-0 h-[1px] mx-auto" />
 
       {/* Board Section */}
       {renderMembersSection(

@@ -164,6 +164,10 @@ const FeaturedEvent: React.FC = () => {
     );
   };
 
+  if (!loading && !featuredEvent) {
+    return null;
+  }
+
   return (
     <>
       {loading ? (
