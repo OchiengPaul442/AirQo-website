@@ -58,11 +58,6 @@ const menuItems: MenuItems = {
       description: 'Calibrate your low-cost sensor data',
       href: '/products/calibrate',
     },
-    {
-      title: 'Air Quality Reporting Tool',
-      description: 'Generate and download reports',
-      href: 'https://platform.airqo.net/reports/login',
-    },
   ],
   Solutions: [
     {
@@ -121,13 +116,11 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
                     href={item.href}
                     className="block p-2 rounded-xl hover:bg-blue-50 transition"
                   >
-                    <div className="text-lg font-medium text-gray-800">
+                    <div className="font-medium text-gray-800">
                       {item.title}
                     </div>
                     {item.description && (
-                      <div className="text-sm text-gray-600">
-                        {item.description}
-                      </div>
+                      <div className=" text-gray-500">{item.description}</div>
                     )}
                   </Link>
                 </NavigationMenuLink>
