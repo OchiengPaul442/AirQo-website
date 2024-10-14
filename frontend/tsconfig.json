@@ -24,7 +24,8 @@
       "@store/*": ["./src/store/*"],
       "@types/*": ["./src/types/*"],
       "@lib/*": ["./src/lib/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@context/*": ["./src/context/*"]
     },
     "plugins": [
       {

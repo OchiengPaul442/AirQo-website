@@ -1,6 +1,5 @@
 'use client';
-import Divider from '@components/sections/Divider';
-import { CustomButton } from '@components/ui';
+import { CustomButton, Divider } from '@components/ui';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';

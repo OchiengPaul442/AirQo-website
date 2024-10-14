@@ -1,79 +1,49 @@
-import Image from 'next/image';
+'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
-interface HeroProps {
-  picUrl: string;
-  title: string;
-  subtext: string;
-  link: string;
-}
+const TabNavigation = () => {
+  const pathname = usePathname();
 
-const TabNavigation: React.FC<HeroProps> = ({
-  picUrl,
-  title,
-  subtext,
-  link,
-}) => {
+  // Function to check if the tab is active based on the current pathname
+  const isActiveTab = (path: string) => pathname === path;
+
   return (
-    <div className="w-full bg-white py-10">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-        {/* Text Section */}
-        <div className="md:w-1/2 space-y-6">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-800">
-            {title}
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600">{subtext}</p>
-          <Link href={link}>
-            <a className="inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-              Register here
-            </a>
-          </Link>
-        </div>
-
-        {/* Image Section */}
-        <div className="md:w-1/2">
-          <Image
-            src={picUrl}
-            alt="Forum Image"
-            width={600}
-            height={400}
-            className="rounded-lg object-cover"
-          />
-        </div>
-      </div>
-
-      {/* Navigation Links */}
-      <div className="w-full bg-gray-50 py-4 mt-6">
-        <div className="max-w-5xl mx-auto flex flex-wrap justify-between items-center text-gray-600 space-x-4">
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">About</a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">
-              Programme committee
-            </a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">
-              Schedule & Registration
-            </a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">Speakers</a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">Partners</a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">Travel Logistics</a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">Glossary</a>
-          </Link>
-          <Link href="#">
-            <a className="hover:text-gray-800 transition">Resources</a>
-          </Link>
+    <div className="w-full py-10">
+      <div className="w-full bg-gray-50 py-4 overflow-x-auto">
+        <div className="max-w-5xl mx-auto flex justify-between min-w-[920px] px-4 lg:px-0 items-center space-y-4 md:space-y-0">
+          {[
+            { href: '/clean-air-forum', text: 'About' },
+            {
+              href: '/clean-air-forum/program-committee',
+              text: 'Programme Committee',
+            },
+            {
+              href: '/clean-air-forum/schedule',
+              text: 'Schedule & Registration',
+            },
+            { href: '/clean-air-forum/speakers', text: 'Speakers' },
+            { href: '/clean-air-forum/partners', text: 'Partners' },
+            { href: '/clean-air-forum/logistics', text: 'Travel Logistics' },
+            { href: '/clean-air-forum/glossary', text: 'Glossary' },
+            { href: '/clean-air-forum/resources', text: 'Resources' },
+          ].map((link, index) => (
+            <Link key={index} href={link.href}>
+              <span
+                className={`relative text-gray-700 hover:text-gray-900 transition ${
+                  isActiveTab(link.href)
+                    ? 'font-semibold text-gray-900'
+                    : 'text-gray-700'
+                }`}
+              >
+                {link.text}
+                {isActiveTab(link.href) && (
+                  <span className="absolute left-0 -bottom-[18px] h-[2px] w-full bg-gray-900" />
+                )}
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

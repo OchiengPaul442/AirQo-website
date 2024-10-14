@@ -1,6 +1,5 @@
 'use client';
-import Divider from '@components/sections/Divider';
-import { CustomButton } from '@components/ui';
+import { CustomButton, Divider } from '@components/ui';
 import React from 'react';
 
 const AfricanCityPage = () => {

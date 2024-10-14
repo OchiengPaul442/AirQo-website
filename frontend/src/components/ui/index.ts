@@ -21,6 +21,7 @@ export {
   DialogTitle,
   DialogTrigger,
 } from './dialog';
+export { default as Divider } from './Divider';
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -40,6 +41,7 @@ export {
 } from './dropdown-menu';
 export { Input } from './input';
 export { default as MediaContentSection } from './MediaContentSection';
+export { default as MemberCard } from './MemberCard';
 export {
   NavigationMenu,
   NavigationMenuContent,

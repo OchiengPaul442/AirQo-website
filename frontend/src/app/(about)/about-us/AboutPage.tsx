@@ -1,7 +1,6 @@
 'use client';
 
 import PaginatedSection from '@components/sections/CleanAir/PaginatedSection';
-import Divider from '@components/sections/Divider';
 import {
   getBoardMembers,
   getExternalTeamMembers,
@@ -11,34 +10,9 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { FaLinkedinIn, FaTwitter } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/';
-
-/** Type Definitions **/
-
-// Interface for individual member descriptions
-interface MemberDescription {
-  description: string;
-}
-
-// Interface for a team member
-interface TeamMember {
-  picture_url: string;
-  name: string;
-  title: string;
-  twitter?: string;
-  linked_in?: string;
-  descriptions: MemberDescription[];
-}
+import { Divider, MemberCard } from '@/components/ui/';
 
 /** Skeleton Loader Component **/
 
@@ -59,11 +33,9 @@ const SkeletonCard: React.FC = () => (
 
 const AboutPage: React.FC = () => {
   // State definitions with TypeScript types
-  const [boardMembers, setBoardMembers] = useState<TeamMember[]>([]);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [externalTeamMembers, setExternalTeamMembers] = useState<TeamMember[]>(
-    [],
-  );
+  const [boardMembers, setBoardMembers] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [externalTeamMembers, setExternalTeamMembers] = useState<any[]>([]);
   const [partners, setPartners] = useState<any[]>([]);
 
   const [loadingTeam, setLoadingTeam] = useState<boolean>(true);
@@ -115,7 +87,7 @@ const AboutPage: React.FC = () => {
 
   /** Helper Function to Render Member Sections **/
   const renderMembersSection = (
-    members: TeamMember[],
+    members: any[],
     loading: boolean,
     sectionId: string,
     title: string,
@@ -186,109 +158,8 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-            {members.map((member, idx) => (
-              <Dialog key={idx}>
-                <DialogTrigger asChild>
-                  <div className="flex flex-col items-center space-y-4 cursor-pointer">
-                    <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
-                      <Image
-                        src={member.picture_url}
-                        alt={member.name}
-                        width={310}
-                        height={390}
-                        className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
-                      />
-                    </div>
-                    <div className="flex items-center w-full justify-between">
-                      <div className="text-left">
-                        <h3 className="text-xl font-bold">{member.name}</h3>
-                        <p className="text-gray-500">{member.title}</p>
-                      </div>
-                      {/* Optional Social Media Icon */}
-                      <div className="flex items-center space-x-2">
-                        {member.twitter && (
-                          <a
-                            href={member.twitter}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:text-blue-600 transition"
-                          >
-                            <FaTwitter size={24} />
-                          </a>
-                        )}
-                        {member.linked_in && (
-                          <a
-                            href={member.linked_in}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:text-blue-600 transition"
-                          >
-                            <FaLinkedinIn size={24} />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </DialogTrigger>
-
-                {/* Content Section */}
-                <DialogContent className="max-w-[1024px] p-6">
-                  {/* Header */}
-                  <DialogHeader className="mb-4">
-                    <div className="flex flex-col items-start gap-4">
-                      <div>
-                        <DialogTitle className="text-2xl font-bold">
-                          {member.name}
-                        </DialogTitle>
-                        <p className="text-lg text-gray-500">{member.title}</p>
-                      </div>
-                      {/* Optional Social Media Icon */}
-                      <div className="flex items-center space-x-2">
-                        {member.twitter && (
-                          <a
-                            href={member.twitter}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:text-blue-600 transition"
-                          >
-                            <FaTwitter size={24} />
-                          </a>
-                        )}
-                        {member.linked_in && (
-                          <a
-                            href={member.linked_in}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:text-blue-600 transition"
-                          >
-                            <FaLinkedinIn size={24} />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </DialogHeader>
-                  <div className="flex flex-col lg:flex-row items-start gap-6">
-                    {/* Image Section */}
-                    <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
-                      <Image
-                        src={member.picture_url}
-                        alt={member.name}
-                        width={300}
-                        height={300}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      {/* Description */}
-                      <DialogDescription className="leading-relaxed overflow-y-auto">
-                        {member.descriptions.map((desc, idx) => (
-                          <p key={idx}>{desc.description}</p>
-                        ))}
-                      </DialogDescription>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+            {members.map((member: any, idx: any) => (
+              <MemberCard key={idx} member={member} />
             ))}
           </div>
         </section>
