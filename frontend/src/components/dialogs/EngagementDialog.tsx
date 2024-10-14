@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -43,6 +44,44 @@ const options: EngagementOption[] = [
   },
 ];
 
+// Define motion variants for reusable animations
+const containerVariants = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { opacity: 1, x: 0 },
+};
+
+const textVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const optionVariants = {
+  hidden: { opacity: 0, x: 50 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: custom * 0.05, // Slightly reduced delay for faster appearance
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  }),
+};
+
+const formVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    transition: { duration: 0.2, ease: 'easeIn' },
+  },
+};
+
 const EngagementDialog = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: any) => state.modal.isOpen);
@@ -85,10 +124,7 @@ const EngagementDialog = () => {
     e.preventDefault();
 
     if (formData.termsAccepted) {
-      // Handle the form data here (e.g., send it to an API or backend)
       console.log('Form submitted with data:', formData);
-
-      // Reset form and close modal
       setFormData({
         firstName: '',
         lastName: '',
@@ -103,111 +139,126 @@ const EngagementDialog = () => {
   };
 
   const renderForm = () => (
-    <div className="w-full flex flex-col justify-center gap-6 h-full p-6">
-      <button
-        onClick={() => setActiveSection(null)}
-        className="mb-4 text-blue-600 hover:text-blue-800 transition-colors flex items-center"
+    <AnimatePresence>
+      <motion.div
+        key="form"
+        variants={formVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="w-full flex flex-col justify-center gap-6 h-full p-6"
       >
-        <FiArrowLeft className="mr-2" />
-        Back
-      </button>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-start justify-center w-full gap-6"
-      >
-        {/* First Name */}
-        <div className="flex flex-col w-full">
-          <label htmlFor="firstName" className="mb-2 text-gray-600">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            className="p-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-[#F9FAFB]"
-            required
-          />
-        </div>
-
-        {/* Last Name */}
-        <div className="flex flex-col w-full">
-          <label htmlFor="lastName" className="mb-2 text-gray-600">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            className="p-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-[#F9FAFB]"
-            required
-          />
-        </div>
-
-        {/* Email Address */}
-        <div className="flex flex-col w-full">
-          <label htmlFor="email" className="mb-2 text-gray-600">
-            Email address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="p-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-[#F9FAFB]"
-            required
-          />
-        </div>
-
-        {/* Terms and Conditions */}
-        <div className="flex items-start text-sm">
-          <input
-            type="checkbox"
-            id="terms"
-            name="termsAccepted"
-            checked={formData.termsAccepted}
-            onChange={handleInputChange}
-            className="mr-2 relative top-[5px]"
-            required
-          />
-          <label htmlFor="terms" className="text-gray-600">
-            I agree to the{' '}
-            <a
-              href="/terms"
-              className="text-blue-600 underline hover:text-blue-800"
-            >
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a
-              href="/privacy"
-              className="text-blue-600 underline hover:text-blue-800"
-            >
-              Privacy Policy
-            </a>
-          </label>
-        </div>
-
-        <CustomButton
-          type="submit"
-          className="bg-blue-600 text-white px-6 py-4 hover:bg-blue-700 transition-colors"
+        <button
+          onClick={() => setActiveSection(null)}
+          className="mb-4 text-blue-600 hover:text-blue-800 transition-colors flex items-center"
         >
-          Send
-        </CustomButton>
-      </form>
-    </div>
+          <FiArrowLeft className="mr-2" />
+          Back
+        </button>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-start justify-center w-full gap-6"
+        >
+          {/* First Name */}
+          <div className="flex flex-col w-full">
+            <label htmlFor="firstName" className="mb-2 text-gray-600">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              className="p-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-[#F9FAFB]"
+              required
+            />
+          </div>
+
+          {/* Last Name */}
+          <div className="flex flex-col w-full">
+            <label htmlFor="lastName" className="mb-2 text-gray-600">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              className="p-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-[#F9FAFB]"
+              required
+            />
+          </div>
+
+          {/* Email Address */}
+          <div className="flex flex-col w-full">
+            <label htmlFor="email" className="mb-2 text-gray-600">
+              Email address
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="p-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-[#F9FAFB]"
+              required
+            />
+          </div>
+
+          {/* Terms and Conditions */}
+          <div className="flex items-start text-sm">
+            <input
+              type="checkbox"
+              id="terms"
+              name="termsAccepted"
+              checked={formData.termsAccepted}
+              onChange={handleInputChange}
+              className="mr-2 relative top-[5px]"
+              required
+            />
+            <label htmlFor="terms" className="text-gray-600">
+              I agree to the{' '}
+              <a
+                href="/terms"
+                className="text-blue-600 underline hover:text-blue-800"
+              >
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a
+                href="/privacy"
+                className="text-blue-600 underline hover:text-blue-800"
+              >
+                Privacy Policy
+              </a>
+            </label>
+          </div>
+
+          <CustomButton
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-4 hover:bg-blue-700 transition-colors"
+          >
+            Send
+          </CustomButton>
+        </form>
+      </motion.div>
+    </AnimatePresence>
   );
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-5xl max-h-full mx-auto p-0 overflow-hidden">
         <div className="flex flex-col lg:flex-row">
-          {/* Left Side */}
-          <div className="w-full lg:w-1/2 flex flex-col items-start justify-center gap-6 h-full bg-gray-100 p-16">
+          {/* Left Side - Breadcrumb and Text with Animation */}
+          <motion.div
+            className="w-full lg:w-1/2 flex flex-col items-start justify-center gap-6 h-full bg-gray-100 p-16"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
             <nav aria-label="Breadcrumb">
               <ol className="flex items-center space-x-2 text-sm">
                 <li>
@@ -225,7 +276,13 @@ const EngagementDialog = () => {
                 </li>
               </ol>
             </nav>
-            <div className="space-y-2 lg:w-[65%]">
+            <motion.div
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+              className="space-y-2 lg:w-[65%]"
+            >
               <h2 className="text-2xl font-bold text-gray-900">
                 How would you like to engage with us?
               </h2>
@@ -233,17 +290,26 @@ const EngagementDialog = () => {
                 Access real-time and historic air quality information across
                 Africa through our easy-to-use air quality analytics dashboard.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Right Side */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center gap-6 h-full p-16">
+          <motion.div
+            className="w-full lg:w-1/2 flex flex-col justify-center gap-6 h-full p-16"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
+          >
             {!activeSection
               ? options.map((item, idx) => (
-                  <div
+                  <motion.div
                     key={idx}
                     onClick={() => handleItemClick(item.title)}
                     className="flex items-center p-4 bg-white border rounded-md shadow-sm hover:bg-blue-50 cursor-pointer transition-all"
+                    variants={optionVariants}
+                    initial="hidden"
+                    animate="visible"
+                    custom={idx}
                   >
                     <div className="flex-shrink-0 p-2 bg-blue-50 rounded-full text-blue-600 text-2xl">
                       {item.icon}
@@ -252,10 +318,10 @@ const EngagementDialog = () => {
                       <h3 className="font-bold text-gray-900">{item.title}</h3>
                       <p className="text-gray-500">{item.description}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))
               : renderForm()}
-          </div>
+          </motion.div>
         </div>
       </DialogContent>
     </Dialog>

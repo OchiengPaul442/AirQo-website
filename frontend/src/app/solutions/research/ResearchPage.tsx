@@ -171,7 +171,10 @@ const ResearchPage = () => {
           </p>
           <CustomButton
             onClick={() => {
-              return null;
+              window.open(
+                'https://www.nema.go.ug/sites/default/files/NSOER%202018-2019.pdf',
+                '_blank',
+              );
             }}
             className="flex items-center bg-transparent text-black justify-center w-full max-w-[200px] border border-black px-4 py-3 bg-none mt-4"
           >
@@ -182,7 +185,7 @@ const ResearchPage = () => {
 
       {/* Call to Action */}
       <CustomButton
-        onClick={() => router.push('#')}
+        onClick={() => router.push('/explore-data')}
         className="bg-[#0CE87E] text-black rounded-lg max-w-5xl mx-auto w-full py-16 text-center"
       >
         <h3 className="text-3xl font-bold mb-4">

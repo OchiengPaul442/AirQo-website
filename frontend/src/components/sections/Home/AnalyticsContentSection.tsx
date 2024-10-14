@@ -64,6 +64,7 @@ const AnalyticsContentSection: React.FC<AnalyticsContentSectionProps> = ({
               fill
               className="object-contain"
               priority
+              loading="eager"
             />
           </div>
         </div>

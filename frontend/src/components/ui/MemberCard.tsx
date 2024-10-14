@@ -53,6 +53,7 @@ const MemberCard: React.FC<MemberCardProps> = ({
               alt={member.name}
               width={295}
               height={390}
+              loading="eager"
               className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
             />
           </div>
@@ -155,6 +156,7 @@ const MemberCard: React.FC<MemberCardProps> = ({
               className="w-full h-full object-cover"
               placeholder="blur"
               blurDataURL="/placeholder-image.jpg"
+              loading="eager"
             />
           </div>
 

@@ -51,6 +51,7 @@ const ContentSection: React.FC<ContentSectionProps> = ({
             height={482}
             layout="responsive"
             objectFit="cover"
+            loading="eager"
             className="rounded-lg shadow-sm w-full max-w-[600px] max-h-[482px]"
           />
         </div>

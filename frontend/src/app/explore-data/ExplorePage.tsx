@@ -1,31 +1,28 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import { CustomButton } from '@/components/ui';
 
-// Utility function to detect platform
-const getDownloadLink = () => {
-  const userAgent =
-    typeof window !== 'undefined'
-      ? navigator.userAgent || navigator.vendor
-      : '';
-
-  if (/android/i.test(userAgent)) {
-    return 'https://play.google.com/store/apps/details?id=com.airqo.app';
-  } else if (/iPad|iPhone|iPod/i.test(userAgent)) {
-    return 'https://apps.apple.com/ug/app/airqo-air-quality/id1337573091';
-  } else {
-    return 'https://play.google.com/store/apps/details?id=com.airqo.app';
-  }
-};
-
 const ExplorePage = () => {
-  const handleDownloadClick = () => {
-    const downloadLink = getDownloadLink();
-    window.open(downloadLink, '_blank');
+  const router = useRouter();
+
+  // Framer Motion variant for text reveal
+  const textReveal = {
+    hidden: { opacity: 0, y: -20 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.5,
+        ease: 'easeInOut',
+      },
+    }),
   };
 
   return (
@@ -53,10 +50,17 @@ const ExplorePage = () => {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-[2fr,3fr] h-full">
-          {/* Left Section - Smaller Width */}
+          {/* Left Section - Smooth sequential reveal for each part */}
           <div className="flex flex-col justify-center h-full bg-gray-50 p-8 lg:p-16">
-            {/* Breadcrumb */}
-            <nav className="text-sm text-gray-500 mb-4" aria-label="Breadcrumb">
+            {/* Breadcrumb with reveal effect */}
+            <motion.nav
+              className="text-sm text-gray-500 mb-4"
+              aria-label="Breadcrumb"
+              initial="hidden"
+              animate="visible"
+              custom={1}
+              variants={textReveal}
+            >
               <ol className="flex items-center space-x-2">
                 <li>
                   <Link href="/" className="hover:underline">
@@ -70,19 +74,31 @@ const ExplorePage = () => {
                   </Link>
                 </li>
               </ol>
-            </nav>
+            </motion.nav>
 
-            {/* Heading */}
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            {/* Heading with reveal effect */}
+            <motion.h1
+              className="text-3xl font-bold text-gray-900 mb-4"
+              initial="hidden"
+              animate="visible"
+              custom={2}
+              variants={textReveal}
+            >
               Visualise air quality information.
-            </h1>
+            </motion.h1>
 
-            {/* Description */}
-            <p className="text-gray-600 mb-8">
+            {/* Description with reveal effect */}
+            <motion.p
+              className="text-gray-600 mb-8"
+              initial="hidden"
+              animate="visible"
+              custom={3}
+              variants={textReveal}
+            >
               Access real-time and historic air quality information across
               Africa through our easy-to-use air quality analytics dashboard or
               mobile app.
-            </p>
+            </motion.p>
           </div>
 
           {/* Right Section - Larger Width */}
@@ -106,7 +122,7 @@ const ExplorePage = () => {
                 </p>
                 <CustomButton
                   className="text-white"
-                  onClick={handleDownloadClick}
+                  onClick={() => router.push('/explore-data/mobile-app')}
                 >
                   Download App
                 </CustomButton>

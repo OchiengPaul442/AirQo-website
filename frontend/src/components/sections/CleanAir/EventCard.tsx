@@ -21,6 +21,7 @@ const EventCard = ({ event, key }: any) => {
           alt={event.title}
           width={231}
           height={204}
+          loading="eager"
           className="rounded-lg object-cover"
         />
       </div>

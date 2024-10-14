@@ -45,7 +45,7 @@ const CleanAirPage = () => {
             </p>
           }
           buttonText="Join the Network"
-          buttonLink="#"
+          buttonLink="https://docs.google.com/forms/d/e/1FAIpQLScIPz7VrhfO2ifMI0dPWIQRiGQ9y30LoKUCT-DDyorS7sAKUA/viewform"
           titleClassName="text-4xl lg:text-[56px] leading-[1.1]"
           contentClassName="text-left space-y-4"
           buttonClassName="rounded-none"
@@ -76,7 +76,8 @@ const CleanAirPage = () => {
             Are you an organization or individual interested in air quality in
             Africa?
             <a
-              href="/join"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScIPz7VrhfO2ifMI0dPWIQRiGQ9y30LoKUCT-DDyorS7sAKUA/viewform"
+              target="_blank"
               className="text-blue-600 font-semibold hover:underline"
             >
               Join the network

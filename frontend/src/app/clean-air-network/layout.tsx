@@ -1,4 +1,4 @@
-import ActionButtons from '@components/layouts/ActionButtons';
+import ActionButtons2 from '@components/layouts/ActionButtons2';
 import Footer from '@components/layouts/Footer';
 import Navbar from '@components/layouts/Navbar';
 import TabNavigation from '@components/sections/CleanAir/TabNavigation';
@@ -22,7 +22,7 @@ const CleanAirLayout: React.FC<CleanAirLayoutProps> = ({ children }) => {
 
       {/* Action Buttons Section */}
       <section className="my-16">
-        <ActionButtons />
+        <ActionButtons2 />
       </section>
 
       {/* Footer */}
