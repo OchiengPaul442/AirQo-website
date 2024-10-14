@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.partners',
     'apps.cleanair',
     'apps.FAQ',
+    'apps.africancities',
 
     # Third-party apps
     'corsheaders',
@@ -140,6 +141,7 @@ else:
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
         'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+        'SECURE': True,
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     MEDIA_URL = '/media/'
