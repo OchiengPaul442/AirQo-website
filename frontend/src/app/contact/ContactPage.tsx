@@ -18,7 +18,7 @@ const ContactPage: React.FC = () => {
       style={{ height: 'calc(100vh - 132px)' }}
     >
       {/* Contact Information Section */}
-      <section className="flex-1 flex items-center justify-center bg-white p-8 rounded-lg shadow-md mb-8 lg:mb-0 lg:h-auto h-full">
+      <section className="flex-1 flex items-center justify-center bg-yellow-50 p-8 rounded-lg shadow-md mb-8 lg:mb-0 lg:h-auto h-full">
         <div className="max-w-md">
           <h2 className="text-3xl font-bold mb-4">Get in touch</h2>
           <p className="text-lg font-semibold mb-4">Makerere University</p>

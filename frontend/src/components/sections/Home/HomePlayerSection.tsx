@@ -2,7 +2,11 @@
 import PlayIcon from '@public/assets/icons/playIcon.png';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+
+import { useDispatch } from '@/hooks';
+import { openModal } from '@/store/slices/modalSlice';
 
 import { CustomButton } from '../../ui';
 
@@ -10,6 +14,8 @@ import { CustomButton } from '../../ui';
 const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 const HomePlayerSection = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePlayButtonClick = () => {
@@ -35,8 +41,13 @@ const HomePlayerSection = () => {
           quality data to drive air pollution mitigation actions.
         </p>
         <div className="flex gap-4">
-          <CustomButton onClick={() => {}}>Explore data</CustomButton>
-          <CustomButton onClick={() => {}} className="bg-blue-50 text-blue-600">
+          <CustomButton onClick={() => router.push('/explore-data')}>
+            Explore data
+          </CustomButton>
+          <CustomButton
+            onClick={() => dispatch(openModal())}
+            className="bg-blue-50 text-blue-600"
+          >
             Get involved
           </CustomButton>
         </div>

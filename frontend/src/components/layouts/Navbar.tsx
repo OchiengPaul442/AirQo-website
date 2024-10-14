@@ -2,7 +2,7 @@
 import { CustomButton } from '@components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { RiCloseLargeFill } from 'react-icons/ri';
 import { TbChevronDown, TbMenu } from 'react-icons/tb';
@@ -16,6 +16,8 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from '@/components/ui';
+import { useDispatch } from '@/hooks';
+import { openModal } from '@/store/slices/modalSlice';
 
 import NotificationBanner from './NotificationBanner';
 
@@ -133,7 +135,9 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
 );
 
 const Navbar: React.FC = () => {
+  const dispatch = useDispatch();
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
@@ -183,14 +187,14 @@ const Navbar: React.FC = () => {
 
               {/* Navigation Links */}
               <CustomButton
-                onClick={() => alert('Primary Button Clicked')}
+                onClick={() => dispatch(openModal())}
                 className="text-blue-600 bg-blue-50 hover:bg-blue-100 transition rounded-none"
               >
                 Get involved
               </CustomButton>
 
               <CustomButton
-                onClick={() => alert('Primary Button Clicked')}
+                onClick={() => router.push('/explore-data')}
                 className="rounded-none"
               >
                 Explore data

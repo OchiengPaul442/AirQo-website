@@ -103,29 +103,29 @@ const HomeStatsSection: React.FC = () => {
       {
         title: 'Digital air quality platforms',
         content:
-          'Our platforms provide real-time air quality data and insights for African cities.',
+          'We empower decision-makers in African cities We increase access to air quality data evidence.',
       },
       {
         title: 'Policy engagement',
         content:
-          'We engage with policymakers to develop data-driven solutions to air quality challenges.',
+          'We engage city authorities and government agencies We empower local leaders with air quality information.',
       },
     ],
     communities: [
       {
-        title: 'Community engagement',
+        title: 'AirQommunity Champions',
         content:
-          'We work with communities to address air quality issues by providing education and support.',
+          'A growing network of individual change makers Championing local leaders and demand action.',
       },
       {
-        title: 'Digital air quality platforms',
+        title: 'Free Access To Air Quality Information',
         content:
-          'Our platforms provide real-time air quality data and insights for African communities.',
+          'We train individuals and communities Facilitating access to air quality information.',
       },
       {
-        title: 'Policy engagement',
+        title: 'AirQo Hosts',
         content:
-          'We engage with policymakers to develop data-driven solutions to air quality challenges.',
+          'We engage locals host our deployment activities We involve locals in our maintenance drives.',
       },
     ],
   };

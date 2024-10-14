@@ -19,7 +19,7 @@ const HomePage = () => {
         subtitle="Air Quality Monitor"
         description="We deploy a high-resolution air quality monitoring network in target urban areas across Africa to increase awareness and understanding of air quality management, provide actionable information, and derive actions against air pollution."
         buttonText="Learn more"
-        buttonLink="#"
+        buttonLink="/products/monitor"
         imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728175985/website/photos/monitorHome_dmmrsk.png"
         reverse={false}
         backgroundColor="bg-transparent"
@@ -29,7 +29,7 @@ const HomePage = () => {
         subtitle="Air Quality Analytics"
         description="Access and visualise real-time and historical air quality information across Africa through our easy-to-use air quality analytics dashboard."
         buttonText="Learn more"
-        buttonLink="#"
+        buttonLink="/products/analytics"
         imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728175853/website/photos/analyticsHome_l3hgcy.png"
         backgroundColor="bg-[#EDF3FF]"
         subtitleColor="text-black"
@@ -40,7 +40,7 @@ const HomePage = () => {
         subtitle="Air Quality API"
         description="Are you a developer? We invite you to leverage our open-air quality data on your App "
         buttonText="Get started here"
-        buttonLink="#"
+        buttonLink="/products/api"
         imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132435/website/photos/ApiSection_evfebp.webp"
         reverse={false}
         backgroundColor="bg-transparent"
@@ -52,7 +52,7 @@ const HomePage = () => {
         subtitle="Air Quality Map"
         description="Visualize hourly air quality information with a single click, over our growing network across African cities"
         buttonText="View more"
-        buttonLink="#"
+        buttonLink="https://analytics.airqo.net/map"
         imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728178762/website/photos/mapHome_rq49ql.png"
         reverse={false}
         backgroundColor="bg-[#EDF3FF]"
@@ -64,8 +64,8 @@ const HomePage = () => {
       <AppDownloadSection
         title="Download the app"
         description="Discover the quality of air you are breathing"
-        appStoreLink="https://apps.apple.com/your-app"
-        googlePlayLink="https://play.google.com/store/your-app"
+        appStoreLink="https://apps.apple.com/ug/app/airqo-air-quality/id1337573091"
+        googlePlayLink="https://play.google.com/store/apps/details?id=com.airqo.app"
         mockupImage="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132436/website/photos/get-app-sm_bknad9.png"
       />
 

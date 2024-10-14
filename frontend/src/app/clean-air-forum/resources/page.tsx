@@ -31,7 +31,6 @@ const AccordionItem = ({ session, isOpen, toggleAccordion }: any) => {
           {session.resource_files.map((file: any) => (
             <div key={file.id} className="mb-4">
               <div className="flex items-start space-x-2 pl-4">
-                {' '}
                 {/* Add indentation */}
                 {/* Bullet Point */}
                 <span className="text-gray-700">•</span>
@@ -65,26 +64,35 @@ const AccordionItem = ({ session, isOpen, toggleAccordion }: any) => {
 const Page = () => {
   const data = useForumData();
   const [openAccordions, setOpenAccordions] = useState<{
-    [key: number]: number | null;
+    [resourceIndex: number]: { [sessionIndex: number]: boolean };
   }>({});
   const [allExpanded, setAllExpanded] = useState(false);
 
-  // Toggle a specific accordion for a specific resource
+  // Toggle a specific accordion for a specific resource and session
   const handleToggleAccordion = (
     resourceIndex: number,
     sessionIndex: number,
   ) => {
     setOpenAccordions((prevState) => ({
       ...prevState,
-      [resourceIndex]:
-        prevState[resourceIndex] === sessionIndex ? null : sessionIndex,
+      [resourceIndex]: {
+        ...prevState[resourceIndex],
+        [sessionIndex]: !prevState[resourceIndex]?.[sessionIndex],
+      },
     }));
   };
 
   // Expand all accordions
   const handleExpandAll = () => {
     setAllExpanded(true);
-    setOpenAccordions({});
+    const expandedAccordions: any = {};
+    data.forum_resources.forEach((resource: any, resourceIndex: number) => {
+      expandedAccordions[resourceIndex] = {};
+      resource.resource_sessions.forEach((_: any, sessionIndex: number) => {
+        expandedAccordions[resourceIndex][sessionIndex] = true;
+      });
+    });
+    setOpenAccordions(expandedAccordions);
   };
 
   // Collapse all accordions
@@ -125,7 +133,9 @@ const Page = () => {
                 key={session.id}
                 session={session}
                 isOpen={
-                  allExpanded || openAccordions[resourceIndex] === sessionIndex
+                  allExpanded ||
+                  openAccordions[resourceIndex]?.[sessionIndex] ||
+                  false
                 }
                 toggleAccordion={() =>
                   handleToggleAccordion(resourceIndex, sessionIndex)

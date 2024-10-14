@@ -1,12 +1,25 @@
-import Link from 'next/link';
+'use client';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
+import { useDispatch } from '@/hooks';
+import { openModal } from '@/store/slices/modalSlice';
+
+import { CustomButton } from '../ui';
+
 const ActionButtons = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   return (
     <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl mx-auto">
       {/* Card 1 */}
-      <Link href="#">
-        <div className="flex flex-col justify-between bg-blue-600 text-white md:rounded-xl p-8 w-full cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95 focus:scale-105 focus:outline-none">
+      <CustomButton
+        onClick={() => {
+          router.push('/explore-data');
+        }}
+        className="bg-transparent p-0 m-0"
+      >
+        <div className="flex flex-col justify-between bg-blue-600 items-start text-start text-white md:rounded-xl p-8 w-full cursor-pointer transform transition-transform duration-300 focus:outline-none">
           <div>
             <h3 className="text-2xl font-medium mb-4">
               Explore our digital tools. Learn about the quality of air around
@@ -15,11 +28,16 @@ const ActionButtons = () => {
           </div>
           <p className="mt-4 text-lg hover:underline">Explore data →</p>
         </div>
-      </Link>
+      </CustomButton>
 
       {/* Card 2 */}
-      <Link href="#">
-        <div className="flex flex-col justify-between bg-blue-50 text-blue-600 md:rounded-xl p-8 w-full cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95 focus:scale-105 focus:outline-none">
+      <CustomButton
+        onClick={() => {
+          dispatch(openModal());
+        }}
+        className="bg-transparent p-0 m-0"
+      >
+        <div className="flex flex-col justify-between items-start text-start bg-blue-50 text-blue-600 md:rounded-xl p-8 w-full cursor-pointer transform transition-transform duration-300 focus:outline-none">
           <div>
             <h3 className="text-2xl font-medium mb-4">
               Get involved. Learn about ways you can support our vision.
@@ -27,7 +45,7 @@ const ActionButtons = () => {
           </div>
           <p className="mt-4 text-lg hover:underline">Get Involved →</p>
         </div>
-      </Link>
+      </CustomButton>
     </div>
   );
 };

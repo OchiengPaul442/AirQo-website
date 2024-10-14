@@ -4,6 +4,9 @@ import ScrollToTopButton from '@components/layouts/ScrollToTopButton';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
+import EngagementDialog from '@/components/dialogs/EngagementDialog';
+import { ReduxDataProvider } from '@/context/ReduxDataProvider';
+
 const interFont = localFont({
   src: [
     {
@@ -33,8 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${interFont.variable} antialiased`}>
-        {children}
-        <ScrollToTopButton />
+        <ReduxDataProvider>
+          <main>{children}</main>
+          <ScrollToTopButton />
+          <EngagementDialog />
+        </ReduxDataProvider>
       </body>
     </html>
   );
