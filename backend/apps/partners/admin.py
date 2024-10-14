@@ -18,7 +18,7 @@ class PartnerAdmin(admin.ModelAdmin):
                     'partner_logo_preview', 'partner_image_preview')
     search_fields = ('partner_name',)
     list_filter = ('type', 'website_category')
-    list_editable = ('order',)
+    list_editable = ('order', 'website_category')
     inlines = [PartnerDescriptionInline]
     ordering = ('order', 'id')
 

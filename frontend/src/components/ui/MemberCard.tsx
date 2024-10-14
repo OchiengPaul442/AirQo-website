@@ -1,3 +1,5 @@
+import { cn } from '@lib/utils';
+import PlaceholderImage from '@public/assets/images/placeholder.webp';
 import Image from 'next/image';
 import React from 'react';
 import { FaLinkedinIn, FaTwitter } from 'react-icons/fa';
@@ -16,9 +18,7 @@ interface Member {
   name: string;
   title: string;
   picture_url: string;
-
   picture: string;
-
   bio: string;
   descriptions: { description: string }[];
   twitter?: string; // Optional field
@@ -27,33 +27,59 @@ interface Member {
 
 interface MemberCardProps {
   member: Member;
+  btnText?: string; // Button text is now customizable
+  cardClassName?: string; // Allow customization for the outer card div
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
+const MemberCard: React.FC<MemberCardProps> = ({
+  member,
+  btnText = '',
+  cardClassName,
+}) => {
   return (
     <Dialog>
       {/* Trigger for opening the dialog */}
       <DialogTrigger asChild>
-        <div className="flex flex-col items-center space-y-4 cursor-pointer">
-          {/* Image and hover effect */}
-          <div className="w-[310px] h-[390px] overflow-hidden rounded-lg">
+        <div
+          className={cn(
+            'flex flex-col items-center space-y-4 cursor-pointer mx-auto max-w-[300px]',
+            cardClassName,
+          )}
+        >
+          {/* Image and hover effect with default placeholder */}
+          <div className="w-auto h-[390px] overflow-hidden rounded-lg">
             <Image
-              src={member.picture_url || member.picture || ''}
+              src={member.picture_url || member.picture || PlaceholderImage}
               alt={member.name}
-              width={310}
+              width={295}
               height={390}
               className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-105"
             />
           </div>
 
-          {/* Member Name and Title */}
-          <div className="flex items-center w-full justify-between">
-            <div className="text-left">
-              <h3 className="text-xl font-bold">{member.name}</h3>
-              <p className="text-gray-500">{member.title}</p>
+          {/* Member Name, Title, Read Bio Button, and Social Media Icons */}
+          <div className="flex justify-between items-center w-full">
+            <div className="flex flex-col items-start space-y-2 text-left">
+              <h3
+                className="text-xl font-bold max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis"
+                title={member.name}
+              >
+                {member.name}
+              </h3>
+              <p
+                className="text-gray-500 max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis"
+                title={member.title}
+              >
+                {member.title}
+              </p>
+              {btnText && (
+                <button className="text-sm text-blue-500 hover:underline mt-2">
+                  {btnText}
+                </button>
+              )}
             </div>
 
-            {/* Optional Social Media Icons */}
+            {/* Social Media Icons */}
             <div className="flex items-center space-x-2">
               {member.twitter && (
                 <a
@@ -122,11 +148,13 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
           {/* Image in Dialog */}
           <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
             <Image
-              src={member.picture_url || member.picture || ''}
+              src={member.picture_url || member.picture || PlaceholderImage}
               alt={member.name}
               width={300}
               height={300}
               className="w-full h-full object-cover"
+              placeholder="blur"
+              blurDataURL="/placeholder-image.jpg"
             />
           </div>
 

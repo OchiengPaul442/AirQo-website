@@ -1,3 +1,4 @@
+import { cn } from '@lib/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
@@ -10,7 +11,9 @@ type PaginatedSectionProps = {
   title?: ReactNode;
   description?: ReactNode;
   logos: any[];
-  bgColor?: string; // Optional background color
+  bgColor?: string;
+  sectionClassName?: string;
+  noClick?: boolean;
 };
 
 const PaginatedSection: React.FC<PaginatedSectionProps> = ({
@@ -18,6 +21,8 @@ const PaginatedSection: React.FC<PaginatedSectionProps> = ({
   description,
   logos,
   bgColor = '',
+  sectionClassName = '',
+  noClick = false,
 }) => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,11 +43,18 @@ const PaginatedSection: React.FC<PaginatedSectionProps> = ({
           )}
 
           <div className="w-full flex justify-start">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full">
+            <div
+              className={cn(
+                'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full',
+                sectionClassName,
+              )}
+            >
               {paginatedLogos.map((partner, index) => (
                 <div
                   key={index}
-                  onClick={() => router.push(`/partners/${partner.id}`)}
+                  onClick={() =>
+                    !noClick && router.push(`/partners/${partner.id}`)
+                  }
                   className="flex justify-center items-center cursor-pointer w-full h-[144px] border border-gray-300 px-2 py-4"
                 >
                   <Image
