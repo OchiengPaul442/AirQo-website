@@ -23,7 +23,7 @@ const HomePage = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, {
       once: true,
-      margin: '0px 0px -200px 0px',
+      margin: '0px 0px -150px 0px',
     });
 
     return (
@@ -41,9 +41,7 @@ const HomePage = () => {
   return (
     <div className="space-y-20">
       {/* Home Player Section */}
-      <MotionSection>
-        <HomePlayerSection />
-      </MotionSection>
+      <HomePlayerSection />
 
       {/* Statistics Section */}
       <MotionSection>
