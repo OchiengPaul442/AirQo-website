@@ -6,13 +6,23 @@ import { FaArrowUpLong } from 'react-icons/fa6';
 const ScrollToTopButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down
+  // Show button when user reaches near the bottom of the page
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      const scrollPosition = window.scrollY + window.innerHeight;
+      const footer = document.getElementById('WebsiteFooter');
+
+      // Only proceed if footer exists
+      if (footer) {
+        const footerPosition =
+          footer.getBoundingClientRect().top + window.scrollY;
+
+        // Check if the user has reached the bottom or near the footer
+        if (scrollPosition >= footerPosition - 100) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
       }
     };
 
@@ -38,7 +48,8 @@ const ScrollToTopButton: React.FC = () => {
           transition={{ duration: 0.5, ease: 'easeOut' }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="fixed bottom-8 right-8 bg-blue-700 text-white p-4 rounded-full shadow-md"
+          className="fixed right-8 top-8 lg:bottom-auto lg:-top-[30px] md:right-0 xl:-right-36 bg-blue-700 text-white p-2 shadow-md"
+          style={{ position: 'absolute' }}
         >
           <motion.div
             animate={{ y: [0, -10, 0] }}

@@ -109,7 +109,14 @@ const AfricanCityPage = () => {
           <p className="text-gray-800 font-semibold mb-1">Published by</p>
           <p className="text-gray-800 mb-6">AirQo</p>
         </div>
-        <CustomButton className="flex items-center bg-transparent px-4 w-full max-w-[200px] py-3 border text-gray-700 border-gray-700 hover:bg-gray-200">
+        <CustomButton
+          onClick={() =>
+            window.open(
+              'https://www.sciencedirect.com/science/article/pii/S2352340922007065?via%3Dihub',
+            )
+          }
+          className="flex items-center bg-transparent px-4 w-full max-w-[200px] py-3 border text-gray-700 border-gray-700 hover:bg-gray-200"
+        >
           Read More →
         </CustomButton>
       </section>

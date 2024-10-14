@@ -99,7 +99,7 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
   title,
   items,
 }) => (
-  <NavigationMenuContent className="bg-white shadow-lg md:w-[400px] lg:w-[600px] rounded-md p-4">
+  <NavigationMenuContent className="bg-white shadow-lg md:w-[400px] lg:w-[600px] text-sm rounded-md p-4">
     <div className="text-gray-400 mb-4">{title}</div>
     <div className="flex gap-8">
       {items
@@ -178,7 +178,7 @@ const Navbar: React.FC = () => {
             <NavigationMenuList className="space-x-3">
               {Object.entries(menuItems).map(([title, items]) => (
                 <NavigationMenuItem key={title}>
-                  <NavigationMenuTrigger className="text-gray-800 font-medium hover:text-blue-600 transition-colors">
+                  <NavigationMenuTrigger className="text-gray-800 font-medium hover:text-blue-600 text-sm transition-colors">
                     {title}
                   </NavigationMenuTrigger>
                   <DropdownMenuContent title={title} items={items} />

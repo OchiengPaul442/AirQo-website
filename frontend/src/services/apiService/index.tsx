@@ -198,3 +198,14 @@ export const getForumEventDetails = async (id: string) => {
     throw error;
   }
 };
+
+// Function to get clean air resources
+export const getCleanAirResources = async () => {
+  try {
+    const response = await apiClient.get('/clean-air-resources/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching clean air resources:', error);
+    throw error;
+  }
+};

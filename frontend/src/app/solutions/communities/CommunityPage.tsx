@@ -2,11 +2,13 @@
 import { CustomButton } from '@components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
+import { useDispatch } from '@/hooks';
+import { openModal } from '@/store/slices/modalSlice';
+
 const CommunitiesPage = () => {
-  const router = useRouter();
+  const dispatch = useDispatch();
 
   return (
     <div className="pb-16 flex flex-col w-full space-y-20">
@@ -132,7 +134,8 @@ const CommunitiesPage = () => {
                 awareness about air pollution in her community through our
                 digital technologies.
                 <Link
-                  href="#"
+                  target="_blank"
+                  href="https://blog.airqo.net/helping-communities-combat-air-pollution-through-digital-technologies-6a5924a1e1e"
                   className="text-lg ml-3 md:text-xl text-[#1F2937] underline hover:text-gray-600 transition-colors mt-2 inline-block"
                 >
                   Read story
@@ -220,7 +223,7 @@ const CommunitiesPage = () => {
 
       {/* CTA Section */}
       <CustomButton
-        onClick={() => router.push('#')}
+        onClick={() => dispatch(openModal())}
         className="max-w-5xl mx-auto w-full px-4 rounded-lg text-black py-16 bg-[#FFEA2B]"
       >
         <div className=" text-center">

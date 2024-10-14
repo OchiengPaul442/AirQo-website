@@ -30,7 +30,7 @@ const ExplorePage = () => {
 
   return (
     <div className="bg-gray-300 min-h-screen flex justify-center items-center px-4">
-      <div className="max-w-5xl w-full bg-white shadow-md rounded-lg relative overflow-hidden lg:h-[600px]">
+      <div className="max-w-5xl w-full bg-white shadow-md relative overflow-hidden lg:h-[600px]">
         {/* Close Button */}
         <Link
           href="/"

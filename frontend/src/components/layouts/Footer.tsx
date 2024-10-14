@@ -20,9 +20,15 @@ import {
   DialogTrigger,
 } from '@/components/ui';
 
+import ScrollToTopButton from './ScrollToTopButton';
+
 const Footer = () => {
   return (
-    <footer className="py-8 px-4 max-w-5xl mx-auto text-[14px]">
+    <footer
+      id="WebsiteFooter"
+      className="relative py-8 px-4 max-w-5xl mx-auto text-[14px]"
+    >
+      <ScrollToTopButton />
       {/* Top Section with Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Logo and Social Media */}
@@ -40,28 +46,29 @@ const Footer = () => {
           </div>
           <div className="flex space-x-4 mt-6">
             <Link
-              href="#"
+              href="https://www.facebook.com/AirQo"
               aria-label="Facebook"
               className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaFacebookF size={14} />
             </Link>
             <Link
-              href="#"
+              href="https://www.youtube.com/channel/UCx7YtV55TcqKGeKsDdT5_XQ"
               aria-label="YouTube"
               className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaYoutube size={14} />
             </Link>
             <Link
-              href="#"
+              href="https://www.linkedin.com/company/airqo/mycompany/"
               aria-label="LinkedIn"
               className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
               <FaLinkedinIn size={14} />
             </Link>
             <Link
-              href="#"
+              href="https://x.com/AirQoProject"
+              target="_blank"
               aria-label="Twitter"
               className="text-blue-600 bg-blue-50 rounded-full p-2 hover:bg-blue-200 transition-all"
             >
@@ -191,7 +198,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:underline">
+                <Link
+                  href="https://blog.airqo.net/"
+                  target="_blank"
+                  className="text-gray-600 hover:underline"
+                >
                   Blog
                 </Link>
               </li>

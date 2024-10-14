@@ -69,7 +69,7 @@ const HomePlayerSection = () => {
           {/* Play Button */}
           <button
             onClick={handlePlayButtonClick}
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 flex items-center justify-center hover:scale-110 focus:outline-none transition-transform duration-300"
           >
             <Image src={PlayIcon} alt="Play Icon" width={65} height={65} />
           </button>
@@ -79,7 +79,7 @@ const HomePlayerSection = () => {
       {/* Video Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg overflow-hidden w-full max-w-3xl p-4">
+          <div className="bg-white overflow-hidden w-full max-w-3xl p-4">
             <div className="relative pb-[56.25%]">
               <ReactPlayer
                 url="https://res.cloudinary.com/dbibjvyhm/video/upload/v1728162527/website/videos/Final_1_qttrg3.mp4"
@@ -90,12 +90,12 @@ const HomePlayerSection = () => {
                 className="absolute top-0 left-0"
               />
             </div>
-            <button
+            <CustomButton
               onClick={handleCloseModal}
-              className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              className="text-white mt-3"
             >
               Close
-            </button>
+            </CustomButton>
           </div>
         </div>
       )}

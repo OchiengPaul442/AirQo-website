@@ -1,6 +1,5 @@
 import '@/Styles/globals.scss';
 
-import ScrollToTopButton from '@components/layouts/ScrollToTopButton';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -38,7 +37,6 @@ export default function RootLayout({
       <body className={`${interFont.variable} antialiased`}>
         <ReduxDataProvider>
           <main>{children}</main>
-          <ScrollToTopButton />
           <EngagementDialog />
         </ReduxDataProvider>
       </body>

@@ -12,7 +12,9 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { FaArrowRightLong } from 'react-icons/fa6';
 
-import { Divider, MemberCard } from '@/components/ui/';
+import { CustomButton, Divider, MemberCard } from '@/components/ui/';
+import { useDispatch } from '@/hooks';
+import { openModal } from '@/store/slices/modalSlice';
 
 /** Skeleton Loader Component **/
 
@@ -33,6 +35,9 @@ const SkeletonCard: React.FC = () => (
 
 const AboutPage: React.FC = () => {
   // State definitions with TypeScript types
+
+  const dispatch = useDispatch();
+
   const [boardMembers, setBoardMembers] = useState<any[]>([]);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [externalTeamMembers, setExternalTeamMembers] = useState<any[]>([]);
@@ -135,7 +140,7 @@ const AboutPage: React.FC = () => {
                     Africa.
                   </p>
                   <Link
-                    href="/team"
+                    href="/careers"
                     className="flex items-center text-blue-700"
                   >
                     <span>Join the team </span>
@@ -423,10 +428,13 @@ const AboutPage: React.FC = () => {
                 the continent to facilitate policy changes that combat air
                 pollution.
               </p>
-              <Link href="/team" className="flex items-center text-blue-700">
+              <CustomButton
+                onClick={() => dispatch(openModal())}
+                className="bg-transparent p-0 m-0 flex items-center text-blue-700"
+              >
                 <span>Partner with Us </span>
                 <FaArrowRightLong className="inline-block ml-2 " />
-              </Link>
+              </CustomButton>
             </div>
           </div>
           <PaginatedSection logos={partnerLogoLinks} />

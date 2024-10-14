@@ -146,7 +146,7 @@ const MemberCard: React.FC<MemberCardProps> = ({
         {/* Main Content */}
         <div className="flex flex-col lg:flex-row items-start gap-6">
           {/* Image in Dialog */}
-          <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] overflow-hidden rounded-lg">
+          <div className="flex-shrink-0 w-full lg:w-[300px] h-[300px] lg:h-full overflow-hidden rounded-lg">
             <Image
               src={member.picture_url || member.picture || PlaceholderImage}
               alt={member.name}
