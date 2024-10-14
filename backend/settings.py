@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.board',
     'apps.partners',
     'apps.cleanair',
+    'apps.FAQ',
 
     # Third-party apps
     'corsheaders',
