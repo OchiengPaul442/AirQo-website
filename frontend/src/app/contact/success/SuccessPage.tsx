@@ -1,6 +1,7 @@
 'use client';
 import { CustomButton } from '@components/ui';
 import SuccessImage from '@public/assets/images/success/successImage.png';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -22,13 +23,42 @@ const SuccessPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [countdown, router]);
 
+  // Animation variants for the image and text
+  const containerVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.5, ease: 'easeOut' },
+    },
+  };
+
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { delay: 0.3, duration: 0.4, ease: 'easeOut' },
+    },
+    hover: { scale: 1.05, transition: { duration: 0.3 } },
+    tap: { scale: 0.95 },
+  };
+
   return (
-    <div
+    <motion.div
       className="flex flex-col items-center justify-center w-full h-[calc(100vh-85px)] bg-[#F9FAFB] p-8"
       style={{ height: 'calc(100vh - 132px)' }}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
     >
       {/* Success Image */}
-      <div className="flex items-center justify-center mb-8">
+      <motion.div
+        className="flex items-center justify-center mb-8"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <Image
           src={SuccessImage}
           alt="Success"
@@ -36,30 +66,53 @@ const SuccessPage: React.FC = () => {
           height={250}
           className="mb-4"
         />
-      </div>
+      </motion.div>
 
       {/* Success Message */}
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">
+      <motion.h1
+        className="text-2xl font-bold text-gray-800 mb-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.4 }}
+      >
         Thank you for reaching out!
-      </h1>
-      <p className="text-gray-600 mb-8 text-center max-w-lg">
+      </motion.h1>
+      <motion.p
+        className="text-gray-600 mb-8 text-center max-w-lg"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
+      >
         We have received your message and our team will get back to you as soon
         as possible.
-      </p>
+      </motion.p>
 
       {/* Back Button */}
-      <CustomButton
-        onClick={() => router.push('/')}
-        className="bg-blue-600 text-white px-8 py-4 hover:bg-blue-700 transition-colors mb-4"
+      <motion.div
+        variants={buttonVariants}
+        initial="hidden"
+        animate="visible"
+        whileHover="hover"
+        whileTap="tap"
       >
-        Back to Home
-      </CustomButton>
+        <CustomButton
+          onClick={() => router.push('/')}
+          className="bg-blue-600 text-white px-8 py-4 hover:bg-blue-700 transition-colors mb-4"
+        >
+          Back to Home
+        </CustomButton>
+      </motion.div>
 
       {/* Countdown Timer */}
-      <p className="text-gray-500 text-sm">
+      <motion.p
+        className="text-gray-500 text-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+      >
         You will be redirected to the home page in {countdown} seconds.
-      </p>
-    </div>
+      </motion.p>
+    </motion.div>
   );
 };
 

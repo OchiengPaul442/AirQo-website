@@ -1,15 +1,55 @@
 'use client';
+
 import AppDownloadSection from '@components/sections/Home/AppDownloadSection';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
+
+// Define motion variants for different animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
 
 const MobilePage = () => {
   return (
     <div className="pb-16 flex flex-col w-full space-y-20 overflow-hidden">
       {/* Hero Section */}
-      <section className="bg-yellow-50 py-16 px-4">
+      <motion.section
+        className="bg-yellow-50 py-16 px-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
+          {/* Text Content */}
+          <motion.div className="space-y-6" variants={itemVariants}>
             <p className="text-gray-500 mb-2 text-[14px]">
               Our Products {'>'} Mobile App
             </p>
@@ -22,8 +62,13 @@ const MobilePage = () => {
               easy to use and free to download, allowing you to stay up-to-date
               on the quality of the air you are breathing.
             </p>
-          </div>
-          <div className="flex justify-center w-full">
+          </motion.div>
+
+          {/* Image */}
+          <motion.div
+            className="flex justify-center w-full"
+            variants={itemVariants}
+          >
             <Image
               src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132442/website/photos/OurProducts/MobileApp/mobile-header_cz3n6t.webp"
               alt="Discover the quality of air around you"
@@ -31,28 +76,50 @@ const MobilePage = () => {
               height={350}
               style={{ objectFit: 'cover' }}
               className="rounded-lg w-full md:w-full"
+              loading="eager"
             />
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Know Your Air Section */}
-      <section className="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <h2 className="text-[40px] font-semibold mb-4">
+      <motion.section
+        className="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <motion.h2
+          className="text-[40px] font-semibold mb-4"
+          variants={itemVariants}
+        >
           Know your <span className="text-blue-700">Air</span>
-        </h2>
-        <p className="text-lg text-gray-700 mb-6">
+        </motion.h2>
+        <motion.p
+          className="text-lg text-gray-700 mb-6"
+          variants={itemVariants}
+        >
           The AirQo Air quality Mobile App is the first of its kind in Africa.
           With the App, you have access to real-time and forecast air quality
           information from monitored urban areas across major cities in Africa.
-        </p>
-      </section>
+        </motion.p>
+      </motion.section>
 
       {/* Personalized Air Quality Alerts Section */}
-      <section className="px-4">
+      <motion.section
+        className="px-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
         <div className="flex flex-col-reverse max-w-5xl mx-auto lg:flex-row items-center lg:items-start relative">
           {/* Card Section */}
-          <div className="bg-gray-100 relative p-6 rounded-lg shadow-md md:w-[630px] md:-top-10 lg:max-w-md lg:absolute lg:left-0 lg:top-8 z-10">
+          <motion.div
+            className="bg-gray-100 relative p-6 rounded-lg shadow-md md:w-[630px] md:-top-10 lg:max-w-md lg:absolute lg:left-0 lg:top-8 z-10"
+            variants={cardVariants}
+          >
             <h3 className="font-bold text-2xl mb-4">
               Personalized air quality alerts and notifications
             </h3>
@@ -64,18 +131,17 @@ const MobilePage = () => {
               Set up your favourite places to quickly check the quality of air
               in areas that matter to you.
             </p>
-            <p className="text-lg text-gray-700 mb-4">
+            <p className="text-lg text-gray-700">
               Turn on the notifications to know the quality of the air you are
               breathing.
             </p>
-            <p className="text-lg text-gray-700">
-              You will receive a push notification whenever the quality of air
-              is clean or gets above the recommended safe levels.
-            </p>
-          </div>
+          </motion.div>
 
           {/* Image Section */}
-          <div className="relative mt-12 lg:mt-0 lg:ml-[300px] w-full">
+          <motion.div
+            className="relative mt-12 lg:mt-0 lg:ml-[300px] w-full"
+            variants={itemVariants}
+          >
             <Image
               src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132443/website/photos/OurProducts/MobileApp/section-1_x2ppgk.webp"
               alt="Personalized air quality alerts"
@@ -94,15 +160,24 @@ const MobilePage = () => {
                 className="rounded-lg w-full md:w-full"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Real-time and Forecast Section */}
-      <section className="px-4">
+      <motion.section
+        className="px-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
         <div className="flex flex-col-reverse max-w-5xl mx-auto lg:flex-row items-center lg:items-start relative">
           {/* Image Section */}
-          <div className="relative order-2 lg:order-1 mt-12 lg:mt-0 lg:mr-[300px] w-full">
+          <motion.div
+            className="relative order-2 lg:order-1 mt-12 lg:mt-0 lg:mr-[300px] w-full"
+            variants={itemVariants}
+          >
             <Image
               src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132443/website/photos/OurProducts/MobileApp/section-2_vgl9ey.webp"
               alt="Real-time and forecast"
@@ -120,10 +195,13 @@ const MobilePage = () => {
                 className="rounded-lg w-full md:w-full"
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* Card Section */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md relative top-0 lg:max-w-md lg:absolute lg:right-0 lg:top-16 z-10 w-full sm:w-auto md:w-[630px] md:-top-10 flex flex-col space-y-6">
+          <motion.div
+            className="bg-gray-100 p-6 rounded-lg shadow-md relative top-0 lg:max-w-md lg:absolute lg:right-0 lg:top-16 z-10 w-full sm:w-auto md:w-[630px] md:-top-10 flex flex-col space-y-6"
+            variants={cardVariants}
+          >
             <h3 className="font-bold text-2xl">Real-time and forecast</h3>
             <p className="text-lg text-gray-700">
               Our App gives you access to real-time and forecast air quality
@@ -136,15 +214,24 @@ const MobilePage = () => {
               when to take a walk or a jog to avoid air pollution and stay
               healthy.
             </p>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Health Tips Section */}
-      <section className="px-4 py-16">
+      <motion.section
+        className="px-4 py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
         <div className="max-w-5xl mx-auto flex flex-col-reverse lg:flex-row gap-8 items-center relative">
           {/* Card Section (Health Tips Description) */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full lg:w-[40%] z-10 lg:absolute lg:left-0 lg:top-44 sm:w-auto md:w-[630px] md:-top-10">
+          <motion.div
+            className="bg-gray-100 p-6 rounded-lg shadow-md w-full lg:w-[40%] z-10 lg:absolute lg:left-0 lg:top-44 sm:w-auto md:w-[630px] md:-top-10"
+            variants={cardVariants}
+          >
             <h3 className="font-bold text-2xl mb-4">Health tips</h3>
             <p className="text-lg text-gray-700 mb-4">
               Our App provides you with detailed information beyond the numbers.
@@ -153,10 +240,13 @@ const MobilePage = () => {
               You have access to frequent tips to help you stay healthy and
               learn how you can reduce your exposure to air pollution.
             </p>
-          </div>
+          </motion.div>
 
           {/* Composite Image Section */}
-          <div className="lg:w-2/3 rounded-lg flex justify-center lg:justify-end lg:items-end mt-16 lg:mt-0 lg:ml-[300px] w-full">
+          <motion.div
+            className="lg:w-2/3 rounded-lg flex justify-center lg:justify-end lg:items-end mt-16 lg:mt-0 lg:ml-[300px] w-full"
+            variants={itemVariants}
+          >
             <div className="relative right-12">
               <Image
                 src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132443/website/photos/OurProducts/MobileApp/section-3_zyyjnx.webp"
@@ -167,12 +257,18 @@ const MobilePage = () => {
                 className="rounded-lg w-full lg:w-auto"
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* Background Section */}
-          <div className="absolute bottom-20 lg:-bottom-16 left-0 lg:left-64 w-[100%] lg:w-[75%] h-[75%] lg:h-[100%] lg:rounded-lg bg-[#EDF3FF] -z-10"></div>
+          <motion.div
+            className="absolute bottom-20 lg:-bottom-16 left-0 lg:left-64 w-[100%] lg:w-[75%] h-[75%] lg:h-[100%] lg:rounded-lg bg-[#EDF3FF] -z-10"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          ></motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* App Download Section */}
       <AppDownloadSection />
