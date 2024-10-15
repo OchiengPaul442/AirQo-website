@@ -246,6 +246,7 @@ const AboutPage: React.FC = () => {
             width={1024}
             height={480}
             className="object-cover w-auto h-auto"
+            loading="eager"
           />
           <Image
             src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728295909/website/photos/about/Frame_ugwgqr.png"
@@ -253,6 +254,7 @@ const AboutPage: React.FC = () => {
             width={1024}
             height={49}
             className="absolute w-auto h-auto object-cover"
+            loading="eager"
           />
         </div>
         <div className="flex flex-col lg:flex-row justify-start items-center gap-8">
@@ -264,6 +266,7 @@ const AboutPage: React.FC = () => {
               width={800}
               height={400}
               className="absolute w-[300px] h-[200px] lg:w-[410px] lg:h-[225px]"
+              loading="eager"
             />
 
             {/* Outline Abstract Shape Image */}
@@ -273,6 +276,7 @@ const AboutPage: React.FC = () => {
               width={800}
               height={400}
               className="absolute w-[350px] h-[230px] lg:w-[450px] lg:h-[300px] object-contain"
+              loading="eager"
             />
 
             {/* Text */}
