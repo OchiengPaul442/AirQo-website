@@ -1,8 +1,7 @@
-# models.py
-
 import uuid
 from django.db import models
 from cloudinary.models import CloudinaryField
+from django.conf import settings
 from backend.utils.models import BaseModel
 
 # Function to generate UUID
@@ -24,17 +23,27 @@ class UUIDBaseModel(models.Model):
     class Meta:
         abstract = True
 
-
 # AfricanCountry Model
 
 
 class AfricanCountry(UUIDBaseModel):
     country_name = models.CharField(max_length=100)
-    country_flag = CloudinaryField(
-        "CountryFlag",
-        overwrite=True,
-        resource_type="image",
-    )
+
+    # Conditionally store images based on DEBUG setting
+    if settings.DEBUG:
+        country_flag = models.FileField(
+            upload_to='african_countries/flags/',
+            null=True,
+            blank=True
+        )
+    else:
+        country_flag = CloudinaryField(
+            "CountryFlag",
+            overwrite=True,
+            folder="website/uploads/african_countries/flags",
+            resource_type="image",
+        )
+
     order = models.IntegerField(default=1)
 
     class Meta:
@@ -105,11 +114,21 @@ class Description(UUIDBaseModel):
 
 
 class Image(UUIDBaseModel):
-    image = CloudinaryField(
-        "ContentImage",
-        overwrite=True,
-        resource_type="image",
-    )
+    # Conditionally store images based on DEBUG setting
+    if settings.DEBUG:
+        image = models.FileField(
+            upload_to='content_images/',
+            null=True,
+            blank=True
+        )
+    else:
+        image = CloudinaryField(
+            "ContentImage",
+            overwrite=True,
+            folder="website/uploads/african_countries/images",
+            resource_type="image",
+        )
+
     order = models.IntegerField(default=1)
     content = models.ForeignKey(
         Content,

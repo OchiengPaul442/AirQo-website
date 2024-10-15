@@ -1,5 +1,6 @@
 import nested_admin
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import AfricanCountry, City, Content, Description, Image
 
 # Inline for Description under Content
@@ -46,8 +47,20 @@ class CityInline(nested_admin.NestedTabularInline):
 
 @admin.register(AfricanCountry)
 class AfricanCountryAdmin(nested_admin.NestedModelAdmin):
-    list_display = ['country_name', 'order', 'created_at', 'updated_at']
+    list_display = ['country_name', 'order',
+                    'flag_preview', 'created_at', 'updated_at']
     search_fields = ['country_name']
     ordering = ['order']
     inlines = [CityInline]  # Nest City in AfricanCountry
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at', 'flag_preview']
+
+    # Method to show the image preview in the admin panel
+    def flag_preview(self, obj):
+        if obj.country_flag:
+            return format_html(
+                '<img src="{}" width="50" height="30" style="border-radius: 3px;"/>',
+                obj.country_flag.url
+            )
+        return "No Flag"
+
+    flag_preview.short_description = "Flag Preview"

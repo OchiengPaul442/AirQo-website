@@ -209,3 +209,14 @@ export const getCleanAirResources = async () => {
     throw error;
   }
 };
+
+// Function to get african-countries
+export const getAfricanCountries = async () => {
+  try {
+    const response = await apiClient.get('/african-countries/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching african-countries:', error);
+    throw error;
+  }
+};

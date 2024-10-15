@@ -1,5 +1,6 @@
 'use client';
 
+import AfricanCities from '@components/sections/AfricanCities/AfricanCities';
 import { CustomButton, Divider } from '@components/ui';
 import { motion } from 'framer-motion';
 import React from 'react';
@@ -149,6 +150,8 @@ const AfricanCityPage = () => {
           </motion.div>
         </motion.div>
       </motion.section>
+
+      <AfricanCities />
 
       <Divider />
 
