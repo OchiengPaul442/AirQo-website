@@ -5,6 +5,7 @@ import localFont from 'next/font/local';
 import { useEffect, useState } from 'react';
 
 import EngagementDialog from '@/components/dialogs/EngagementDialog';
+import { ErrorBoundary } from '@/components/ui';
 import { ReduxDataProvider } from '@/context/ReduxDataProvider';
 
 import MaintenancePage from './MaintenancePage';
@@ -61,7 +62,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${interFont.variable} antialiased`}>
         <ReduxDataProvider>
-          <main>{children}</main>
+          <ErrorBoundary>{children}</ErrorBoundary>
           <EngagementDialog />
         </ReduxDataProvider>
       </body>
