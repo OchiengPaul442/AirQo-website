@@ -19,6 +19,10 @@ const nextConfig = {
         hostname: 'diginsights.com',
       },
       {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+      },
+      {
         protocol: 'http',
         hostname: '127.0.0.1',
         port: '8000',

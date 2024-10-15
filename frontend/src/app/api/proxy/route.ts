@@ -1,13 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_EXTERNAL_API_URL || '';
+import { removeTrailingSlash } from '@/utils';
+
+const API_BASE_URL = removeTrailingSlash(
+  process.env.NEXT_PUBLIC_EXTERNAL_API_URL || '',
+);
+const API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN || '';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const endpoint = searchParams.get('endpoint');
 
+  if (!endpoint) {
+    return NextResponse.json(
+      { error: 'Endpoint is required' },
+      { status: 400 },
+    );
+  }
+
   try {
-    const apiResponse = await fetch(`${API_BASE_URL}/${endpoint}`, {
+    // Create the external API URL with proper URL construction
+    const apiUrl = new URL(`${API_BASE_URL}/${endpoint}`);
+    apiUrl.searchParams.append('token', API_TOKEN);
+
+    // Make the request to the external API
+    const apiResponse = await fetch(apiUrl.toString(), {
       headers: {
         'Content-Type': 'application/json',
       },

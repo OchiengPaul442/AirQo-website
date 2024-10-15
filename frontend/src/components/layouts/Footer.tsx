@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -8,18 +7,9 @@ import {
   FaTwitter,
   FaYoutube,
 } from 'react-icons/fa';
-import { FiChevronDown } from 'react-icons/fi';
-import { IoLocationSharp } from 'react-icons/io5';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui';
-
+import CountrySelectorDialog from '../sections/footer/CountrySelectorDialog';
+import MonitorDisplay from '../sections/footer/MonitorDisplay';
 import ScrollToTopButton from './ScrollToTopButton';
 
 const Footer = () => {
@@ -216,38 +206,10 @@ const Footer = () => {
       {/* Bottom Section */}
       <div className="flex flex-col lg:flex-row lg:justify-between items-center space-y-4 lg:space-y-0">
         {/* Location Button with Dialog */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 rounded-xl text-gray-800 hover:bg-gray-200 transition-all">
-              <IoLocationSharp size={20} color="#2563eb" />
-              <span>Uganda</span>
-              <FiChevronDown size={16} className="text-gray-600" />
-            </button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Select Location</DialogTitle>
-              <DialogDescription>
-                Choose your location to get tailored content.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="mt-4">
-              {/* Location options or content can go here */}
-              <p>Location selection will be available here.</p>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <CountrySelectorDialog />
 
         {/* Monitors in Uganda */}
-        <div className="flex items-center space-x-2">
-          <div className="flex space-x-1">
-            <span className="bg-blue-600 text-white px-2 py-1 rounded">0</span>
-            <span className="bg-blue-600 text-white px-2 py-1 rounded">1</span>
-            <span className="bg-blue-600 text-white px-2 py-1 rounded">1</span>
-            <span className="bg-blue-600 text-white px-2 py-1 rounded">3</span>
-          </div>
-          <p className="text-gray-800">Monitors in Uganda</p>
-        </div>
+        <MonitorDisplay />
       </div>
 
       <div className="border-t border-gray-200 my-8"></div>

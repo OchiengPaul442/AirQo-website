@@ -42,7 +42,7 @@ const AfricanCities: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto p-4 lg:p-0">
       {/* Top Section: Countries List */}
-      <div className="flex space-x-4 overflow-x-auto pb-4">
+      <div className="flex space-x-4 flex-wrap pb-4">
         {countries.map((country) => (
           <button
             key={country.id}
@@ -67,7 +67,7 @@ const AfricanCities: React.FC = () => {
 
       {/* Middle Section: Cities List for the selected country */}
       {selectedCountry && selectedCountry.cities.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-6 border-t border-gray-300 w-full pt-4 pb-8">
           <div className="flex space-x-4">
             {selectedCountry.cities.map((city: any) => (
               <button
