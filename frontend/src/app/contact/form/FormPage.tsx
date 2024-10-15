@@ -6,20 +6,68 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 
+import { postContactUs } from '@/services/externalService';
+
 const FormPage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [category, setCategory] = useState<string | null>(null);
+
+  // State for form data, loading, error, and success messages
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    message: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
     setCategory(categoryFromUrl);
   }, [searchParams]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form input changes
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Category:', category);
-    router.push('/contact/success');
+    setLoading(true);
+    setError(null);
+
+    const body = {
+      ...formData,
+      category: category || 'general',
+    };
+
+    try {
+      const response = await postContactUs(body);
+
+      if (response.success) {
+        setSuccess(true);
+        setFormData({
+          fullName: '',
+          email: '',
+          message: '',
+        });
+      } else {
+        throw new Error('Failed to submit form');
+      }
+    } catch (err) {
+      setError('Oops! Something went wrong. Please try again.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Define motion variants for the form container
@@ -31,6 +79,30 @@ const FormPage: React.FC = () => {
       transition: { duration: 0.5, ease: 'easeOut' },
     },
   };
+
+  if (success) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="bg-green-100 p-6 rounded-lg"
+        >
+          <h2 className="text-2xl font-bold text-green-600">Success!</h2>
+          <p className="text-gray-600">
+            Your message has been sent successfully.
+          </p>
+          <CustomButton
+            onClick={() => router.push('/')}
+            className="mt-4 bg-blue-600 text-white px-6 py-4 hover:bg-blue-700 transition-colors"
+          >
+            Go to Homepage
+          </CustomButton>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -66,13 +138,22 @@ const FormPage: React.FC = () => {
         >
           {/* Back Button */}
           <button
-            onClick={() => router.back()}
+            onClick={() => {
+              router.back();
+              setFormData({
+                fullName: '',
+                email: '',
+                message: '',
+              });
+              setError(null);
+            }}
             className="mb-4 text-blue-600 hover:text-blue-800 transition-colors flex items-center focus:outline-none"
             aria-label="Go back to contact options"
           >
             <FiArrowLeft className="mr-2" />
             Back
           </button>
+
           <form className="space-y-6 items-start" onSubmit={handleSubmit}>
             {/* Full Name */}
             <div className="flex flex-col">
@@ -87,6 +168,8 @@ const FormPage: React.FC = () => {
                 required
                 aria-required="true"
                 placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -103,6 +186,8 @@ const FormPage: React.FC = () => {
                 required
                 aria-required="true"
                 placeholder="Enter your email address"
+                value={formData.email}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -119,6 +204,8 @@ const FormPage: React.FC = () => {
                 required
                 aria-required="true"
                 placeholder="Enter your message"
+                value={formData.message}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -150,14 +237,26 @@ const FormPage: React.FC = () => {
               </label>
             </div>
 
-            {/* Submit Button with Hover and Tap Animations */}
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-red-600"
+              >
+                {error}
+              </motion.div>
+            )}
 
+            {/* Submit Button with Hover and Tap Animations */}
             <CustomButton
               type="submit"
               className="bg-blue-600 text-white px-6 py-4 hover:bg-blue-700 transition-colors"
               aria-label="Submit contact form"
+              disabled={loading}
             >
-              Send
+              {loading ? 'Sending...' : 'Send'}
             </CustomButton>
           </form>
         </motion.section>

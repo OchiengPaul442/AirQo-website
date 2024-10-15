@@ -1,7 +1,47 @@
 import { CustomButton } from '@components/ui';
-import React from 'react';
+import React, { useState } from 'react';
 
-const NewsLetter = () => {
+import { subscribeToNewsletter } from '@/services/externalService';
+
+const NewsLetter: React.FC = () => {
+  const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>(
+    'idle',
+  );
+  const [loading, setLoading] = useState(false);
+
+  // Form fields state
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setFormStatus('idle');
+
+    const formData = {
+      email,
+      firstName,
+      lastName,
+    };
+
+    try {
+      const response = await subscribeToNewsletter(formData);
+
+      if (response.success) {
+        setFormStatus('success');
+      } else {
+        setFormStatus('error');
+      }
+    } catch (error) {
+      setFormStatus('error');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="bg-blue-50 py-28 px-4">
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center lg:items-start lg:justify-between gap-12">
@@ -17,36 +57,69 @@ const NewsLetter = () => {
         </div>
 
         {/* Form Section */}
-        <form className="lg:w-1/2 flex flex-col space-y-4">
-          <div className="flex flex-col md:flex-row md:space-x-4 w-full">
-            <input
-              type="text"
-              name="firstName"
-              placeholder="First name"
-              className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Last name"
-              className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500 mt-4 md:mt-0"
-              required
-            />
+        {formStatus === 'success' ? (
+          <div className="lg:w-1/2 text-center">
+            <span role="img" aria-label="waving hand" className="text-4xl">
+              👋
+            </span>
+            <p className="text-blue-600 text-[20px] mt-4">
+              Thanks for joining...
+            </p>
           </div>
-          <div className="flex w-full">
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              className="flex-grow p-3 outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <CustomButton type="submit" className="rounded-none">
-              Subscribe
-            </CustomButton>
+        ) : formStatus === 'error' ? (
+          <div className="lg:w-1/2 text-center">
+            <span role="img" aria-label="sad face" className="text-4xl">
+              😢
+            </span>
+            <p className="text-red-600 text-[20px] mt-4">
+              Oops! Something went wrong. Please try again!
+            </p>
           </div>
-        </form>
+        ) : (
+          <form
+            className="lg:w-1/2 flex flex-col space-y-4"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex flex-col md:flex-row md:space-x-4 w-full">
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First name"
+                className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last name"
+                className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500 mt-4 md:mt-0"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+            <div className="flex w-full">
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                className="flex-grow p-3 outline-none focus:ring-2 focus:ring-blue-500"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <CustomButton
+                type="submit"
+                className="rounded-none"
+                disabled={loading}
+              >
+                {loading ? 'Submitting...' : 'Subscribe'}
+              </CustomButton>
+            </div>
+          </form>
+        )}
       </div>
     </section>
   );

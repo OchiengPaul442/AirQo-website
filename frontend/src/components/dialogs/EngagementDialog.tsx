@@ -6,6 +6,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useDispatch, useSelector } from '@/hooks';
+import { postContactUs } from '@/services/externalService';
 import { closeModal } from '@/store/slices/modalSlice';
 
 import { CustomButton } from '../ui';
@@ -14,6 +15,7 @@ interface EngagementOption {
   title: string;
   description: string;
   icon: string;
+  category: string;
 }
 
 const options: EngagementOption[] = [
@@ -21,26 +23,31 @@ const options: EngagementOption[] = [
     title: "I'm a Partner.",
     description: "Interested in supporting AirQo's vision",
     icon: '🔗',
+    category: 'partners',
   },
   {
     title: "I'm a Policymaker.",
     description: 'Interested in air quality information',
     icon: '📜',
+    category: 'policy',
   },
   {
     title: "I'm a Community Champion.",
     description: 'Interested in raising awareness about air pollution.',
     icon: '🌍',
+    category: 'champions',
   },
   {
     title: "I'm a Researcher.",
     description: 'Interested in Air Quality data and analytics',
     icon: '📊',
+    category: 'researchers',
   },
   {
     title: "I'm a Developer.",
     description: 'Interested in air quality data API',
     icon: '💻',
+    category: 'developers',
   },
 ];
 
@@ -61,7 +68,7 @@ const optionVariants = {
     opacity: 1,
     x: 0,
     transition: {
-      delay: custom * 0.05, // Slightly reduced delay for faster appearance
+      delay: custom * 0.05,
       duration: 0.5,
       ease: 'easeOut',
     },
@@ -82,10 +89,32 @@ const formVariants = {
   },
 };
 
+const successVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
+const errorVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
 const EngagementDialog = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: any) => state.modal.isOpen);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -103,11 +132,14 @@ const EngagementDialog = () => {
       lastName: '',
       email: '',
       termsAccepted: false,
-    }); // Reset form
+    });
+    setSubmissionSuccess(false); // Reset success message
+    setSubmissionError(null); // Reset error message
   };
 
-  const handleItemClick = (title: string) => {
+  const handleItemClick = (title: string, category: string) => {
     setActiveSection(title);
+    setSelectedCategory(category);
   };
 
   // Handle form input changes
@@ -120,21 +152,42 @@ const EngagementDialog = () => {
   };
 
   // Form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setSubmissionError(null);
 
-    if (formData.termsAccepted) {
-      console.log('Form submitted with data:', formData);
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        termsAccepted: false,
-      });
-      setActiveSection(null);
-      dispatch(closeModal());
+    if (formData.termsAccepted && selectedCategory) {
+      // Create the request body
+      const requestBody = {
+        fullName: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        message: 'Get involved - Request from the website',
+        category: selectedCategory,
+      };
+
+      try {
+        const res = await postContactUs(requestBody);
+        if (res.success) {
+          setSubmissionSuccess(true);
+          setFormData({
+            firstName: '',
+            lastName: '',
+            email: '',
+            termsAccepted: false,
+          });
+        } else {
+          throw new Error('Failed to submit');
+        }
+      } catch (error) {
+        setSubmissionError('Oops! Something went wrong. Please try again.');
+        console.error('Error submitting form:', error);
+      } finally {
+        setLoading(false);
+      }
     } else {
-      alert('You must accept the terms and conditions.');
+      setLoading(false);
+      alert('You must accept the terms and conditions and select a category.');
     }
   };
 
@@ -149,7 +202,16 @@ const EngagementDialog = () => {
         className="w-full flex flex-col justify-center gap-6 h-full p-6"
       >
         <button
-          onClick={() => setActiveSection(null)}
+          onClick={() => {
+            setActiveSection(null);
+            setFormData({
+              firstName: '',
+              lastName: '',
+              email: '',
+              termsAccepted: false,
+            });
+            setSubmissionError(null);
+          }}
           className="mb-4 text-blue-600 hover:text-blue-800 transition-colors flex items-center"
         >
           <FiArrowLeft className="mr-2" />
@@ -236,13 +298,50 @@ const EngagementDialog = () => {
             </label>
           </div>
 
+          {submissionError && (
+            <motion.div
+              key="error"
+              variants={errorVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-red-600 text-sm"
+            >
+              {submissionError}
+            </motion.div>
+          )}
+
           <CustomButton
             type="submit"
             className="bg-blue-600 text-white px-6 py-4 hover:bg-blue-700 transition-colors"
+            disabled={loading}
           >
-            Send
+            {loading ? 'Sending...' : 'Send'}
           </CustomButton>
         </form>
+      </motion.div>
+    </AnimatePresence>
+  );
+
+  const renderSuccessMessage = () => (
+    <AnimatePresence>
+      <motion.div
+        key="success"
+        variants={successVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="w-full flex flex-col items-center justify-center gap-6 h-full p-6"
+      >
+        <h2 className="text-3xl font-bold text-green-600">Success!</h2>
+        <p className="text-gray-600 text-lg">
+          Thank you for your submission. We will get in touch with you soon!
+        </p>
+        <CustomButton
+          onClick={handleClose}
+          className="bg-blue-600 text-white px-6 py-4 hover:bg-blue-700 transition-colors"
+        >
+          Close
+        </CustomButton>
       </motion.div>
     </AnimatePresence>
   );
@@ -300,27 +399,31 @@ const EngagementDialog = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
           >
-            {!activeSection
-              ? options.map((item, idx) => (
-                  <motion.div
-                    key={idx}
-                    onClick={() => handleItemClick(item.title)}
-                    className="flex items-center p-4 bg-white border rounded-md shadow-sm hover:bg-blue-50 cursor-pointer transition-all"
-                    variants={optionVariants}
-                    initial="hidden"
-                    animate="visible"
-                    custom={idx}
-                  >
-                    <div className="flex-shrink-0 p-2 bg-blue-50 rounded-full text-blue-600 text-2xl">
-                      {item.icon}
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="font-bold text-gray-900">{item.title}</h3>
-                      <p className="text-gray-500">{item.description}</p>
-                    </div>
-                  </motion.div>
-                ))
-              : renderForm()}
+            {submissionSuccess
+              ? renderSuccessMessage()
+              : !activeSection
+                ? options.map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      onClick={() => handleItemClick(item.title, item.category)}
+                      className="flex items-center p-4 bg-white border rounded-md shadow-sm hover:bg-blue-50 cursor-pointer transition-all"
+                      variants={optionVariants}
+                      initial="hidden"
+                      animate="visible"
+                      custom={idx}
+                    >
+                      <div className="flex-shrink-0 p-2 bg-blue-50 rounded-full text-blue-600 text-2xl">
+                        {item.icon}
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="font-bold text-gray-900">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-500">{item.description}</p>
+                      </div>
+                    </motion.div>
+                  ))
+                : renderForm()}
           </motion.div>
         </div>
       </DialogContent>
