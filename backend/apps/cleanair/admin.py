@@ -1,131 +1,114 @@
-# backend/apps/cleanair/admin.py
-
-import nested_admin
+# admin.py
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import (
-    CleanAirResource, ForumEvent, Partner, Program, Session,
-    Support, Person, ForumResource, ResourceSession, ResourceFile, Engagement, Objective
+    CleanAirResource, ForumEvent, Partner, Program, Session, Support,
+    Person, Engagement, Objective, ForumResource, ResourceFile, ResourceSession
 )
+from nested_admin import NestedTabularInline, NestedModelAdmin
 
-# Inlines for Objective under Engagement
+# Inlines
 
 
-class ObjectiveInline(nested_admin.NestedTabularInline):
+class ObjectiveInline(NestedTabularInline):
     model = Objective
     extra = 0
-    fk_name = 'engagement'
 
 
-# Inlines for Engagement under ForumEvent
-class EngagementInline(nested_admin.NestedStackedInline):
+class EngagementInline(NestedTabularInline):
     model = Engagement
-    extra = 0
-    fk_name = 'forum_event'
     inlines = [ObjectiveInline]
+    extra = 0
 
 
-# Inlines for Support under ForumEvent
-class SupportInline(nested_admin.NestedStackedInline):
+class SessionInline(NestedTabularInline):
+    model = Session
+    extra = 0  # Adjust this value based on your needs
+
+
+class SupportInline(NestedTabularInline):
     model = Support
     extra = 0
-    fk_name = 'forum_event'
 
 
-# Inlines for ResourceFile under ResourceSession
-class ResourceFileInline(nested_admin.NestedTabularInline):
+class ResourceFileInline(NestedTabularInline):
     model = ResourceFile
-    extra = 0
-    fk_name = 'session'
+    extra = 1
 
 
-# Inlines for ResourceSession under ForumResource
-class ResourceSessionInline(nested_admin.NestedStackedInline):
+class ResourceSessionInline(NestedTabularInline):
     model = ResourceSession
-    extra = 0
-    fk_name = 'forum_resource'
+    extra = 1
     inlines = [ResourceFileInline]
 
-
-# Inlines for ForumResource under ForumEvent
-class ForumResourceInline(nested_admin.NestedStackedInline):
-    model = ForumResource
-    extra = 0
-    fk_name = 'forum_event'
-    inlines = [ResourceSessionInline]
-
-
-# Inlines for Session under Program
-class SessionInline(nested_admin.NestedTabularInline):
-    model = Session
-    extra = 0
-    fk_name = 'program'
-
-
-# Inlines for Program under ForumEvent
-class ProgramInline(nested_admin.NestedStackedInline):
-    model = Program
-    extra = 0
-    fk_name = 'forum_event'
-    inlines = [SessionInline]
-
-
-# Inlines for Person under ForumEvent
-class PersonInline(nested_admin.NestedTabularInline):
-    model = Person
-    extra = 0
-    fk_name = 'forum_event'
-
-
-# Inlines for Partner under ForumEvent
-class PartnerInline(nested_admin.NestedTabularInline):
-    model = Partner
-    extra = 0
-    fk_name = 'forum_event'
-
-
-@admin.register(ForumEvent)
-class ForumEventAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('title', 'start_date', 'end_date', 'order')
-    inlines = [
-        SupportInline,
-        EngagementInline,
-    ]
-    search_fields = ('title', 'title_subtext')
-    list_filter = ('start_date', 'end_date')
-
-
-@admin.register(Program)
-class ProgramAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('title', 'forum_event', 'order')
-    inlines = [SessionInline]
-    search_fields = ('title',)
-    list_filter = ('forum_event',)
-
-
-@admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'forum_event', 'order')
-    search_fields = ('name', 'title')
-    list_filter = ('category', 'forum_event')
-
-
-@admin.register(Partner)
-class PartnerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'forum_event', 'order')
-    search_fields = ('name', 'website_link')
-    list_filter = ('category', 'forum_event')
-
-
-@admin.register(ForumResource)
-class ForumResourceAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('resource_title', 'forum_event', 'order')
-    inlines = [ResourceSessionInline]
-    search_fields = ('resource_title', 'resource_authors')
-    list_filter = ('forum_event',)
+# Admins
 
 
 @admin.register(CleanAirResource)
 class CleanAirResourceAdmin(admin.ModelAdmin):
-    list_display = ('resource_title', 'resource_category', 'order')
+    list_display = ('resource_title', 'resource_category',
+                    'order', 'author_title')
+    list_filter = ('resource_category', 'author_title')
+    search_fields = ('resource_title', 'author_title')
+    readonly_fields = ('author_title',)
+    list_per_page = 12
+
+
+@admin.register(ForumEvent)
+class ForumEventAdmin(NestedModelAdmin):
+    list_display = ('title', 'start_date', 'end_date',
+                    'order')  # Removed 'author_title'
+    list_filter = ('start_date', 'end_date')
+    search_fields = ('title',)
+    readonly_fields = ()  # Removed 'author_title'
+    list_per_page = 12
+    inlines = [EngagementInline, SupportInline]
+
+
+@admin.register(Program)
+class ProgramAdmin(NestedModelAdmin):
+    list_display = ('title', 'forum_event',)
+    list_filter = ('forum_event',)
+    search_fields = ('title', 'forum_event__title',)
+    list_per_page = 12
+    inlines = [SessionInline]
+
+
+@admin.register(Person)
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('name', 'forum_event', 'category',
+                    'image_preview', 'order')
+    list_filter = ('forum_event',)
+    search_fields = ('name', 'category', 'forum_event__title',)
+    list_per_page = 12
+
+    def image_preview(self, obj):
+        if obj.picture:
+            height = 200
+            return format_html('<img src="{}" height="{}" />', obj.picture.url, height)
+        return ""
+    image_preview.short_description = 'Picture'
+
+
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'forum_event', 'category', 'logo_preview', 'order')
+    list_filter = ('forum_event',)
+    search_fields = ('name', 'category', 'forum_event__title',)
+    list_per_page = 12
+
+    def logo_preview(self, obj):
+        if obj.partner_logo:
+            height = 200
+            return format_html('<img src="{}" height="{}" />', obj.partner_logo.url, height)
+        return ""
+    logo_preview.short_description = 'Logo'
+
+
+@admin.register(ForumResource)
+class ForumResourceAdmin(NestedModelAdmin):
+    inlines = [ResourceSessionInline]
+    list_display = ('resource_title', 'resource_authors',
+                    'order', 'forum_event')
     search_fields = ('resource_title', 'resource_authors')
-    list_filter = ('resource_category',)
+    list_filter = ('forum_event',)

@@ -1,77 +1,22 @@
-# backend/apps/cleanair/serializers.py
-
+# serializers.py
 from rest_framework import serializers
 from .models import (
-    CleanAirResource, ForumEvent, Partner, Program, Session,
-    Support, Person, ForumResource, ResourceSession, ResourceFile, Engagement, Objective
+    CleanAirResource, ForumEvent, Engagement, Partner, Program,
+    Session, Support, Person, Objective, ForumResource,
+    ResourceFile, ResourceSession
 )
 
 
-class ResourceFileSerializer(serializers.ModelSerializer):
+class CleanAirResourceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ResourceFile
-        fields = ['id', 'resource_summary', 'file', 'order']
-
-
-class ResourceSessionSerializer(serializers.ModelSerializer):
-    resource_files = ResourceFileSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = ResourceSession
-        fields = ['id', 'session_title', 'order', 'resource_files']
-
-
-class ForumResourceSerializer(serializers.ModelSerializer):
-    resource_sessions = ResourceSessionSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = ForumResource
-        fields = ['id', 'resource_title',
-                  'resource_authors', 'order', 'resource_sessions']
-
-
-class SupportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Support
-        fields = ['id', 'query', 'name', 'role', 'email', 'order']
-
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Person
-        fields = ['id', 'name', 'title', 'bio', 'category',
-                  'picture', 'twitter', 'linked_in', 'order']
-
-
-class PartnerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Partner
-        fields = ['id', 'partner_logo', 'name',
-                  'website_link', 'category', 'order']
-        ref_name = 'CleanAirPartnerSerializer'
-
-
-class SessionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Session
-        fields = ['id', 'start_time', 'end_time',
-                  'session_title', 'session_details', 'order']
-        ref_name = 'CleanAirSessionSerializer'
-
-
-class ProgramSerializer(serializers.ModelSerializer):
-    sessions = SessionSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Program
-        fields = ['id', 'title', 'sub_text', 'order', 'sessions']
-        ref_name = 'CleanAirProgramSerializer'
+        model = CleanAirResource
+        fields = '__all__'
 
 
 class ObjectiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Objective
-        fields = ['id', 'title', 'details', 'order']
+        exclude = ['order']
 
 
 class EngagementSerializer(serializers.ModelSerializer):
@@ -79,35 +24,188 @@ class EngagementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Engagement
-        fields = ['id', 'title', 'objectives']
+        fields = '__all__'
+
+
+class PartnerSerializer(serializers.ModelSerializer):
+    partner_logo = serializers.SerializerMethodField()
+
+    def get_partner_logo(self, obj):
+        return obj.partner_logo.url if obj.partner_logo else None
+
+    class Meta:
+        model = Partner
+        exclude = ['order']
+        ref_name = 'CleanAirPartner'
+
+
+class SessionSerializer(serializers.ModelSerializer):
+    session_details_html = serializers.SerializerMethodField()
+
+    def get_session_details_html(self, obj):
+        html = obj.session_details
+        return '' if html.strip() == '<p><br></p>' else html
+
+    class Meta:
+        model = Session
+        exclude = ['order', 'session_details']
+        ref_name = 'CleanAirSession'
+
+
+class CleanAirProgramSerializer(serializers.ModelSerializer):
+    sub_text_html = serializers.SerializerMethodField()
+    sessions = SessionSerializer(many=True)
+
+    def get_sub_text_html(self, obj):
+        html = obj.sub_text
+        return '' if html.strip() == '<p><br></p>' else html
+
+    class Meta:
+        model = Program
+        exclude = ['order']
+        ref_name = 'CleanAirProgram'
+
+
+class SupportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Support
+        exclude = ['order']
+
+
+class PersonSerializer(serializers.ModelSerializer):
+    picture = serializers.SerializerMethodField()
+    bio_html = serializers.SerializerMethodField()
+
+    def get_bio_html(self, obj):
+        html = obj.bio
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_picture(self, obj):
+        return obj.picture.url if obj.picture else None
+
+    class Meta:
+        model = Person
+        exclude = ['bio', 'order']
+
+
+class ResourceFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResourceFile
+        fields = ['file', 'resource_summary', 'session']
+
+
+class ResourceSessionSerializer(serializers.ModelSerializer):
+    resource_files = ResourceFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ResourceSession
+        fields = '__all__'
+
+
+class ForumResourceSerializer(serializers.ModelSerializer):
+    resource_sessions = ResourceSessionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ForumResource
+        fields = '__all__'
 
 
 class ForumEventSerializer(serializers.ModelSerializer):
-    programs = ProgramSerializer(many=True, read_only=True)
-    persons = PersonSerializer(many=True, read_only=True)
-    partners = PartnerSerializer(many=True, read_only=True)
     forum_resources = ForumResourceSerializer(many=True, read_only=True)
+    engagements = EngagementSerializer(read_only=True)
+    partners = PartnerSerializer(many=True, read_only=True)
     supports = SupportSerializer(many=True, read_only=True)
-    engagements = EngagementSerializer(many=True, read_only=True)
+    programs = CleanAirProgramSerializer(many=True, read_only=True)
+    persons = PersonSerializer(many=True, read_only=True)
+    background_image = serializers.SerializerMethodField()
+    introduction_html = serializers.SerializerMethodField()
+    sponsorship_opportunities_about_html = serializers.SerializerMethodField()
+    sponsorship_opportunities_schedule_html = serializers.SerializerMethodField()
+    sponsorship_opportunities_partners_html = serializers.SerializerMethodField()
+    sponsorship_packages_html = serializers.SerializerMethodField()
+    schedule_details_html = serializers.SerializerMethodField()
+    travel_logistics_vaccination_details_html = serializers.SerializerMethodField()
+    travel_logistics_visa_details_html = serializers.SerializerMethodField()
+    registration_details_html = serializers.SerializerMethodField()
+    Speakers_text_section_html = serializers.SerializerMethodField()
+    Committee_text_section_html = serializers.SerializerMethodField()
+    partners_text_section_html = serializers.SerializerMethodField()
+    glossary_details_html = serializers.SerializerMethodField()
+    travel_logistics_accommodation_details_html = serializers.SerializerMethodField()
+
+    def get_travel_logistics_accommodation_details_html(self, obj):
+        html = obj.travel_logistics_accommodation_details
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_glossary_details_html(self, obj):
+        html = obj.glossary_details
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_partners_text_section_html(self, obj):
+        html = obj.partners_text_section
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_sponsorship_opportunities_partners_html(self, obj):
+        html = obj.sponsorship_opportunities_partners
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_sponsorship_opportunities_about_html(self, obj):
+        html = obj.sponsorship_opportunities_about
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_sponsorship_opportunities_schedule_html(self, obj):
+        html = obj.sponsorship_opportunities_schedule
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_sponsorship_packages_html(self, obj):
+        html = obj.sponsorship_packages
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_Speakers_text_section_html(self, obj):
+        html = obj.Speakers_text_section
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_Committee_text_section_html(self, obj):
+        html = obj.Committee_text_section
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_introduction_html(self, obj):
+        html = obj.introduction
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_background_image(self, obj):
+        if obj.background_image:
+            return obj.background_image.url
+        return None
+
+    def get_registration_details_html(self, obj):
+        html = obj.registration_details
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_schedule_details_html(self, obj):
+        html = obj.schedule_details
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_travel_logistics_vaccination_details_html(self, obj):
+        html = obj.travel_logistics_vaccination_details
+        return '' if html.strip() == '<p><br></p>' else html
+
+    def get_travel_logistics_visa_details_html(self, obj):
+        html = obj.travel_logistics_visa_details
+        return '' if html.strip() == '<p><br></p>' else html
 
     class Meta:
         model = ForumEvent
-        fields = [
-            'id', 'title', 'title_subtext', 'start_date', 'end_date',
-            'start_time', 'end_time', 'introduction', 'speakers_text_section',
-            'committee_text_section', 'partners_text_section', 'registration_link',
-            'schedule_details', 'registration_details', 'sponsorship_opportunities_about',
-            'sponsorship_opportunities_schedule', 'sponsorship_opportunities_partners',
-            'sponsorship_packages', 'travel_logistics_vaccination_details',
-            'travel_logistics_visa_details', 'travel_logistics_accommodation_details',
-            'glossary_details', 'background_image', 'location_name',
-            'location_link', 'engagements', 'programs', 'persons', 'partners',
-            'forum_resources', 'supports'
+        exclude = [
+            'introduction', 'Speakers_text_section',
+            "travel_logistics_accommodation_details",
+            "glossary_details", "schedule_details",
+            "partners_text_section",
+            "sponsorship_opportunities_about",
+            "sponsorship_opportunities_schedule",
+            "sponsorship_packages",
+            'Committee_text_section', 'registration_details',
+            'travel_logistics_vaccination_details',
+            'order', 'author_title', 'updated_by',
+            "sponsorship_opportunities_partners"
         ]
-
-
-class CleanAirResourceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CleanAirResource
-        fields = ['id', 'resource_title', 'resource_link', 'resource_file',
-                  'author_title', 'resource_category', 'resource_authors', 'order']

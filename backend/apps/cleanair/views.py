@@ -1,86 +1,18 @@
-# backend/apps/cleanair/views.py
-
+# views.py
 from rest_framework import viewsets
-from .models import (
-    CleanAirResource, ForumEvent, Partner, Program, Session,
-    Support, Person, ForumResource, ResourceSession, ResourceFile, Engagement, Objective
-)
-from .serializers import (
-    CleanAirResourceSerializer, ForumEventSerializer, PartnerSerializer,
-    ProgramSerializer, SessionSerializer, SupportSerializer,
-    PersonSerializer, ForumResourceSerializer, ResourceSessionSerializer,
-    ResourceFileSerializer, EngagementSerializer, ObjectiveSerializer
-)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny
+from .models import CleanAirResource, ForumEvent
+from .serializers import CleanAirResourceSerializer, ForumEventSerializer
 
 
-class CleanAirResourceViewSet(viewsets.ModelViewSet):
+class CleanAirResourceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CleanAirResource.objects.all()
     serializer_class = CleanAirResourceSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
 
 
-class ForumEventViewSet(viewsets.ModelViewSet):
-    queryset = ForumEvent.objects.all()
+class ForumEventViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ForumEvent.objects.prefetch_related(
+        'persons', 'programs', 'partners', 'forum_resources').all()
     serializer_class = ForumEventSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class PartnerViewSet(viewsets.ModelViewSet):
-    queryset = Partner.objects.all()
-    serializer_class = PartnerSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class ProgramViewSet(viewsets.ModelViewSet):
-    queryset = Program.objects.all()
-    serializer_class = ProgramSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class SessionViewSet(viewsets.ModelViewSet):
-    queryset = Session.objects.all()
-    serializer_class = SessionSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class SupportViewSet(viewsets.ModelViewSet):
-    queryset = Support.objects.all()
-    serializer_class = SupportSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class PersonViewSet(viewsets.ModelViewSet):
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class ForumResourceViewSet(viewsets.ModelViewSet):
-    queryset = ForumResource.objects.all()
-    serializer_class = ForumResourceSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class ResourceSessionViewSet(viewsets.ModelViewSet):
-    queryset = ResourceSession.objects.all()
-    serializer_class = ResourceSessionSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class ResourceFileViewSet(viewsets.ModelViewSet):
-    queryset = ResourceFile.objects.all()
-    serializer_class = ResourceFileSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class EngagementViewSet(viewsets.ModelViewSet):
-    queryset = Engagement.objects.all()
-    serializer_class = EngagementSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class ObjectiveViewSet(viewsets.ModelViewSet):
-    queryset = Objective.objects.all()
-    serializer_class = ObjectiveSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]

@@ -1,35 +1,18 @@
-# backend/apps/cleanair/models.py
-
-import uuid
-from django.conf import settings
+# models.py
 from django.db import models
 from cloudinary.models import CloudinaryField
-from ckeditor.fields import RichTextField
+from ckeditor.fields import RichTextField  # Replaced QuillField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from enum import Enum
+from django.utils.text import slugify
 
 
-class BaseModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    class Meta:
-        abstract = True
-
-
-class CleanAirResource(BaseModel):
+class CleanAirResource(models.Model):
     resource_title = models.CharField(max_length=120)
     resource_link = models.URLField(null=True, blank=True)
-    if settings.DEBUG:
-        resource_file = models.FileField(
-            upload_to='cleanair/resources/', null=True, blank=True)
-    else:
-        resource_file = CloudinaryField(
-            'raw',
-            overwrite=True,
-            resource_type='auto',
-            folder='website/uploads/cleanAir/resources/',
-            null=True,
-            blank=True
-        )
+    resource_file = models.FileField(
+        upload_to='cleanair/resources/', null=True, blank=True)
     author_title = models.CharField(
         max_length=40, null=True, blank=True, default="Created By")
 
@@ -56,42 +39,45 @@ class CleanAirResource(BaseModel):
         return self.resource_title
 
 
-class ForumEvent(BaseModel):
+class ForumEvent(models.Model):
     title = models.CharField(max_length=100, default="CLEAN-Air Forum")
     title_subtext = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
-    introduction = RichTextField(blank=True, null=True)
-    speakers_text_section = RichTextField(blank=True, null=True)
-    committee_text_section = RichTextField(blank=True, null=True)
-    partners_text_section = RichTextField(blank=True, null=True)
+    introduction = RichTextField(blank=True, null=True)  # Replaced QuillField
+    Speakers_text_section = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    Committee_text_section = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    partners_text_section = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
     registration_link = models.URLField(blank=True)
-    schedule_details = RichTextField(blank=True, null=True)
-    registration_details = RichTextField(blank=True, null=True)
-    sponsorship_opportunities_about = RichTextField(blank=True, null=True)
-    sponsorship_opportunities_schedule = RichTextField(blank=True, null=True)
-    sponsorship_opportunities_partners = RichTextField(blank=True, null=True)
-    sponsorship_packages = RichTextField(blank=True, null=True)
-    travel_logistics_vaccination_details = RichTextField(blank=True, null=True)
-    travel_logistics_visa_details = RichTextField(blank=True, null=True)
+    schedule_details = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    registration_details = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    sponsorship_opportunities_about = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    sponsorship_opportunities_schedule = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    sponsorship_opportunities_partners = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    sponsorship_packages = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    travel_logistics_vaccination_details = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    travel_logistics_visa_details = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
     travel_logistics_accommodation_details = RichTextField(
-        blank=True, null=True)
-    glossary_details = RichTextField(blank=True, null=True)
-
-    if settings.DEBUG:
-        background_image = models.FileField(
-            upload_to='cleanair/events/', null=True, blank=True)
-    else:
-        background_image = CloudinaryField(
-            "BackgroundImage",
-            overwrite=True,
-            resource_type="image",
-            folder="website/uploads/cleanAir/events/images/",
-            blank=True,
-            null=True
-        )
+        blank=True, null=True)  # Replaced QuillField
+    glossary_details = RichTextField(
+        blank=True, null=True)  # Replaced QuillField
+    unique_title = models.CharField(max_length=100, blank=True)
+    background_image = CloudinaryField(
+        "BackgroundImage", overwrite=True, resource_type="image", blank=True, null=True
+    )
     location_name = models.CharField(max_length=100, blank=True)
     location_link = models.URLField(blank=True)
     order = models.IntegerField(default=1)
@@ -102,6 +88,18 @@ class ForumEvent(BaseModel):
     def __str__(self):
         return self.title
 
+    def generate_unique_title(self, postfix_index=0):
+        unique_title = slugify(self.title)
+        if postfix_index > 0:
+            unique_title = f"{unique_title}{postfix_index}"
+        try:
+            ForumEvent.objects.get(unique_title=unique_title)
+        except ForumEvent.DoesNotExist:
+            return unique_title
+        else:
+            postfix_index += 1
+            return self.generate_unique_title(postfix_index=postfix_index)
+
 
 class PartnerCategoryChoices(Enum):
     FUNDING_PARTNER = "Funding Partner"
@@ -111,7 +109,7 @@ class PartnerCategoryChoices(Enum):
 
     @classmethod
     def choices(cls):
-        return [(key.value, key.name.replace('_', ' ').title()) for key in cls]
+        return [(key.value, key.name) for key in cls]
 
 
 class CategoryChoices(Enum):
@@ -123,13 +121,13 @@ class CategoryChoices(Enum):
 
     @classmethod
     def choices(cls):
-        return [(key.value, key.name.replace('_', ' ').title()) for key in cls]
+        return [(key.value, key.name) for key in cls]
 
 
-class Engagement(BaseModel):
+class Engagement(models.Model):
     title = models.CharField(max_length=200)
-    forum_event = models.ForeignKey(
-        'ForumEvent',
+    forum_event = models.OneToOneField(
+        ForumEvent,
         null=True,
         blank=True,
         related_name="engagements",
@@ -140,7 +138,7 @@ class Engagement(BaseModel):
         return self.title
 
 
-class Objective(BaseModel):
+class Objective(models.Model):
     title = models.CharField(max_length=200)
     details = models.TextField(blank=True, null=True)
     engagement = models.ForeignKey(
@@ -150,7 +148,7 @@ class Objective(BaseModel):
         related_name="objectives",
         on_delete=models.CASCADE,
     )
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     class Meta:
         ordering = ['order']
@@ -159,26 +157,16 @@ class Objective(BaseModel):
         return self.title
 
 
-class Partner(BaseModel):
-    if settings.DEBUG:
-        partner_logo = models.FileField(
-            upload_to='cleanair/events/', null=True, blank=True)
-    else:
-        partner_logo = CloudinaryField(
-            'ForumPartnerImage',
-            overwrite=True,
-            resource_type='image',
-            folder='website/uploads/cleanAir/events/partners/',
-            null=True,
-            blank=True
-        )
+class Partner(models.Model):
+    partner_logo = CloudinaryField(
+        'ForumPartnerImage', overwrite=True, resource_type="image")
     name = models.CharField(max_length=70)
     website_link = models.URLField(blank=True, null=True)
     order = models.IntegerField(default=1)
     category = models.CharField(
         max_length=50, choices=PartnerCategoryChoices.choices(), default=PartnerCategoryChoices.FUNDING_PARTNER.value)
     forum_event = models.ForeignKey(
-        'ForumEvent',
+        ForumEvent,
         null=True,
         blank=True,
         related_name="partners",
@@ -192,12 +180,12 @@ class Partner(BaseModel):
         return f"{self.get_category_display()} - {self.name}"
 
 
-class Program(BaseModel):
+class Program(models.Model):
     title = models.CharField(max_length=100)
-    sub_text = RichTextField(blank=True, null=True)
+    sub_text = RichTextField(blank=True, null=True)  # Replaced QuillField
     order = models.IntegerField(default=1)
     forum_event = models.ForeignKey(
-        'ForumEvent',
+        ForumEvent,
         null=True,
         blank=True,
         related_name="programs",
@@ -211,11 +199,12 @@ class Program(BaseModel):
         return f"Program - {self.title}"
 
 
-class Session(BaseModel):
+class Session(models.Model):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=False, null=True)
     session_title = models.CharField(max_length=150)
-    session_details = RichTextField(blank=False, null=True)
+    session_details = RichTextField(
+        blank=False, null=True)  # Replaced QuillField
     order = models.IntegerField(default=1)
     program = models.ForeignKey(
         Program,
@@ -232,14 +221,14 @@ class Session(BaseModel):
         return f"Session - {self.session_title}"
 
 
-class Support(BaseModel):
+class Support(models.Model):
     query = models.CharField(max_length=80)
     name = models.CharField(max_length=70)
     role = models.CharField(max_length=100, blank=True)
     email = models.EmailField()
     order = models.IntegerField(default=1)
-    forum_event = models.ForeignKey(
-        'ForumEvent',
+    event = models.ForeignKey(
+        ForumEvent,
         null=True,
         blank=True,
         related_name="supports",
@@ -253,29 +242,19 @@ class Support(BaseModel):
         return f"Support - {self.query}"
 
 
-class Person(BaseModel):
+class Person(models.Model):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100, blank=True)
-    bio = RichTextField(blank=True, null=True)
+    bio = RichTextField(blank=True, null=True)  # Replaced QuillField
     category = models.CharField(
         max_length=50, choices=CategoryChoices.choices(), default=CategoryChoices.SPEAKER.value)
-    if settings.DEBUG:
-        picture = models.FileField(
-            upload_to='cleanair/events/', null=True, blank=True)
-    else:
-        picture = CloudinaryField(
-            "PersonImage",
-            overwrite=True,
-            resource_type="image",
-            folder="website/uploads/cleanAir/events/profilePictures/",
-            blank=True,
-            null=True
-        )
+    picture = CloudinaryField(
+        "PersonImage", overwrite=True, resource_type="image")
     twitter = models.URLField(blank=True)
     linked_in = models.URLField(blank=True)
     order = models.IntegerField(default=1)
     forum_event = models.ForeignKey(
-        'ForumEvent',
+        ForumEvent,
         null=True,
         blank=True,
         related_name="persons",
@@ -289,7 +268,7 @@ class Person(BaseModel):
         return self.name
 
 
-class ForumResource(BaseModel):
+class ForumResource(models.Model):
     resource_title = models.CharField(max_length=120)
     resource_authors = models.CharField(max_length=200, default="AirQo")
     order = models.IntegerField(default=1)
@@ -308,12 +287,13 @@ class ForumResource(BaseModel):
         return self.resource_title
 
 
-class ResourceSession(BaseModel):
+class ResourceSession(models.Model):
     session_title = models.CharField(max_length=120)
     forum_resource = models.ForeignKey(
         'ForumResource',
         related_name="resource_sessions",
         on_delete=models.CASCADE,
+        default=1
     )
     order = models.IntegerField(default=1)
 
@@ -324,23 +304,11 @@ class ResourceSession(BaseModel):
         return self.session_title
 
 
-class ResourceFile(BaseModel):
+class ResourceFile(models.Model):
     resource_summary = models.TextField(blank=True, null=True)
-
-    if settings.DEBUG:
-        file = models.FileField(
-            upload_to='cleanair/resources/', null=True, blank=True)
-    else:
-        file = CloudinaryField(
-            "BackgroundImage",
-            overwrite=True,
-            resource_type="image",
-            folder="website/uploads/cleanAir/resources/",
-            blank=True,
-            null=True
-        )
+    file = models.FileField(upload_to='cleanair/resources/')
     session = models.ForeignKey(
-        'ResourceSession', related_name='resource_files', on_delete=models.CASCADE, null=True, blank=True)
+        'ResourceSession', related_name='resource_files', on_delete=models.CASCADE, null=True, blank=True, default=1)
     order = models.IntegerField(default=1)
 
     class Meta:
@@ -348,3 +316,11 @@ class ResourceFile(BaseModel):
 
     def __str__(self):
         return self.file.name
+
+
+# signals.py
+
+@receiver(pre_save, sender=ForumEvent)
+def append_short_name(sender, instance, *args, **kwargs):
+    if not instance.unique_title:
+        instance.unique_title = instance.generate_unique_title()
