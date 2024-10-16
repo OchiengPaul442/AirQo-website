@@ -7,7 +7,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_image(obj):
-        return obj.image.url if obj.image else None
+        return obj.image.url
 
     class Meta:
         fields = ('id', 'image')
@@ -43,7 +43,7 @@ class AfricanCitySerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_country_flag(obj):
-        return obj.country_flag.url if obj.country_flag else None
+        return obj.country_flag.url
 
     class Meta:
         fields = '__all__'

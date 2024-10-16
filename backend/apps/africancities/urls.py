@@ -1,10 +1,9 @@
-from rest_framework.routers import DefaultRouter
 from django.urls import path, include
+from rest_framework import routers
 from .views import AfricanCityViewSet
 
-router = DefaultRouter()
-router.register(r'african-cities', AfricanCityViewSet,
-                basename='african-cities')
+router = routers.DefaultRouter()
+router.register(r'african-countries', AfricanCityViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

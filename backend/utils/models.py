@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -24,21 +23,6 @@ class BaseModel(TimeStampedModel):
         # Restore the soft-deleted object
         self.is_deleted = False
         self.save()
-
-    class Meta:
-        abstract = True
-
-
-def generate_uuid():
-    """Generate a unique UUID for the model."""
-    return uuid.uuid4().hex
-
-
-class UUIDBaseModel(BaseModel):
-    """Base Model with UUID primary key."""
-    id = models.CharField(
-        primary_key=True, default=generate_uuid, editable=False, max_length=32
-    )
 
     class Meta:
         abstract = True
