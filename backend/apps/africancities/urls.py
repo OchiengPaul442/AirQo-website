@@ -1,19 +1,10 @@
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import (
-    AfricanCountryViewSet,
-    CityViewSet,
-    ContentViewSet,
-    DescriptionViewSet,
-    ImageViewSet,
-)
+from django.urls import path, include
+from .views import AfricanCityViewSet
 
 router = DefaultRouter()
-router.register(r'africancountries', AfricanCountryViewSet)
-router.register(r'cities', CityViewSet)
-router.register(r'contents', ContentViewSet)
-router.register(r'descriptions', DescriptionViewSet)
-router.register(r'images', ImageViewSet)
+router.register(r'african-cities', AfricanCityViewSet,
+                basename='african-cities')
 
 urlpatterns = [
     path('', include(router.urls)),

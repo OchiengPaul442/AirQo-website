@@ -1,39 +1,50 @@
 from rest_framework import serializers
-from .models import AfricanCountry, City, Content, Description, Image
+from .models import AfricanCountry, City, Content, Image, Description
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_image(obj):
+        return obj.image.url if obj.image else None
+
     class Meta:
+        fields = ('id', 'image')
         model = Image
-        fields = ['id', 'image', 'order', 'content']
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
     class Meta:
+        fields = ('id', 'paragraph')
         model = Description
-        fields = ['id', 'paragraph', 'order', 'content']
 
 
 class ContentSerializer(serializers.ModelSerializer):
-    descriptions = DescriptionSerializer(many=True, read_only=True)
-    images = ImageSerializer(many=True, read_only=True)
+    image = ImageSerializer(read_only=True, many=True)
+    description = DescriptionSerializer(read_only=True, many=True)
 
     class Meta:
+        fields = ('id', 'title', 'description', 'image')
         model = Content
-        fields = ['id', 'title', 'order', 'city', 'descriptions', 'images']
 
 
 class CitySerializer(serializers.ModelSerializer):
-    contents = ContentSerializer(many=True, read_only=True)
+    content = ContentSerializer(read_only=True, many=True)
 
     class Meta:
+        fields = ('id', 'city_name', 'content')
         model = City
-        fields = ['id', 'city_name', 'order', 'african_country', 'contents']
 
 
-class AfricanCountrySerializer(serializers.ModelSerializer):
-    cities = CitySerializer(many=True, read_only=True)
+class AfricanCitySerializer(serializers.ModelSerializer):
+    city = CitySerializer(read_only=True, many=True)
+    country_flag = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_country_flag(obj):
+        return obj.country_flag.url if obj.country_flag else None
 
     class Meta:
+        fields = '__all__'
         model = AfricanCountry
-        fields = ['id', 'country_name', 'country_flag', 'order', 'cities']

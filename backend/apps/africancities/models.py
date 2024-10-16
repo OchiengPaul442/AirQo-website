@@ -1,28 +1,14 @@
 from django.db import models
-import uuid
 from cloudinary.models import CloudinaryField
-from backend.utils.models import BaseModel
+from backend.utils.models import UUIDBaseModel
 
-
-def generate_uuid():
-    return uuid.uuid4().hex
-
-# Base Model with UUID primary key
-
-
-class UUIDBaseModel(BaseModel):
-    id = models.CharField(
-        primary_key=True, default=generate_uuid, editable=False, max_length=32
-    )
-
-    class Meta:
-        abstract = True
+# Create your models here.
 
 
 class AfricanCountry(UUIDBaseModel):
     country_name = models.CharField(max_length=100)
     country_flag = CloudinaryField(
-        "CountryFlag", overwrite=True, resource_type="image")
+        "CountryFlag", overwrite=True, resource_type="image", blank=True, null=True)  # Allow blank
     order = models.IntegerField(default=1)
 
     class Meta:
@@ -35,11 +21,11 @@ class AfricanCountry(UUIDBaseModel):
 class City(UUIDBaseModel):
     city_name = models.CharField(max_length=100)
     order = models.IntegerField(default=1)
-    african_country = models.ForeignKey(
+    african_city = models.ForeignKey(
         AfricanCountry,
         null=True,
-        related_name="cities",
-        on_delete=models.SET_NULL,
+        related_name="city",
+        on_delete=models.SET_NULL,  # Handle case where parent is deleted
     )
 
     class Meta:
@@ -55,8 +41,8 @@ class Content(UUIDBaseModel):
     city = models.ForeignKey(
         City,
         null=True,
-        related_name="contents",
-        on_delete=models.SET_NULL,
+        related_name="content",
+        on_delete=models.SET_NULL,  # Handle case where parent is deleted
     )
 
     class Meta:
@@ -73,8 +59,8 @@ class Description(UUIDBaseModel):
         Content,
         null=True,
         blank=True,
-        related_name="descriptions",
-        on_delete=models.SET_NULL,
+        related_name="description",
+        on_delete=models.SET_NULL,  # Handle case where parent is deleted
     )
 
     class Meta:
@@ -85,15 +71,15 @@ class Description(UUIDBaseModel):
 
 
 class Image(UUIDBaseModel):
-    image = CloudinaryField(
-        "ContentImage", overwrite=True, resource_type="image")
+    image = CloudinaryField("ContentImage", overwrite=True,
+                            resource_type="image", blank=True, null=True)  # Allow blank
     order = models.IntegerField(default=1)
     content = models.ForeignKey(
         Content,
         null=True,
         blank=True,
-        related_name="images",
-        on_delete=models.SET_NULL,
+        related_name="image",
+        on_delete=models.SET_NULL,  # Handle case where parent is deleted
     )
 
     class Meta:
