@@ -25,6 +25,7 @@ class UUIDBaseModel(BaseModel):
 
 
 # Event Model
+# Event Model
 class Event(UUIDBaseModel):
     title = models.CharField(max_length=100)
     title_subtext = models.CharField(max_length=90)
@@ -89,8 +90,7 @@ class Event(UUIDBaseModel):
         )
         background_image = models.FileField(
             upload_to='events/images/',
-            null=True,
-            blank=True
+            default='default_image.jpg',  # Provide a default image for existing rows
         )
     else:
         # In production, store files in Cloudinary
@@ -99,12 +99,14 @@ class Event(UUIDBaseModel):
             overwrite=True,
             folder="website/uploads/events/images",
             resource_type="image",
+            default='website/uploads/default_image.webp',
         )
         background_image = CloudinaryField(
             "BackgroundImage",
             overwrite=True,
             folder="website/uploads/events/images",
             resource_type="image",
+            default='website/uploads/default_image.webp',
         )
 
     location_name = models.CharField(max_length=100, null=True, blank=True)
@@ -141,6 +143,12 @@ class Event(UUIDBaseModel):
                 self.background_image.delete(save=False)
 
         super().delete(*args, **kwargs)
+
+
+@receiver(pre_save, sender=Event)
+def append_unique_title(sender, instance, **kwargs):
+    if not instance.unique_title:
+        instance.unique_title = instance.generate_unique_title()
 
 
 @receiver(pre_save, sender=Event)
@@ -230,6 +238,7 @@ class PartnerLogo(UUIDBaseModel):
             overwrite=True,
             folder="website/uploads/events/logos",
             resource_type="image",
+            default='website/uploads/default_image.webp',
         )
     name = models.CharField(max_length=70)
     order = models.IntegerField(default=1)

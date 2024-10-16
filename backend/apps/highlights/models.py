@@ -47,6 +47,7 @@ class Highlight(UUIDBaseModel):
             overwrite=True,
             resource_type="image",
             folder="website/uploads/highlights/images",
+            default='website/uploads/default_image.webp',
         )
 
     link = models.URLField()

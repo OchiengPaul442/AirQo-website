@@ -1,10 +1,7 @@
-import uuid
 from django.db import models
+import uuid
 from cloudinary.models import CloudinaryField
-from django.conf import settings
 from backend.utils.models import BaseModel
-
-# Function to generate UUID
 
 
 def generate_uuid():
@@ -13,37 +10,19 @@ def generate_uuid():
 # Base Model with UUID primary key
 
 
-class UUIDBaseModel(models.Model):
+class UUIDBaseModel(BaseModel):
     id = models.CharField(
         primary_key=True, default=generate_uuid, editable=False, max_length=32
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
 
-# AfricanCountry Model
-
 
 class AfricanCountry(UUIDBaseModel):
     country_name = models.CharField(max_length=100)
-
-    # Conditionally store images based on DEBUG setting
-    if settings.DEBUG:
-        country_flag = models.FileField(
-            upload_to='african_countries/flags/',
-            null=True,
-            blank=True
-        )
-    else:
-        country_flag = CloudinaryField(
-            "CountryFlag",
-            overwrite=True,
-            folder="website/uploads/african_countries/flags",
-            resource_type="image",
-        )
-
+    country_flag = CloudinaryField(
+        "CountryFlag", overwrite=True, resource_type="image")
     order = models.IntegerField(default=1)
 
     class Meta:
@@ -51,8 +30,6 @@ class AfricanCountry(UUIDBaseModel):
 
     def __str__(self):
         return self.country_name
-
-# City Model
 
 
 class City(UUIDBaseModel):
@@ -71,8 +48,6 @@ class City(UUIDBaseModel):
     def __str__(self):
         return self.city_name
 
-# Content Model
-
 
 class Content(UUIDBaseModel):
     title = models.CharField(max_length=150)
@@ -89,8 +64,6 @@ class Content(UUIDBaseModel):
 
     def __str__(self):
         return f"Section-{self.id}"
-
-# Description Model
 
 
 class Description(UUIDBaseModel):
@@ -110,25 +83,10 @@ class Description(UUIDBaseModel):
     def __str__(self):
         return f"Paragraph-{self.id}"
 
-# Image Model
-
 
 class Image(UUIDBaseModel):
-    # Conditionally store images based on DEBUG setting
-    if settings.DEBUG:
-        image = models.FileField(
-            upload_to='content_images/',
-            null=True,
-            blank=True
-        )
-    else:
-        image = CloudinaryField(
-            "ContentImage",
-            overwrite=True,
-            folder="website/uploads/african_countries/images",
-            resource_type="image",
-        )
-
+    image = CloudinaryField(
+        "ContentImage", overwrite=True, resource_type="image")
     order = models.IntegerField(default=1)
     content = models.ForeignKey(
         Content,

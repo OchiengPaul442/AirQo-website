@@ -59,6 +59,7 @@ class Partner(UUIDBaseModel):
             overwrite=True,
             resource_type="image",
             folder="website/uploads/partners/logos",
+            default='website/uploads/default_image.webp',
         )
 
     partner_name = models.CharField(max_length=200, null=False, blank=False)
