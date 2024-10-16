@@ -1,24 +1,11 @@
-import uuid
+# externalTeam/models.py
+
 from django.conf import settings
 from django.db import models
 from cloudinary.models import CloudinaryField
-from backend.utils.models import BaseModel
 
 
-def generate_uuid():
-    return uuid.uuid4().hex
-
-
-class UUIDBaseModel(BaseModel):
-    id = models.CharField(
-        primary_key=True, default=generate_uuid, editable=False, max_length=32
-    )
-
-    class Meta:
-        abstract = True
-
-
-class ExternalTeamMember(UUIDBaseModel):
+class ExternalTeamMember(models.Model):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
 
@@ -28,7 +15,8 @@ class ExternalTeamMember(UUIDBaseModel):
     else:
         # Cloudinary storage in production
         picture = CloudinaryField(
-            "Image", overwrite=True, folder="website/uploads/externalTeam/images", resource_type="image")
+            "Image", overwrite=True, folder="website/uploads/externalTeam/images", resource_type="image"
+        )
 
     twitter = models.URLField(max_length=255, null=True, blank=True)
     linked_in = models.URLField(max_length=255, null=True, blank=True)
@@ -40,8 +28,10 @@ class ExternalTeamMember(UUIDBaseModel):
     def __str__(self):
         return self.name
 
-    # Ensure image is deleted from the correct storage when the member is deleted
     def delete(self, *args, **kwargs):
+        """
+        Ensure the picture is deleted from the correct storage when the member is deleted.
+        """
         if self.picture:
             if settings.DEBUG:
                 self.picture.delete(save=False)
@@ -53,7 +43,7 @@ class ExternalTeamMember(UUIDBaseModel):
         super().delete(*args, **kwargs)
 
 
-class ExternalTeamMemberBiography(UUIDBaseModel):
+class ExternalTeamMemberBiography(models.Model):
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=1)
     member = models.ForeignKey(

@@ -1,3 +1,5 @@
+# externalTeam/serializers.py
+
 from rest_framework import serializers
 from .models import ExternalTeamMember, ExternalTeamMemberBiography
 from django.conf import settings
@@ -23,7 +25,6 @@ class ExternalTeamMemberSerializer(serializers.ModelSerializer):
     def get_picture_url(self, obj):
         if obj.picture:
             if settings.DEBUG:
-                # If in development mode, use local file URL
                 request = self.context.get('request')
                 if request:
                     return request.build_absolute_uri(obj.picture.url)

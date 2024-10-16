@@ -1,3 +1,5 @@
+# externalTeam/admin.py
+
 from django.contrib import admin
 from .models import ExternalTeamMember, ExternalTeamMemberBiography
 from django.utils.html import format_html
@@ -18,14 +20,12 @@ class ExternalTeamMemberAdmin(admin.ModelAdmin):
     ordering = ['order', 'name']
     inlines = [ExternalTeamMemberBiographyInline]
 
-    # Image preview for the list view
     def image_preview(self, obj):
         if obj.picture:
             return format_html(f'<img src="{obj.picture.url}" style="width: 50px; height: 50px;" />')
         return ""
     image_preview.short_description = "Picture Preview"
 
-    # Image preview for the detail view
     def image_preview_detail(self, obj):
         if obj.picture:
             return format_html(f'<img src="{obj.picture.url}" style="max-width: 300px; max-height: 300px;" />')
