@@ -1,56 +1,56 @@
+# admin.py
 
 from django.contrib import admin
-from django.utils.html import format_html
+import nested_admin
 from .models import Partner, PartnerDescription
 
 
-class PartnerDescriptionInline(admin.TabularInline):
+class PartnerDescriptionInline(nested_admin.NestedTabularInline):
+    fields = ('description', 'order')
     model = PartnerDescription
     extra = 0
-    min_num = 0
-    fields = ('description', 'order')
-    ordering = ('order',)
 
 
 @admin.register(Partner)
-class PartnerAdmin(admin.ModelAdmin):
-    list_display = ('partner_name', 'type', 'order', 'website_category',
-                    'partner_logo_preview', 'partner_image_preview')
-    search_fields = ('partner_name',)
-    list_filter = ('type', 'website_category')
-    list_editable = ('order', 'website_category')
-    inlines = [PartnerDescriptionInline]
-    ordering = ('order', 'id')
+class PartnerAdmin(nested_admin.NestedModelAdmin):
+    list_display = ('partner_name', 'website_category',
+                    'type', 'logo_preview', 'image_preview')
+    readonly_fields = ('created', 'modified')
+    list_filter = ('website_category', 'type',)
+    fields = (
+        'partner_name',
+        'website_category',
+        'type',
+        'partner_logo',
+        'partner_image',
+        'partner_link',
+        'order',
+        'unique_title',
+        'created',
+        'modified'
+    )
+    list_per_page = 10
+    search_fields = ('partner_name', 'type')
+    inlines = (PartnerDescriptionInline,)
 
-    # Image preview for partner_logo in list view
-    def partner_logo_preview(self, obj):
+    def logo_preview(self, obj):
+        width, height = 65, 50
+        from django.utils.html import escape, format_html
         if obj.partner_logo:
-            return format_html('<img src="{}" style="width: 50px; height: 50px;" />', obj.partner_logo.url)
-        return "-"
+            return format_html(
+                f'<img src="{escape(obj.partner_logo.url)}" width="{width}" height="{height}" />'
+            )
+        return "No Logo"
 
-    # Image preview for partner_image in list view
-    def partner_image_preview(self, obj):
+    logo_preview.short_description = "Logo"
+
+    def image_preview(self, obj):
+        width, height = 120, 80
+        from django.utils.html import escape, format_html
         if obj.partner_image:
-            return format_html('<img src="{}" style="width: 50px; height: 50px;" />', obj.partner_image.url)
-        return "-"
+            return format_html(
+                f'<img src="{escape(obj.partner_image.url)}" width="{width}" height="{height}" />'
+            )
+        return "No Image"
 
-    partner_logo_preview.short_description = 'Logo Preview'
-    partner_image_preview.short_description = 'Image Preview'
-
-    # Image previews in the form view
-    def get_readonly_fields(self, request, obj=None):
-        readonly_fields = list(super().get_readonly_fields(request, obj))
-        if obj:
-            readonly_fields.extend(
-                ['partner_logo_preview', 'partner_image_preview'])
-        return readonly_fields
-
-    def partner_logo_preview(self, obj):
-        if obj.partner_logo:
-            return format_html('<img src="{}" style="max-width: 200px; max-height: 200px;" />', obj.partner_logo.url)
-        return "-"
-
-    def partner_image_preview(self, obj):
-        if obj.partner_image:
-            return format_html('<img src="{}" style="max-width: 200px; max-height: 200px;" />', obj.partner_image.url)
-        return "-"
+    image_preview.short_description = "Image"
