@@ -1,6 +1,14 @@
-import React from 'react';
+'use client';
+import React, { useEffect } from 'react';
 
 const PP_Page = () => {
+  useEffect(() => {
+    // Add smooth scrolling behavior
+    if (typeof window !== 'undefined') {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+  }, []);
+
   const sections = [
     {
       id: 'intro',

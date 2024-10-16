@@ -1,3 +1,4 @@
+'use client';
 import { CustomButton } from '@components/ui';
 import React, { useState } from 'react';
 

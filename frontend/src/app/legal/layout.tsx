@@ -1,8 +1,7 @@
-'use client';
 import MainLayout from '@components/layouts/MainLayout';
 import TabSection from '@components/sections/legal/Tabsection';
 import { Metadata } from 'next';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Legal Information | AirQo',
@@ -48,13 +47,6 @@ type LegalPageLayoutProps = {
 };
 
 const LegalPageLayout: React.FC<LegalPageLayoutProps> = ({ children }) => {
-  useEffect(() => {
-    // Add smooth scrolling behavior
-    if (typeof window !== 'undefined') {
-      document.documentElement.style.scrollBehavior = 'smooth';
-    }
-  }, []);
-
   return (
     <MainLayout>
       <TabSection />
