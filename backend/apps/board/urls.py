@@ -1,12 +1,9 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import BoardMemberViewSet
+from rest_framework import routers
+from .views import BoardViewSet
 
-# Initialize the router
-router = DefaultRouter()
-
-# Register the BoardMemberViewSet
-router.register(r'board-members', BoardMemberViewSet, basename='board-member')
+router = routers.DefaultRouter()
+router.register(r'board-members', BoardViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
