@@ -31,7 +31,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   notifyDevelopers(error: Error, errorInfo: ErrorInfo) {
     // Example: log error details to an external service
-    console.log('Developer notified about the error.');
+    console.log('Developer notified about the error.', error, errorInfo);
   }
 
   render() {
