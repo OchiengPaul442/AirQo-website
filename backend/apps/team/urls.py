@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register(r'team', TeamViewSet, basename='team')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]

@@ -86,7 +86,7 @@ const AboutPage: React.FC = () => {
   const partnerLogoLinks = partners.map((partner: any) => {
     return {
       id: partner.id,
-      logoUrl: partner.partner_logo_url,
+      logoUrl: partner.partner_logo_url || partner.partner_logo || '',
     };
   });
 

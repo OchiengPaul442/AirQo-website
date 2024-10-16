@@ -10,15 +10,20 @@ const AfricanCities: React.FC = () => {
   // Fetch African countries when the component loads
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getAfricanCountries();
-      setCountries(response);
+      try {
+        const response = await getAfricanCountries();
+        setCountries(response);
 
-      // Default to the first country and its first city
-      if (response.length > 0) {
-        setSelectedCountry(response[0]);
-        if (response[0].cities.length > 0) {
-          setSelectedCity(response[0].cities[0]);
+        // Default to the first country and its first city
+        if (response.length > 0) {
+          const defaultCountry = response[0];
+          setSelectedCountry(defaultCountry);
+          if (defaultCountry.city.length > 0) {
+            setSelectedCity(defaultCountry.city[0]);
+          }
         }
+      } catch (error) {
+        console.error('Error fetching African countries:', error);
       }
     };
     fetchData();
@@ -27,8 +32,8 @@ const AfricanCities: React.FC = () => {
   // Handler for selecting a country
   const handleCountrySelect = (country: any) => {
     setSelectedCountry(country);
-    if (country.cities.length > 0) {
-      setSelectedCity(country.cities[0]); // Select the first city of the selected country
+    if (country.city.length > 0) {
+      setSelectedCity(country.city[0]); // Select the first city of the selected country
     } else {
       setSelectedCity(null);
     }
@@ -42,7 +47,7 @@ const AfricanCities: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto p-4 lg:p-0">
       {/* Top Section: Countries List */}
-      <div className="flex space-x-4 flex-wrap pb-4">
+      <div className="flex gap-4 flex-wrap pb-4">
         {countries.map((country) => (
           <button
             key={country.id}
@@ -66,10 +71,10 @@ const AfricanCities: React.FC = () => {
       </div>
 
       {/* Middle Section: Cities List for the selected country */}
-      {selectedCountry && selectedCountry.cities.length > 0 && (
+      {selectedCountry && selectedCountry.city.length > 0 && (
         <div className="mt-6 border-t border-gray-300 w-full pt-4 pb-8">
           <div className="flex space-x-4">
-            {selectedCountry.cities.map((city: any) => (
+            {selectedCountry.city.map((city: any) => (
               <button
                 key={city.id}
                 className={`px-4 py-2 rounded-full border ${
@@ -87,15 +92,15 @@ const AfricanCities: React.FC = () => {
       )}
 
       {/* Bottom Section: City Details */}
-      {selectedCity && selectedCity.contents.length > 0 && (
+      {selectedCity && selectedCity.content.length > 0 && (
         <div className="mt-8 relative grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Section: Descriptions */}
           <div>
             <h2 className="text-3xl font-bold mb-4">
-              {selectedCity.contents[0].title}
+              {selectedCity.content[0].title}
             </h2>
             <div className="space-y-4">
-              {selectedCity.contents[0].descriptions.map((desc: any) => (
+              {selectedCity.content[0].description.map((desc: any) => (
                 <p key={desc.id} className="text-lg text-gray-700">
                   {desc.paragraph}
                 </p>
@@ -105,9 +110,11 @@ const AfricanCities: React.FC = () => {
 
           {/* Right Section: Images */}
           <div
-            className={`grid grid-cols-${selectedCity.contents[0].images.length === 2 ? '2' : '1'} gap-4 items-center`}
+            className={`grid grid-cols-${
+              selectedCity.content[0].image.length === 2 ? '2' : '1'
+            } gap-4 items-center`}
           >
-            {selectedCity.contents[0].images.map((img: any) => (
+            {selectedCity.content[0].image.map((img: any) => (
               <Image
                 key={img.id}
                 src={img.image}
