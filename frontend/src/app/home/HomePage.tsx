@@ -85,7 +85,7 @@ const HomePage = () => {
           description="Are you a developer? We invite you to leverage our open-air quality data on your App"
           buttonText="Get started here"
           buttonLink="/products/api"
-          imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132435/website/photos/ApiSection_evfebp.webp"
+          imageUrl="https://res.cloudinary.com/dbibjvyhm/image/upload/v1729071534/website/photos/wrapper_zpnvdw.png"
           reverse={false}
           backgroundColor="bg-transparent"
           leftWidth="lg:w-1/3"
@@ -117,7 +117,7 @@ const HomePage = () => {
           description="Discover the quality of air you are breathing"
           appStoreLink="https://apps.apple.com/ug/app/airqo-air-quality/id1337573091"
           googlePlayLink="https://play.google.com/store/apps/details?id=com.airqo.app"
-          mockupImage="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132436/website/photos/get-app-sm_bknad9.png"
+          mockupImage="https://res.cloudinary.com/dbibjvyhm/image/upload/v1729071559/website/photos/wrapper_aum5qm.png"
         />
       </MotionSection>
 

@@ -116,13 +116,11 @@ const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
                 <NavigationMenuLink asChild>
                   <Link
                     href={item.href}
-                    className="block p-2 rounded-xl hover:bg-blue-50 transition"
+                    className="block p-2 rounded-xl hover:bg-blue-50 hover:text-blue-500 transition"
                   >
-                    <div className="font-medium text-gray-800">
-                      {item.title}
-                    </div>
+                    <div className="font-medium">{item.title}</div>
                     {item.description && (
-                      <div className=" text-gray-500">{item.description}</div>
+                      <div className="text-gray-500">{item.description}</div>
                     )}
                   </Link>
                 </NavigationMenuLink>
@@ -188,7 +186,7 @@ const Navbar: React.FC = () => {
               {/* Navigation Links */}
               <CustomButton
                 onClick={() => dispatch(openModal())}
-                className="text-blue-600 bg-blue-50 hover:bg-blue-100 transition rounded-none"
+                className="text-blue-600 bg-blue-50 transition rounded-none"
               >
                 Get involved
               </CustomButton>
