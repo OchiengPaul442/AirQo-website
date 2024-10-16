@@ -61,21 +61,21 @@ const MemberPage: React.FC = () => {
           .filter((partner) => partner.type.toLowerCase() === 'ca-network')
           .map((partner) => ({
             id: partner.id,
-            logoUrl: partner.partner_logo_url || '',
+            logoUrl: partner.partner_logo_url || partner.partner_logo || '',
           }));
 
         const policy = cleanairPartners
           .filter((partner) => partner.type.toLowerCase() === 'ca-forum')
           .map((partner) => ({
             id: partner.id,
-            logoUrl: partner.partner_logo_url || '',
+            logoUrl: partner.partner_logo_url || partner.partner_logo || '',
           }));
 
         const supporting = cleanairPartners
           .filter((partner) => partner.type.toLowerCase() === 'ca-support')
           .map((partner) => ({
             id: partner.id,
-            logoUrl: partner.partner_logo_url || '',
+            logoUrl: partner.partner_logo_url || partner.partner_logo || '',
           }));
 
         const privateSector = cleanairPartners
@@ -84,7 +84,7 @@ const MemberPage: React.FC = () => {
           )
           .map((partner) => ({
             id: partner.id,
-            logoUrl: partner.partner_logo_url || '',
+            logoUrl: partner.partner_logo_url || partner.partner_logo || '',
           }));
 
         // Set state
