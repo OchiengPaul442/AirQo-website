@@ -34,3 +34,6 @@ media/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Ignore static files collected by collectstatic
+staticfiles/
