@@ -19,6 +19,11 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
+# Swagger configuration
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'backend.urls.api_info',
+}
+
 # Application definition
 INSTALLED_APPS = [
     # Django default apps
@@ -28,6 +33,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party apps
+    'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
+    'rest_framework',
+    'django_extensions',
+    'ckeditor',
+    'ckeditor_uploader',
+    'nested_admin',
+    'drf_yasg',  # Added for Swagger
 
     # Custom apps
     'apps.press',
@@ -43,22 +59,12 @@ INSTALLED_APPS = [
     'apps.cleanair',
     'apps.FAQ',
     'apps.africancities',
-
-    # Third-party apps
-    'corsheaders',
-    'cloudinary',
-    'cloudinary_storage',
-    'rest_framework',
-    'django_extensions',
-    'ckeditor',
-    'ckeditor_uploader',
-    'nested_admin',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Must be first
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,9 +73,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+# CORS Configuration
+CORS_ORIGIN_ALLOW_ALL = False  # Disallow all origins by default
+
+# Retrieve allowed origins from .env and split into a list
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+
+# Retrieve regex patterns from .env and split into a list
+CORS_ORIGIN_REGEX_WHITELIST = [
+    pattern.strip() for pattern in os.getenv('CORS_ORIGIN_REGEX_WHITELIST', '').split(',')
 ]
+
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 # Root URL configuration
 ROOT_URLCONF = 'backend.urls'
@@ -78,8 +94,8 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Add directories for custom templates if necessary
-        'APP_DIRS': True,  # Ensure it finds templates from installed apps
+        'DIRS': [],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -131,7 +147,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files configuration (Development uses local storage, Production uses Cloudinary)
 if DEBUG:
-    # Development media files stored locally
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'assets')
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -174,19 +189,19 @@ CKEDITOR_IMAGE_BACKEND = "pillow"  # Image processing backend
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',  # Full toolbar with all free features
-        'height': 300,  # Set minimum height, will expand as needed
-        'width': 'auto',  # Auto width to fit container
+        'toolbar': 'full',
+        'height': 300,
+        'width': 'auto',
         'extraPlugins': ','.join([
-            'uploadimage',  # Allows image uploads
-            'autolink',  # Automatically converts URLs to links
-            'autoembed',  # Automatically embeds media (e.g., YouTube)
-            'codesnippet',  # For code snippets
-            'image2',  # Enhanced image plugin
+            'uploadimage',
+            'autolink',
+            'autoembed',
+            'codesnippet',
+            'image2',
         ]),
-        'removePlugins': 'flash',  # Remove outdated plugins
-        'filebrowserUploadUrl': '/ckeditor/upload/',  # URL for file uploads
-        'filebrowserBrowseUrl': '/ckeditor/browse/',  # URL for browsing uploaded files
+        'removePlugins': 'flash',
+        'filebrowserUploadUrl': '/ckeditor/upload/',
+        'filebrowserBrowseUrl': '/ckeditor/browse/',
         'toolbarGroups': [
             {'name': 'clipboard', 'groups': ['clipboard', 'undo']},
             {'name': 'editing', 'groups': [
@@ -210,11 +225,9 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-
 # Cloudinary-specific folder setup for CKEditor uploads in production
 if not DEBUG:
     # Folder for event-related uploads
     CKEDITOR_UPLOAD_PATH = "website/uploads/"
-
 
 SILENCED_SYSTEM_CHECKS = ['ckeditor.W001']

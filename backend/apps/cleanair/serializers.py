@@ -48,6 +48,7 @@ class PartnerSerializer(serializers.ModelSerializer):
         model = Partner
         fields = ['id', 'partner_logo', 'name',
                   'website_link', 'category', 'order']
+        ref_name = 'CleanAirPartnerSerializer'
 
 
 class SessionSerializer(serializers.ModelSerializer):
@@ -55,6 +56,7 @@ class SessionSerializer(serializers.ModelSerializer):
         model = Session
         fields = ['id', 'start_time', 'end_time',
                   'session_title', 'session_details', 'order']
+        ref_name = 'CleanAirSessionSerializer'
 
 
 class ProgramSerializer(serializers.ModelSerializer):
@@ -63,6 +65,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ['id', 'title', 'sub_text', 'order', 'sessions']
+        ref_name = 'CleanAirProgramSerializer'
 
 
 class ObjectiveSerializer(serializers.ModelSerializer):

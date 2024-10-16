@@ -40,6 +40,7 @@ class SessionSerializer(serializers.ModelSerializer):
             'session_details',
             'order'
         ]
+        ref_name = 'EventSessionSerializer'
 
 
 class ProgramSerializer(serializers.ModelSerializer):
@@ -54,6 +55,7 @@ class ProgramSerializer(serializers.ModelSerializer):
             'order',
             'sessions'
         ]
+        ref_name = 'EventProgramSerializer'
 
 
 class InquirySerializer(serializers.ModelSerializer):

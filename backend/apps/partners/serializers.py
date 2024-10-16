@@ -31,6 +31,7 @@ class PartnerSerializer(serializers.ModelSerializer):
             'website_category',
             'descriptions',
         ]
+        ref_name = 'PartnersPartnerSerializer'
 
     def get_partner_logo_url(self, obj):
         request = self.context.get('request')
