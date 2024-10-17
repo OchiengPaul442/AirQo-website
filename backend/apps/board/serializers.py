@@ -9,13 +9,12 @@ class BoardMemberBiographySerializer(serializers.ModelSerializer):
 
 
 class BoardMemberSerializer(serializers.ModelSerializer):
-    picture = serializers.SerializerMethodField()
+    picture_url = serializers.SerializerMethodField()
     descriptions = BoardMemberBiographySerializer(read_only=True, many=True)
 
     class Meta:
         model = BoardMember
         fields = '__all__'
 
-    @staticmethod
-    def get_picture(obj):
-        return obj.picture.url
+    def get_picture_url(self, obj):
+        return obj.get_picture_url()
