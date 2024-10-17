@@ -2,8 +2,6 @@ from django.contrib import admin
 import nested_admin
 from .models import AfricanCountry, City, Content, Image, Description
 
-# Register your models here.
-
 
 class ImageInline(nested_admin.NestedTabularInline):
     fields = ('image', 'order')
@@ -45,4 +43,6 @@ class AfricanCitiesAdmin(nested_admin.NestedModelAdmin):
         width, height = 60, 40
         from django.utils.html import format_html
 
-        return format_html(f'<img src="{obj.country_flag.url}" width="{width}" height="{height}" />')
+        if obj.country_flag:
+            return format_html(f'<img src="{obj.get_country_flag_url()}" width="{width}" height="{height}" />')
+        return '-'

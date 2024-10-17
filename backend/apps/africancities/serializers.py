@@ -3,14 +3,13 @@ from .models import AfricanCountry, City, Content, Image, Description
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
 
-    @staticmethod
-    def get_image(obj):
-        return obj.image.url
+    def get_image_url(self, obj):
+        return obj.get_image_url()
 
     class Meta:
-        fields = ('id', 'image')
+        fields = ('id', 'image_url')
         model = Image
 
 
@@ -39,12 +38,11 @@ class CitySerializer(serializers.ModelSerializer):
 
 class AfricanCitySerializer(serializers.ModelSerializer):
     city = CitySerializer(read_only=True, many=True)
-    country_flag = serializers.SerializerMethodField()
+    country_flag_url = serializers.SerializerMethodField()
 
-    @staticmethod
-    def get_country_flag(obj):
-        return obj.country_flag.url
+    def get_country_flag_url(self, obj):
+        return obj.get_country_flag_url()
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'country_name', 'country_flag_url', 'city')
         model = AfricanCountry

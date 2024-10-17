@@ -1,14 +1,24 @@
+from django.conf import settings
 from django.db import models
 from cloudinary.models import CloudinaryField
 from backend.utils.models import BaseModel
 
-# Create your models here.
-
 
 class AfricanCountry(BaseModel):
     country_name = models.CharField(max_length=100)
-    country_flag = CloudinaryField(
-        "CountryFlag", overwrite=True, resource_type="image")
+
+    if settings.DEBUG:
+        country_flag = models.FileField(
+            upload_to='countries/flags/',
+            null=True,
+            blank=True
+        )
+    else:
+        country_flag = CloudinaryField(
+            "CountryFlag", overwrite=True, resource_type="image",
+            folder="website/uploads/countries/flags"
+        )
+
     order = models.IntegerField(default=1)
 
     class Meta:
@@ -16,6 +26,12 @@ class AfricanCountry(BaseModel):
 
     def __str__(self):
         return self.country_name
+
+    def get_country_flag_url(self):
+        if settings.DEBUG:
+            return self.country_flag.url if self.country_flag else None
+        else:
+            return self.country_flag.build_url(secure=True)
 
 
 class City(BaseModel):
@@ -71,8 +87,18 @@ class Description(BaseModel):
 
 
 class Image(BaseModel):
-    image = CloudinaryField(
-        "ContentImage", overwrite=True, resource_type="image")
+    if settings.DEBUG:
+        image = models.FileField(
+            upload_to='content/images/',
+            null=True,
+            blank=True
+        )
+    else:
+        image = CloudinaryField(
+            "ContentImage", overwrite=True, resource_type="image",
+            folder="website/uploads/content/images"
+        )
+
     order = models.IntegerField(default=1)
     content = models.ForeignKey(
         Content,
@@ -87,3 +113,9 @@ class Image(BaseModel):
 
     def __str__(self):
         return f"Image-{self.id}"
+
+    def get_image_url(self):
+        if settings.DEBUG:
+            return self.image.url if self.image else None
+        else:
+            return self.image.build_url(secure=True)
