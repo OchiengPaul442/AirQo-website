@@ -40,25 +40,14 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'rest_framework',
     'django_extensions',
-    'ckeditor',
-    'ckeditor_uploader',
     'nested_admin',
     'drf_yasg',  # Added for Swagger
 
+    # Quill editor
+    'django_quill',  # Added django-quill-editor
+
     # Custom apps
-    'apps.press',
-    'apps.impact',
     'apps.event',
-    'apps.highlights',
-    'apps.career',
-    'apps.publications',
-    'apps.team',
-    'apps.externalTeam',
-    'apps.board',
-    'apps.partners',
-    'apps.cleanair',
-    'apps.FAQ',
-    'apps.africancities',
 ]
 
 MIDDLEWARE = [
@@ -112,11 +101,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database configuration: Separate for development (SQLite) and production (Postgres)
 if DEBUG:
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+    #         'NAME': BASE_DIR / os.getenv('DATABASE_NAME', 'db.sqlite3'),
+    #     }
+    # }
     DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
-            'NAME': BASE_DIR / os.getenv('DATABASE_NAME', 'db.sqlite3'),
-        }
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 else:
     DATABASES = {
@@ -140,10 +132,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Define STATICFILES_DIRS to tell Django where to find additional static files
+STATICFILES_DIRS = [
+    # Point to the static folder in the backend
+    os.path.join(BASE_DIR, 'backend', 'static'),
+]
 
 # WhiteNoise configuration for serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Collect static files here for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Media files configuration (Development uses local storage, Production uses Cloudinary)
 if DEBUG:
@@ -183,51 +183,25 @@ if DEBUG:
 else:
     print("Production mode is ON")
 
-# CKEditor configurations
-CKEDITOR_UPLOAD_PATH = "uploads/"  # Local upload path (for development)
-CKEDITOR_IMAGE_BACKEND = "pillow"  # Image processing backend
-
-CKEDITOR_CONFIGS = {
+# Quill Editor Configuration
+QUILL_CONFIGS = {
     'default': {
-        'toolbar': 'full',
-        'height': 300,
-        'width': 'auto',
-        'extraPlugins': ','.join([
-            'uploadimage',
-            'autolink',
-            'autoembed',
-            'codesnippet',
-            'image2',
-        ]),
-        'removePlugins': 'flash',
-        'filebrowserUploadUrl': '/ckeditor/upload/',
-        'filebrowserBrowseUrl': '/ckeditor/browse/',
-        'toolbarGroups': [
-            {'name': 'clipboard', 'groups': ['clipboard', 'undo']},
-            {'name': 'editing', 'groups': [
-                'find', 'selection', 'spellchecker']},
-            {'name': 'links'},
-            {'name': 'insert'},
-            {'name': 'forms'},
-            {'name': 'tools'},
-            {'name': 'document', 'groups': ['mode', 'document', 'doctools']},
-            {'name': 'others'},
-            '/',
-            {'name': 'basicstyles', 'groups': ['basicstyles', 'cleanup']},
-            {'name': 'paragraph', 'groups': [
-                'list', 'indent', 'blocks', 'align', 'bidi']},
-            {'name': 'styles'},
-            {'name': 'colors'},
-            {'name': 'about'},
-        ],
-        'tabSpaces': 4,
-        'extraAllowedContent': 'img[alt,border,vspace,hspace,width,height,align];a[!href];',
+        'theme': 'snow',  # 'snow' for light mode, 'bubble' for minimalistic
+        'modules': {
+            'toolbar': [
+                [{'header': [1, 2, 3, 4, 5, 6, False]}],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{'list': 'ordered'}, {'list': 'bullet'},
+                    {'indent': '-1'}, {'indent': '+1'}],
+                [{'direction': 'rtl'}],
+                [{'size': ['small', False, 'large', 'huge']}],
+                [{'color': []}, {'background': []}],
+                [{'font': []}],
+                ['blockquote', 'code-block'],
+                ['link', 'image', 'video'],
+                ['clean'],
+            ],
+            'syntax': True,  # Enable syntax highlighting
+        },
     }
 }
-
-# Cloudinary-specific folder setup for CKEditor uploads in production
-if not DEBUG:
-    # Folder for event-related uploads
-    CKEDITOR_UPLOAD_PATH = "website/uploads/"
-
-SILENCED_SYSTEM_CHECKS = ['ckeditor.W001']

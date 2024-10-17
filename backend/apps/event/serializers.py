@@ -14,10 +14,8 @@ class PartnerLogoSerializer(serializers.ModelSerializer):
     def get_partner_logo_url(self, obj):
         if obj.partner_logo:
             if settings.DEBUG:
-                # If in development, use the local file URL
                 return self.context['request'].build_absolute_uri(obj.partner_logo.url)
             else:
-                # In production, return the Cloudinary secure URL
                 return cloudinary_url(obj.partner_logo.public_id, secure=True)[0]
         return None
 
@@ -37,7 +35,7 @@ class SessionSerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
             'venue',
-            'session_details',
+            'session_details',  # Keep session_details as QuillField
             'order'
         ]
         ref_name = 'EventSessionSerializer'
@@ -51,7 +49,7 @@ class ProgramSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'date',
-            'program_details',  # Now a TextField
+            'program_details',  # Keep program_details as QuillField
             'order',
             'sessions'
         ]
@@ -85,10 +83,8 @@ class EventListSerializer(serializers.ModelSerializer):
     def get_event_image_url(self, obj):
         if obj.event_image:
             if settings.DEBUG:
-                # If in development, use the local file URL
                 return self.context['request'].build_absolute_uri(obj.event_image.url)
             else:
-                # In production, return the Cloudinary secure URL
                 return cloudinary_url(obj.event_image.public_id, secure=True)[0]
         return None
 
@@ -121,7 +117,7 @@ class EventDetailSerializer(serializers.ModelSerializer):
             'background_image_url',
             'location_name',
             'location_link',
-            'event_details',
+            'event_details',  # Keep event_details as QuillField
             'order',
             'inquiries',
             'programs',

@@ -1,37 +1,39 @@
-# admin.py
+# backend/apps/event/admin.py
+
 from django.contrib import admin
-import nested_admin  # Import nested_admin
+import nested_admin
+from backend.utils.admin import BaseQuillAdmin
 from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 
 
 class InquiryInline(nested_admin.NestedTabularInline):
     model = Inquiry
-    extra = 1
-    readonly_fields = ()  # Removed 'id'
-    sortable_field_name = 'order'  # Enable sorting based on 'order' field
-    fields = ('inquiry', 'role', 'email', 'order')  # Specify fields to display
+    extra = 0
+    readonly_fields = ('created_by', 'modified_by')
+    sortable_field_name = 'order'
+    fields = ('inquiry', 'role', 'email', 'order')
 
 
 class PartnerLogoInline(nested_admin.NestedTabularInline):
     model = PartnerLogo
-    extra = 1
-    readonly_fields = ()  # Removed 'id'
+    extra = 0
+    readonly_fields = ('created_by', 'modified_by')
     sortable_field_name = 'order'
     fields = ('name', 'partner_logo', 'order')
 
 
 class ResourceInline(nested_admin.NestedTabularInline):
     model = Resource
-    extra = 1
-    readonly_fields = ()  # Removed 'id'
+    extra = 0
+    readonly_fields = ('created_by', 'modified_by')
     fields = ('title', 'link', 'resource', 'order')
     sortable_field_name = 'order'
 
 
 class SessionInline(nested_admin.NestedTabularInline):
     model = Session
-    extra = 1
-    readonly_fields = ()  # Removed 'id'
+    extra = 0
+    readonly_fields = ('created_by', 'modified_by')
     fields = ('session_title', 'start_time', 'end_time',
               'venue', 'session_details', 'order')
     sortable_field_name = 'order'
@@ -39,15 +41,15 @@ class SessionInline(nested_admin.NestedTabularInline):
 
 class ProgramInline(nested_admin.NestedTabularInline):
     model = Program
-    extra = 1
-    readonly_fields = ()  # Removed 'id'
+    extra = 0
+    readonly_fields = ('created_by', 'modified_by')
     fields = ('date', 'program_details', 'order')
     sortable_field_name = 'order'
-    inlines = [SessionInline]  # Nest SessionInline within ProgramInline
+    inlines = [SessionInline]
 
 
 @admin.register(Event)
-class EventAdmin(nested_admin.NestedModelAdmin):
+class EventAdmin(BaseQuillAdmin, nested_admin.NestedModelAdmin):
     list_display = (
         'title',
         'start_date',
@@ -59,12 +61,11 @@ class EventAdmin(nested_admin.NestedModelAdmin):
     search_fields = ('title', 'location_name')
     list_editable = ('order',)
     ordering = ('order', '-start_date')
+    list_per_page = 10
+    readonly_fields = ('id', 'unique_title', 'created_by', 'modified_by')
     inlines = [
         InquiryInline,
-        # Nested ProgramInline (which includes SessionInline)
         ProgramInline,
         PartnerLogoInline,
         ResourceInline
     ]
-    # Keep 'id' and 'unique_title' as readonly
-    readonly_fields = ('id', 'unique_title')

@@ -1,32 +1,19 @@
-import uuid
-from django.conf import settings
+# backend/apps/event/models.py
+
 from django.db import models
+from backend import settings
 from backend.utils.models import BaseModel
-from cloudinary.models import CloudinaryField
+from backend.utils.fields import ConditionalImageField, ConditionalFileField
 from cloudinary.uploader import destroy
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from django.utils.text import slugify
-from ckeditor.fields import RichTextField
-
-
-def generate_uuid():
-    return uuid.uuid4().hex
-
-
-# Base Model with UUID primary key
-class UUIDBaseModel(BaseModel):
-    id = models.CharField(
-        primary_key=True, default=generate_uuid, editable=False, max_length=32
-    )
-
-    class Meta:
-        abstract = True
+from django_quill.fields import QuillField  # Import QuillField
+import os
 
 
 # Event Model
-# Event Model
-class Event(UUIDBaseModel):
+class Event(BaseModel):
     title = models.CharField(max_length=100)
     title_subtext = models.CharField(max_length=90)
     start_date = models.DateField()
@@ -81,37 +68,22 @@ class Event(UUIDBaseModel):
         blank=True,
     )
 
-    if settings.DEBUG:
-        # In development, store files locally
-        event_image = models.FileField(
-            upload_to='events/images/',
-            null=True,
-            blank=True
-        )
-        background_image = models.FileField(
-            upload_to='events/images/',
-            default='default_image.jpg',  # Provide a default image for existing rows
-        )
-    else:
-        # In production, store files in Cloudinary
-        event_image = CloudinaryField(
-            "EventImage",
-            overwrite=True,
-            folder="website/uploads/events/images",
-            resource_type="image",
-            default='website/uploads/default_image.webp',
-        )
-        background_image = CloudinaryField(
-            "BackgroundImage",
-            overwrite=True,
-            folder="website/uploads/events/images",
-            resource_type="image",
-            default='website/uploads/default_image.webp',
-        )
+    event_image = ConditionalImageField(
+        local_upload_to='events/images/',
+        cloudinary_folder='website/uploads/events/images',
+        null=True,
+        blank=True
+    )
+    background_image = ConditionalImageField(
+        local_upload_to='events/images/',
+        cloudinary_folder='website/uploads/events/images',
+        null=True,
+        blank=True
+    )
 
     location_name = models.CharField(max_length=100, null=True, blank=True)
     location_link = models.URLField(null=True, blank=True)
-    event_details = RichTextField()
+    event_details = QuillField(default="No details available")
     order = models.IntegerField(default=1)
 
     class Meta:
@@ -129,18 +101,20 @@ class Event(UUIDBaseModel):
         return self.generate_unique_title(postfix_index=postfix_index + 1)
 
     def delete(self, *args, **kwargs):
-        # Delete files from storage
+        # Delete files from storage for both Cloudinary and local storage
         if self.event_image:
             if not settings.DEBUG:  # Delete from Cloudinary in production
                 destroy(self.event_image.public_id)
             else:  # Delete from local storage in development
-                self.event_image.delete(save=False)
+                if os.path.isfile(self.event_image.path):
+                    os.remove(self.event_image.path)
 
         if self.background_image:
             if not settings.DEBUG:
                 destroy(self.background_image.public_id)
             else:
-                self.background_image.delete(save=False)
+                if os.path.isfile(self.background_image.path):
+                    os.remove(self.background_image.path)
 
         super().delete(*args, **kwargs)
 
@@ -151,14 +125,8 @@ def append_unique_title(sender, instance, **kwargs):
         instance.unique_title = instance.generate_unique_title()
 
 
-@receiver(pre_save, sender=Event)
-def append_unique_title(sender, instance, **kwargs):
-    if not instance.unique_title:
-        instance.unique_title = instance.generate_unique_title()
-
-
-# Inquiry Model (unchanged)
-class Inquiry(UUIDBaseModel):
+# Inquiry Model
+class Inquiry(BaseModel):
     inquiry = models.CharField(max_length=80)
     role = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField()
@@ -178,11 +146,10 @@ class Inquiry(UUIDBaseModel):
         return f"Inquiry - {self.inquiry}"
 
 
-# Program Model (unchanged)
-class Program(UUIDBaseModel):
+# Program Model
+class Program(BaseModel):
     date = models.DateField()
-    program_details = models.TextField(
-        null=True, blank=True)  # Changed to TextField
+    program_details = QuillField(default="No details available")
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
         Event,
@@ -199,13 +166,13 @@ class Program(UUIDBaseModel):
         return f"Program - {self.date}"
 
 
-# Session Model (unchanged)
-class Session(UUIDBaseModel):
+# Session Model
+class Session(BaseModel):
     start_time = models.TimeField()
     end_time = models.TimeField()
     venue = models.CharField(max_length=80, null=True, blank=True)
     session_title = models.CharField(max_length=150)
-    session_details = RichTextField()
+    session_details = QuillField(default="No details available")
     order = models.IntegerField(default=1)
     program = models.ForeignKey(
         Program,
@@ -223,23 +190,13 @@ class Session(UUIDBaseModel):
 
 
 # PartnerLogo Model
-class PartnerLogo(UUIDBaseModel):
-    if settings.DEBUG:
-        # In development, store files locally
-        partner_logo = models.FileField(
-            upload_to='events/logos/',
-            null=True,
-            blank=True
-        )
-    else:
-        # In production, store files in Cloudinary
-        partner_logo = CloudinaryField(
-            "PartnerImage",
-            overwrite=True,
-            folder="website/uploads/events/logos",
-            resource_type="image",
-            default='website/uploads/default_image.webp',
-        )
+class PartnerLogo(BaseModel):
+    partner_logo = ConditionalImageField(
+        local_upload_to='events/logos/',
+        cloudinary_folder='website/uploads/events/logos',
+        null=True,
+        blank=True
+    )
     name = models.CharField(max_length=70)
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
@@ -261,29 +218,22 @@ class PartnerLogo(UUIDBaseModel):
             if not settings.DEBUG:
                 destroy(self.partner_logo.public_id)
             else:
-                self.partner_logo.delete(save=False)
+                if os.path.isfile(self.partner_logo.path):
+                    os.remove(self.partner_logo.path)
         super().delete(*args, **kwargs)
 
 
 # Resource Model
-class Resource(UUIDBaseModel):
+class Resource(BaseModel):
     title = models.CharField(max_length=100)
     link = models.URLField(null=True, blank=True)
 
-    if settings.DEBUG:
-        resource = models.FileField(
-            upload_to='publications/files/',
-            null=True,
-            blank=True
-        )
-    else:
-        resource = CloudinaryField(
-            'raw',
-            folder="website/uploads/events/files",
-            resource_type="auto",
-            null=True,
-            blank=True
-        )
+    resource = ConditionalFileField(
+        local_upload_to='publications/files/',
+        cloudinary_folder='website/uploads/events/files',
+        null=True,
+        blank=True
+    )
 
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
@@ -305,5 +255,6 @@ class Resource(UUIDBaseModel):
             if not settings.DEBUG:
                 destroy(self.resource.public_id)
             else:
-                self.resource.delete(save=False)
+                if os.path.isfile(self.resource.path):
+                    os.remove(self.resource.path)
         super().delete(*args, **kwargs)

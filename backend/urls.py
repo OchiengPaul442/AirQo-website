@@ -1,5 +1,3 @@
-# backend/urls.py
-
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -31,22 +29,19 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API routes
-    path('api/', include('apps.press.urls')),
-    path('api/', include('apps.impact.urls')),
+    # path('api/', include('apps.press.urls')),
+    # path('api/', include('apps.impact.urls')),
     path('api/', include('apps.event.urls')),
-    path('api/', include('apps.highlights.urls')),
-    path('api/', include('apps.career.urls')),
-    path('api/', include('apps.publications.urls')),
-    path('api/', include('apps.team.urls')),
-    path('api/', include('apps.board.urls')),
-    path('api/', include('apps.externalTeam.urls')),
-    path('api/', include('apps.partners.urls')),
-    path('api/', include('apps.cleanair.urls')),
-    path('api/', include('apps.FAQ.urls')),
-    path('api/', include('apps.africancities.urls')),
-
-    # CKEditor routes for file upload and management
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('api/', include('apps.highlights.urls')),
+    # path('api/', include('apps.career.urls')),
+    # path('api/', include('apps.publications.urls')),
+    # path('api/', include('apps.team.urls')),
+    # path('api/', include('apps.board.urls')),
+    # path('api/', include('apps.externalTeam.urls')),
+    # path('api/', include('apps.partners.urls')),
+    # path('api/', include('apps.cleanair.urls')),
+    # path('api/', include('apps.FAQ.urls')),
+    # path('api/', include('apps.africancities.urls')),
 
     # Swagger URLs
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',

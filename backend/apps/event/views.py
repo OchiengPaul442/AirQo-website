@@ -1,4 +1,3 @@
-# views.py
 from rest_framework import viewsets
 from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 from .serializers import (
@@ -36,17 +35,6 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
         if category in ['airqo', 'cleanair']:
             queryset = queryset.filter(website_category=category)
         return queryset
-
-    # The 'details' action seems redundant since 'retrieve' already provides detail.
-    # If you have a specific purpose for it, you can keep it; otherwise, consider removing it.
-    # Uncomment the following if needed:
-    """
-    @action(detail=True, methods=['get'])
-    def details(self, request, id=None):
-        event = self.get_object()
-        serializer = self.get_serializer(event)
-        return Response(serializer.data)
-    """
 
 
 class InquiryViewSet(viewsets.ReadOnlyModelViewSet):
