@@ -1,5 +1,3 @@
-# externalTeam/models.py
-
 from django.conf import settings
 from django.db import models
 from cloudinary.models import CloudinaryField
@@ -15,7 +13,7 @@ class ExternalTeamMember(models.Model):
     else:
         # Cloudinary storage in production
         picture = CloudinaryField(
-            "Image", overwrite=True, folder="website/uploads/externalTeam/images", resource_type="image"
+            "Image", overwrite=True, folder="website/uploads/team/externalTeam", resource_type="image"
         )
 
     twitter = models.URLField(max_length=255, null=True, blank=True)
@@ -27,6 +25,12 @@ class ExternalTeamMember(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_picture_url(self):
+        if settings.DEBUG:
+            return self.picture.url if self.picture else None
+        else:
+            return self.picture.build_url(secure=True)
 
     def delete(self, *args, **kwargs):
         """

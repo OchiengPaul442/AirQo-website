@@ -1,5 +1,3 @@
-# externalTeam/admin.py
-
 from django.contrib import admin
 from .models import ExternalTeamMember, ExternalTeamMemberBiography
 from django.utils.html import format_html
@@ -22,13 +20,13 @@ class ExternalTeamMemberAdmin(admin.ModelAdmin):
 
     def image_preview(self, obj):
         if obj.picture:
-            return format_html(f'<img src="{obj.picture.url}" style="width: 50px; height: 50px;" />')
+            return format_html(f'<img src="{obj.get_picture_url()}" style="width: 50px; height: 50px;" />')
         return ""
     image_preview.short_description = "Picture Preview"
 
     def image_preview_detail(self, obj):
         if obj.picture:
-            return format_html(f'<img src="{obj.picture.url}" style="max-width: 300px; max-height: 300px;" />')
+            return format_html(f'<img src="{obj.get_picture_url()}" style="max-width: 300px; max-height: 300px;" />')
         return ""
     image_preview_detail.short_description = "Picture Preview"
 
