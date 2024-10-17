@@ -1,5 +1,3 @@
-# admin.py
-
 from django.contrib import admin
 from .models import Member, MemberBiography
 import nested_admin
@@ -41,7 +39,7 @@ class MemberAdmin(nested_admin.NestedModelAdmin):
 
         if obj.picture:
             return format_html(
-                f'<img src="{escape(obj.picture.url)}" width="{width}" height="{height}" />'
+                f'<img src="{escape(obj.get_picture_url())}" width="{width}" height="{height}" />'
             )
         return "No Image"
 
