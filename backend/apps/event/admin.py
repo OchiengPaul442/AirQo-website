@@ -9,7 +9,6 @@ from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 class InquiryInline(nested_admin.NestedTabularInline):
     model = Inquiry
     extra = 0
-    readonly_fields = ('created_by', 'modified_by')
     sortable_field_name = 'order'
     fields = ('inquiry', 'role', 'email', 'order')
 
@@ -17,7 +16,6 @@ class InquiryInline(nested_admin.NestedTabularInline):
 class PartnerLogoInline(nested_admin.NestedTabularInline):
     model = PartnerLogo
     extra = 0
-    readonly_fields = ('created_by', 'modified_by')
     sortable_field_name = 'order'
     fields = ('name', 'partner_logo', 'order')
 
@@ -25,7 +23,6 @@ class PartnerLogoInline(nested_admin.NestedTabularInline):
 class ResourceInline(nested_admin.NestedTabularInline):
     model = Resource
     extra = 0
-    readonly_fields = ('created_by', 'modified_by')
     fields = ('title', 'link', 'resource', 'order')
     sortable_field_name = 'order'
 
@@ -33,7 +30,6 @@ class ResourceInline(nested_admin.NestedTabularInline):
 class SessionInline(nested_admin.NestedTabularInline):
     model = Session
     extra = 0
-    readonly_fields = ('created_by', 'modified_by')
     fields = ('session_title', 'start_time', 'end_time',
               'venue', 'session_details', 'order')
     sortable_field_name = 'order'
@@ -42,7 +38,6 @@ class SessionInline(nested_admin.NestedTabularInline):
 class ProgramInline(nested_admin.NestedTabularInline):
     model = Program
     extra = 0
-    readonly_fields = ('created_by', 'modified_by')
     fields = ('date', 'program_details', 'order')
     sortable_field_name = 'order'
     inlines = [SessionInline]
@@ -62,7 +57,7 @@ class EventAdmin(BaseQuillAdmin, nested_admin.NestedModelAdmin):
     list_editable = ('order',)
     ordering = ('order', '-start_date')
     list_per_page = 10
-    readonly_fields = ('id', 'unique_title', 'created_by', 'modified_by')
+    readonly_fields = ('id', 'unique_title', 'authored_by')
     inlines = [
         InquiryInline,
         ProgramInline,
