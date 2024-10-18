@@ -1,4 +1,3 @@
-# admin.py
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
@@ -6,8 +5,6 @@ from .models import (
     Person, Engagement, Objective, ForumResource, ResourceFile, ResourceSession
 )
 from nested_admin import NestedTabularInline, NestedModelAdmin
-
-# Inlines
 
 
 class ObjectiveInline(NestedTabularInline):
@@ -23,7 +20,7 @@ class EngagementInline(NestedTabularInline):
 
 class SessionInline(NestedTabularInline):
     model = Session
-    extra = 0  # Adjust this value based on your needs
+    extra = 0
 
 
 class SupportInline(NestedTabularInline):
@@ -41,8 +38,6 @@ class ResourceSessionInline(NestedTabularInline):
     extra = 1
     inlines = [ResourceFileInline]
 
-# Admins
-
 
 @admin.register(CleanAirResource)
 class CleanAirResourceAdmin(admin.ModelAdmin):
@@ -56,11 +51,10 @@ class CleanAirResourceAdmin(admin.ModelAdmin):
 
 @admin.register(ForumEvent)
 class ForumEventAdmin(NestedModelAdmin):
-    list_display = ('title', 'start_date', 'end_date',
-                    'order')  # Removed 'author_title'
+    list_display = ('title', 'start_date', 'end_date', 'order')
     list_filter = ('start_date', 'end_date')
     search_fields = ('title',)
-    readonly_fields = ()  # Removed 'author_title'
+    readonly_fields = ()
     list_per_page = 12
     inlines = [EngagementInline, SupportInline]
 

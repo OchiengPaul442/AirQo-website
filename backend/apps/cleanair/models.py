@@ -1,18 +1,18 @@
-# models.py
 from django.db import models
-from cloudinary.models import CloudinaryField
-from ckeditor.fields import RichTextField  # Replaced QuillField
+from django_quill.fields import QuillField
+from backend.utils.models import BaseModel
+from backend.utils.fields import ConditionalFileField, ConditionalImageField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from enum import Enum
 from django.utils.text import slugify
 
 
-class CleanAirResource(models.Model):
+class CleanAirResource(BaseModel):
     resource_title = models.CharField(max_length=120)
     resource_link = models.URLField(null=True, blank=True)
-    resource_file = models.FileField(
-        upload_to='cleanair/resources/', null=True, blank=True)
+    resource_file = ConditionalFileField(
+        local_upload_to='cleanair/resources/', cloudinary_folder='website/uploads/cleanair/resources/', null=True, blank=True)
     author_title = models.CharField(
         max_length=40, null=True, blank=True, default="Created By")
 
@@ -23,11 +23,8 @@ class CleanAirResource(models.Model):
         RESEARCH_PUBLICATION = "research_publication", "Research Publication"
 
     resource_category = models.CharField(
-        max_length=40,
-        default=ResourceCategory.TECHNICAL_REPORT,
-        choices=ResourceCategory.choices,
-        null=False,
-        blank=False
+        max_length=40, default=ResourceCategory.TECHNICAL_REPORT,
+        choices=ResourceCategory.choices, null=False, blank=False
     )
     resource_authors = models.CharField(max_length=200, default="AirQo")
     order = models.IntegerField(default=1)
@@ -39,48 +36,36 @@ class CleanAirResource(models.Model):
         return self.resource_title
 
 
-class ForumEvent(models.Model):
+class ForumEvent(BaseModel):
     title = models.CharField(max_length=100, default="CLEAN-Air Forum")
     title_subtext = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
-    introduction = RichTextField(blank=True, null=True)  # Replaced QuillField
-    Speakers_text_section = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    Committee_text_section = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    partners_text_section = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
+    introduction = QuillField(blank=True, null=True)
+    speakers_text_section = QuillField(blank=True, null=True)
+    committee_text_section = QuillField(blank=True, null=True)
+    partners_text_section = QuillField(blank=True, null=True)
     registration_link = models.URLField(blank=True)
-    schedule_details = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    registration_details = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    sponsorship_opportunities_about = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    sponsorship_opportunities_schedule = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    sponsorship_opportunities_partners = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    sponsorship_packages = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    travel_logistics_vaccination_details = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    travel_logistics_visa_details = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    travel_logistics_accommodation_details = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
-    glossary_details = RichTextField(
-        blank=True, null=True)  # Replaced QuillField
+    schedule_details = QuillField(blank=True, null=True)
+    registration_details = QuillField(blank=True, null=True)
+    sponsorship_opportunities_about = QuillField(blank=True, null=True)
+    sponsorship_opportunities_schedule = QuillField(blank=True, null=True)
+    sponsorship_opportunities_partners = QuillField(blank=True, null=True)
+    sponsorship_packages = QuillField(blank=True, null=True)
+    travel_logistics_vaccination_details = QuillField(blank=True, null=True)
+    travel_logistics_visa_details = QuillField(blank=True, null=True)
+    travel_logistics_accommodation_details = QuillField(blank=True, null=True)
+    glossary_details = QuillField(blank=True, null=True)
     unique_title = models.CharField(max_length=100, blank=True)
-    background_image = CloudinaryField(
-        "BackgroundImage", overwrite=True, resource_type="image", blank=True, null=True
-    )
+    background_image = ConditionalImageField(
+        local_upload_to='events/images/', cloudinary_folder='website/uploads/events/images', null=True, blank=True)
     location_name = models.CharField(max_length=100, blank=True)
     location_link = models.URLField(blank=True)
     order = models.IntegerField(default=1)
+    authored_by = models.ForeignKey(
+        'auth.User', related_name='cleanair_event_authored_by', null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['order', '-id']
@@ -124,29 +109,21 @@ class CategoryChoices(Enum):
         return [(key.value, key.name) for key in cls]
 
 
-class Engagement(models.Model):
+class Engagement(BaseModel):
     title = models.CharField(max_length=200)
     forum_event = models.OneToOneField(
-        ForumEvent,
-        null=True,
-        blank=True,
-        related_name="engagements",
-        on_delete=models.SET_NULL,
+        ForumEvent, null=True, blank=True, related_name="engagements", on_delete=models.SET_NULL,
     )
 
     def __str__(self):
         return self.title
 
 
-class Objective(models.Model):
+class Objective(BaseModel):
     title = models.CharField(max_length=200)
     details = models.TextField(blank=True, null=True)
     engagement = models.ForeignKey(
-        Engagement,
-        null=True,
-        blank=True,
-        related_name="objectives",
-        on_delete=models.CASCADE,
+        Engagement, null=True, blank=True, related_name="objectives", on_delete=models.CASCADE,
     )
     order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
@@ -157,21 +134,19 @@ class Objective(models.Model):
         return self.title
 
 
-class Partner(models.Model):
-    partner_logo = CloudinaryField(
-        'ForumPartnerImage', overwrite=True, resource_type="image")
+class Partner(BaseModel):
+    partner_logo = ConditionalImageField(
+        local_upload_to='cleanair/partners/', cloudinary_folder='website/uploads/cleanair/partners/', null=True, blank=True)
     name = models.CharField(max_length=70)
     website_link = models.URLField(blank=True, null=True)
     order = models.IntegerField(default=1)
     category = models.CharField(
-        max_length=50, choices=PartnerCategoryChoices.choices(), default=PartnerCategoryChoices.FUNDING_PARTNER.value)
+        max_length=50, choices=PartnerCategoryChoices.choices(),
+        default=PartnerCategoryChoices.FUNDING_PARTNER.value)
     forum_event = models.ForeignKey(
-        ForumEvent,
-        null=True,
-        blank=True,
-        related_name="partners",
-        on_delete=models.SET_NULL,
-    )
+        ForumEvent, null=True, blank=True, related_name="partners", on_delete=models.SET_NULL)
+    authored_by = models.ForeignKey(
+        'auth.User', related_name='cleanair_partner_authored_by', null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['order']
@@ -180,17 +155,14 @@ class Partner(models.Model):
         return f"{self.get_category_display()} - {self.name}"
 
 
-class Program(models.Model):
+class Program(BaseModel):
     title = models.CharField(max_length=100)
-    sub_text = RichTextField(blank=True, null=True)  # Replaced QuillField
+    sub_text = QuillField(blank=True, null=True)
     order = models.IntegerField(default=1)
     forum_event = models.ForeignKey(
-        ForumEvent,
-        null=True,
-        blank=True,
-        related_name="programs",
-        on_delete=models.SET_NULL,
-    )
+        ForumEvent, null=True, blank=True, related_name="programs", on_delete=models.SET_NULL)
+    authored_by = models.ForeignKey(
+        'auth.User', related_name='cleanair_program_authored_by', null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['order']
@@ -199,20 +171,16 @@ class Program(models.Model):
         return f"Program - {self.title}"
 
 
-class Session(models.Model):
+class Session(BaseModel):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=False, null=True)
     session_title = models.CharField(max_length=150)
-    session_details = RichTextField(
-        blank=False, null=True)  # Replaced QuillField
+    session_details = QuillField(blank=False, null=True)
     order = models.IntegerField(default=1)
     program = models.ForeignKey(
-        Program,
-        null=True,
-        blank=True,
-        related_name="sessions",
-        on_delete=models.SET_NULL,
-    )
+        Program, null=True, blank=True, related_name="sessions", on_delete=models.SET_NULL)
+    authored_by = models.ForeignKey(
+        'auth.User', related_name='cleanair_session_authored_by', null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['order']
@@ -221,18 +189,14 @@ class Session(models.Model):
         return f"Session - {self.session_title}"
 
 
-class Support(models.Model):
+class Support(BaseModel):
     query = models.CharField(max_length=80)
     name = models.CharField(max_length=70)
     role = models.CharField(max_length=100, blank=True)
     email = models.EmailField()
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
-        ForumEvent,
-        null=True,
-        blank=True,
-        related_name="supports",
-        on_delete=models.SET_NULL,
+        ForumEvent, null=True, blank=True, related_name="supports", on_delete=models.SET_NULL,
     )
 
     class Meta:
@@ -242,23 +206,20 @@ class Support(models.Model):
         return f"Support - {self.query}"
 
 
-class Person(models.Model):
+class Person(BaseModel):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100, blank=True)
-    bio = RichTextField(blank=True, null=True)  # Replaced QuillField
+    bio = QuillField(blank=True, null=True)
     category = models.CharField(
-        max_length=50, choices=CategoryChoices.choices(), default=CategoryChoices.SPEAKER.value)
-    picture = CloudinaryField(
-        "PersonImage", overwrite=True, resource_type="image")
+        max_length=50, choices=CategoryChoices.choices(),
+        default=CategoryChoices.SPEAKER.value)
+    picture = ConditionalImageField(
+        local_upload_to='cleanair/persons/', cloudinary_folder='website/uploads/cleanair/persons/', null=True, blank=True)
     twitter = models.URLField(blank=True)
     linked_in = models.URLField(blank=True)
     order = models.IntegerField(default=1)
     forum_event = models.ForeignKey(
-        ForumEvent,
-        null=True,
-        blank=True,
-        related_name="persons",
-        on_delete=models.SET_NULL,
+        ForumEvent, null=True, blank=True, related_name="persons", on_delete=models.SET_NULL,
     )
 
     class Meta:
@@ -268,16 +229,12 @@ class Person(models.Model):
         return self.name
 
 
-class ForumResource(models.Model):
+class ForumResource(BaseModel):
     resource_title = models.CharField(max_length=120)
     resource_authors = models.CharField(max_length=200, default="AirQo")
     order = models.IntegerField(default=1)
     forum_event = models.ForeignKey(
-        'ForumEvent',
-        null=True,
-        blank=True,
-        related_name="forum_resources",
-        on_delete=models.SET_NULL,
+        'ForumEvent', null=True, blank=True, related_name="forum_resources", on_delete=models.SET_NULL,
     )
 
     class Meta:
@@ -287,13 +244,10 @@ class ForumResource(models.Model):
         return self.resource_title
 
 
-class ResourceSession(models.Model):
+class ResourceSession(BaseModel):
     session_title = models.CharField(max_length=120)
     forum_resource = models.ForeignKey(
-        'ForumResource',
-        related_name="resource_sessions",
-        on_delete=models.CASCADE,
-        default=1
+        'ForumResource', related_name="resource_sessions", on_delete=models.CASCADE, default=1
     )
     order = models.IntegerField(default=1)
 
@@ -304,9 +258,10 @@ class ResourceSession(models.Model):
         return self.session_title
 
 
-class ResourceFile(models.Model):
+class ResourceFile(BaseModel):
     resource_summary = models.TextField(blank=True, null=True)
-    file = models.FileField(upload_to='cleanair/resources/')
+    file = ConditionalFileField(local_upload_to='cleanair/resources/',
+                                cloudinary_folder='website/uploads/cleanair/resources/')
     session = models.ForeignKey(
         'ResourceSession', related_name='resource_files', on_delete=models.CASCADE, null=True, blank=True, default=1)
     order = models.IntegerField(default=1)
@@ -319,7 +274,6 @@ class ResourceFile(models.Model):
 
 
 # signals.py
-
 @receiver(pre_save, sender=ForumEvent)
 def append_short_name(sender, instance, *args, **kwargs):
     if not instance.unique_title:

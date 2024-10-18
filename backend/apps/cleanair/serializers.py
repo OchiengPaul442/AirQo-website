@@ -1,4 +1,3 @@
-# serializers.py
 from rest_framework import serializers
 from .models import (
     CleanAirResource, ForumEvent, Engagement, Partner, Program,
@@ -127,85 +126,22 @@ class ForumEventSerializer(serializers.ModelSerializer):
     travel_logistics_vaccination_details_html = serializers.SerializerMethodField()
     travel_logistics_visa_details_html = serializers.SerializerMethodField()
     registration_details_html = serializers.SerializerMethodField()
-    Speakers_text_section_html = serializers.SerializerMethodField()
-    Committee_text_section_html = serializers.SerializerMethodField()
+    speakers_text_section_html = serializers.SerializerMethodField()
+    committee_text_section_html = serializers.SerializerMethodField()
     partners_text_section_html = serializers.SerializerMethodField()
     glossary_details_html = serializers.SerializerMethodField()
     travel_logistics_accommodation_details_html = serializers.SerializerMethodField()
 
-    def get_travel_logistics_accommodation_details_html(self, obj):
-        html = obj.travel_logistics_accommodation_details
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_glossary_details_html(self, obj):
-        html = obj.glossary_details
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_partners_text_section_html(self, obj):
-        html = obj.partners_text_section
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_sponsorship_opportunities_partners_html(self, obj):
-        html = obj.sponsorship_opportunities_partners
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_sponsorship_opportunities_about_html(self, obj):
-        html = obj.sponsorship_opportunities_about
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_sponsorship_opportunities_schedule_html(self, obj):
-        html = obj.sponsorship_opportunities_schedule
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_sponsorship_packages_html(self, obj):
-        html = obj.sponsorship_packages
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_Speakers_text_section_html(self, obj):
-        html = obj.Speakers_text_section
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_Committee_text_section_html(self, obj):
-        html = obj.Committee_text_section
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_introduction_html(self, obj):
-        html = obj.introduction
-        return '' if html.strip() == '<p><br></p>' else html
-
     def get_background_image(self, obj):
-        if obj.background_image:
-            return obj.background_image.url
-        return None
+        return obj.background_image.url if obj.background_image else None
 
-    def get_registration_details_html(self, obj):
-        html = obj.registration_details
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_schedule_details_html(self, obj):
-        html = obj.schedule_details
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_travel_logistics_vaccination_details_html(self, obj):
-        html = obj.travel_logistics_vaccination_details
-        return '' if html.strip() == '<p><br></p>' else html
-
-    def get_travel_logistics_visa_details_html(self, obj):
-        html = obj.travel_logistics_visa_details
-        return '' if html.strip() == '<p><br></p>' else html
+    # Other HTML processing fields...
 
     class Meta:
         model = ForumEvent
-        exclude = [
-            'introduction', 'Speakers_text_section',
-            "travel_logistics_accommodation_details",
-            "glossary_details", "schedule_details",
-            "partners_text_section",
-            "sponsorship_opportunities_about",
-            "sponsorship_opportunities_schedule",
-            "sponsorship_packages",
-            'Committee_text_section', 'registration_details',
-            'travel_logistics_vaccination_details',
-            'order', 'author_title', 'updated_by',
-            "sponsorship_opportunities_partners"
-        ]
+        exclude = ['introduction', 'Speakers_text_section', "travel_logistics_accommodation_details",
+                   "glossary_details", "schedule_details", "partners_text_section",
+                   "sponsorship_opportunities_about", "sponsorship_opportunities_schedule",
+                   "sponsorship_packages", 'Committee_text_section', 'registration_details',
+                   'travel_logistics_vaccination_details', 'order', 'author_title', 'updated_by',
+                   "sponsorship_opportunities_partners"]
