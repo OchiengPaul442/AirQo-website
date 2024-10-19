@@ -17,4 +17,4 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_picture_url(self, obj):
-        return obj.get_picture_url()
+        return obj.get_picture_url()  # Handles secure URL or local URL based on the environment

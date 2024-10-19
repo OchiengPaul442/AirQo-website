@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     'apps.career',
     'apps.FAQ',
     'apps.partners',
+    'apps.externalTeam',
+    'apps.board',
+    'apps.team',
 ]
 
 MIDDLEWARE = [

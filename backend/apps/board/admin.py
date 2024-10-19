@@ -14,9 +14,7 @@ class BoardMemberAdmin(nested_admin.NestedModelAdmin):
     list_display = ("name", "title", "image_tag")
     readonly_fields = (
         "id",
-        "created",
         "image_tag",
-        "modified",
     )
     fields = (
         "id",
@@ -27,8 +25,6 @@ class BoardMemberAdmin(nested_admin.NestedModelAdmin):
         "twitter",
         "linked_in",
         "order",
-        "created",
-        "modified",
     )
     list_per_page = 10
     search_fields = ("name", "title")

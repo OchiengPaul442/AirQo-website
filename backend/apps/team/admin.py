@@ -13,8 +13,6 @@ class MemberBiographyInline(nested_admin.NestedTabularInline):
 class MemberAdmin(nested_admin.NestedModelAdmin):
     list_display = ("name", "title", "image_tag")
     readonly_fields = (
-        "created",
-        "modified",
         "image_tag",
     )
     fields = (
@@ -26,8 +24,6 @@ class MemberAdmin(nested_admin.NestedModelAdmin):
         "twitter",
         "linked_in",
         "order",
-        "created",
-        "modified",
     )
     list_per_page = 10
     search_fields = ("name", "title")

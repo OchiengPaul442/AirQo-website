@@ -1,20 +1,18 @@
-from django.conf import settings
 from django.db import models
-from cloudinary.models import CloudinaryField
+from backend.utils.fields import ConditionalImageField
+from backend.utils.models import BaseModel
 
 
-class ExternalTeamMember(models.Model):
+class ExternalTeamMember(BaseModel):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
 
-    if settings.DEBUG:
-        # Local storage in development
-        picture = models.ImageField(upload_to="external_team/")
-    else:
-        # Cloudinary storage in production
-        picture = CloudinaryField(
-            "Image", overwrite=True, folder="website/uploads/team/externalTeam", resource_type="image"
-        )
+    picture = ConditionalImageField(
+        local_upload_to='external_team/',
+        cloudinary_folder='website/uploads/team/externalTeam',
+        null=True,
+        blank=True
+    )
 
     twitter = models.URLField(max_length=255, null=True, blank=True)
     linked_in = models.URLField(max_length=255, null=True, blank=True)
@@ -27,27 +25,12 @@ class ExternalTeamMember(models.Model):
         return self.name
 
     def get_picture_url(self):
-        if settings.DEBUG:
-            return self.picture.url if self.picture else None
-        else:
-            return self.picture.build_url(secure=True)
-
-    def delete(self, *args, **kwargs):
-        """
-        Ensure the picture is deleted from the correct storage when the member is deleted.
-        """
         if self.picture:
-            if settings.DEBUG:
-                self.picture.delete(save=False)
-            else:
-                public_id = self.picture.public_id
-                if public_id:
-                    from cloudinary.uploader import destroy as cloudinary_destroy
-                    cloudinary_destroy(public_id)
-        super().delete(*args, **kwargs)
+            return self.picture.url  # This handles both local and Cloudinary URLs
+        return None
 
 
-class ExternalTeamMemberBiography(models.Model):
+class ExternalTeamMemberBiography(BaseModel):
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=1)
     member = models.ForeignKey(

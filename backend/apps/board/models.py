@@ -1,6 +1,5 @@
-from django.conf import settings
 from django.db import models
-from cloudinary.models import CloudinaryField
+from backend.utils.fields import ConditionalImageField
 from backend.utils.models import BaseModel
 
 
@@ -8,17 +7,12 @@ class BoardMember(BaseModel):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
 
-    if settings.DEBUG:
-        picture = models.FileField(
-            upload_to='boardmembers/pictures/',
-            null=True,
-            blank=True
-        )
-    else:
-        picture = CloudinaryField(
-            "Image", overwrite=True, resource_type="image",
-            folder="website/uploads/team/board_members"
-        )
+    picture = ConditionalImageField(
+        local_upload_to='boardmembers/pictures/',
+        cloudinary_folder='website/uploads/team/board_members',
+        null=True,
+        blank=True
+    )
 
     twitter = models.URLField(max_length=255, null=True, blank=True)
     linked_in = models.URLField(max_length=255, null=True, blank=True)
@@ -31,10 +25,9 @@ class BoardMember(BaseModel):
         return self.name
 
     def get_picture_url(self):
-        if settings.DEBUG:
-            return self.picture.url if self.picture else None
-        else:
-            return self.picture.build_url(secure=True)
+        if self.picture:
+            return self.picture.url  # Secure URL is handled internally by Cloudinary or the file system
+        return None
 
 
 class BoardMemberBiography(BaseModel):
@@ -45,7 +38,7 @@ class BoardMemberBiography(BaseModel):
         null=True,
         blank=True,
         related_name="descriptions",
-        on_delete=models.deletion.SET_NULL,
+        on_delete=models.SET_NULL,
     )
 
     class Meta:

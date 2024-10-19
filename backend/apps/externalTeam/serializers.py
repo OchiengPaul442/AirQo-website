@@ -19,4 +19,4 @@ class ExternalTeamMemberSerializer(serializers.ModelSerializer):
                   'twitter', 'linked_in', 'order', 'descriptions']
 
     def get_picture_url(self, obj):
-        return obj.get_picture_url()
+        return obj.get_picture_url()  # Handles secure URL or local URL based on the environment
