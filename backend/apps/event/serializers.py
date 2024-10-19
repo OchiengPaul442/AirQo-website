@@ -11,7 +11,7 @@ class PartnerLogoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PartnerLogo
-        fields = ['_id', 'name', 'partner_logo_url', 'order']
+        fields = ['name', 'partner_logo_url', 'order']
 
     def get_partner_logo_url(self, obj):
         if obj.partner_logo:
@@ -27,7 +27,7 @@ class ResourceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Resource
-        fields = ['_id', 'title', 'link', 'resource_url', 'order']
+        fields = ['title', 'link', 'resource_url', 'order']
 
     def get_resource_url(self, obj):
         if obj.resource:
@@ -42,7 +42,6 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
-            '_id',
             'session_title',
             'start_time',
             'end_time',
@@ -59,7 +58,6 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            '_id',
             'date',
             'program_details',  # Keep program_details as QuillField
             'order',
@@ -71,7 +69,7 @@ class ProgramSerializer(serializers.ModelSerializer):
 class InquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inquiry
-        fields = ['_id', 'inquiry', 'role', 'email', 'order']
+        fields = ['inquiry', 'role', 'email', 'order']
 
 
 class EventListSerializer(serializers.ModelSerializer):
@@ -81,7 +79,6 @@ class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            '_id',
             'title',
             'title_subtext',
             'start_date',
@@ -113,7 +110,6 @@ class EventDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            '_id',
             'title',
             'title_subtext',
             'start_date',

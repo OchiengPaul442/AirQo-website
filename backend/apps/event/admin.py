@@ -2,7 +2,6 @@
 
 from django.contrib import admin
 import nested_admin
-from backend.utils.admin import BaseQuillAdmin
 from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 
 
@@ -44,21 +43,19 @@ class ProgramInline(nested_admin.NestedTabularInline):
 
 
 @admin.register(Event)
-class EventAdmin(BaseQuillAdmin, nested_admin.NestedModelAdmin):
+class EventAdmin(nested_admin.NestedModelAdmin):
     list_display = (
         'title',
-        '_id',
         'start_date',
         'end_date',
         'website_category',
         'event_category',
         'order'
     )
-    search_fields = ('title', 'location_name', '_id')
+    search_fields = ('title', 'location_name')
     list_editable = ('order',)
     ordering = ('order', '-start_date')
     list_per_page = 10
-    readonly_fields = ('_id', 'created', 'modified')
     inlines = [
         InquiryInline,
         ProgramInline,

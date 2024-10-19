@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 from cloudinary.models import CloudinaryField
 from cloudinary.uploader import destroy
-from backend.utils.baseModel import BaseModel
+from backend.utils.models import BaseModel
 
 
 def generate_uuid():

@@ -1,5 +1,5 @@
 from django.db import models
-from backend.utils.baseModel import BaseModel
+from backend.utils.models import BaseModel
 
 
 class ImpactNumber(BaseModel):

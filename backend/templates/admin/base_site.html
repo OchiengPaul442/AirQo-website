@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %} {% load static %} {% block extrahead %}
+<!-- Ensure this is placed within a valid block -->
+<!-- Link to custom Quill CSS -->
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'admin/css/custom_quill.css' %}"
+/>
+{% endblock %} {% block footer %} {{ block.super }}
+<!-- Ensure this is placed within a valid block -->
+<!-- Include custom Dark Mode JavaScript -->
+<script src="{% static 'admin/js/admin_dark_mode.js' %}"></script>
+{% endblock %}

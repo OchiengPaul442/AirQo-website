@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from cloudinary.models import CloudinaryField
-from backend.utils.baseModel import BaseModel
+from backend.utils.models import BaseModel
 
 
 class AfricanCountry(BaseModel):

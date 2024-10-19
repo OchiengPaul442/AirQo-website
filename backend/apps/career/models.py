@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from ckeditor.fields import RichTextField
-from backend.utils.baseModel import BaseModel
+from backend.utils.models import BaseModel
 
 
 # Function to generate UUID

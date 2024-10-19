@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Must be first
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,12 +84,12 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'backend', 'templates')],  # Add templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',  # Required by admin
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -112,7 +112,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     DATABASES = {
 #         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 #     }
-
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
@@ -137,7 +136,6 @@ STATIC_URL = '/static/'
 
 # Define STATICFILES_DIRS to tell Django where to find additional static files
 STATICFILES_DIRS = [
-    # Point to the static folder in the backend
     os.path.join(BASE_DIR, 'backend', 'static'),
 ]
 
@@ -178,13 +176,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Debug logging (Optional)
-if DEBUG:
-    print(f"Debug mode is: {DEBUG}")
-    print(f"Media files are stored in: {MEDIA_ROOT}")
-else:
-    print("Production mode is ON")
-
 # Quill Editor Configuration
 QUILL_CONFIGS = {
     'default': {
@@ -207,3 +198,10 @@ QUILL_CONFIGS = {
         },
     }
 }
+
+# Debug logging (Optional)
+if DEBUG:
+    print(f"Debug mode is: {DEBUG}")
+    print(f"Media files are stored in: {MEDIA_ROOT}")
+else:
+    print("Production mode is ON")

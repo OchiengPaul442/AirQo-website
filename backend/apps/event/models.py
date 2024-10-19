@@ -1,21 +1,17 @@
 # backend/apps/event/models.py
-
-import uuid
 from django.db import models
+from backend.utils.models import BaseModel
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from backend.utils.baseModel import BaseModel
 from backend.utils.fields import ConditionalImageField, ConditionalFileField
 from cloudinary.uploader import destroy
-from django.utils.text import slugify
 from django_quill.fields import QuillField
 import os
 
 User = get_user_model()
 
+
 # Event Model
-
-
 class Event(BaseModel):
     title = models.CharField(max_length=100)
     title_subtext = models.CharField(max_length=90)
@@ -90,7 +86,7 @@ class Event(BaseModel):
         ordering = ["order", "-start_date"]
 
     def __str__(self):
-        return f"{self.title} ({self._id})"
+        return f"{self.title}"
 
     def delete(self, *args, **kwargs):
         # Delete files from storage for both Cloudinary and local storage
@@ -110,9 +106,8 @@ class Event(BaseModel):
 
         super().delete(*args, **kwargs)
 
+
 # Inquiry Model
-
-
 class Inquiry(BaseModel):
     inquiry = models.CharField(max_length=80)
     role = models.CharField(max_length=100, null=True, blank=True)
@@ -130,11 +125,10 @@ class Inquiry(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Inquiry - {self.inquiry} ({self._id})"
+        return f"Inquiry - {self.inquiry}"
+
 
 # Program Model
-
-
 class Program(BaseModel):
     date = models.DateField()
     program_details = QuillField(default="No details available yet.")
@@ -151,11 +145,10 @@ class Program(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Program - {self.date} ({self._id})"
+        return f"Program - {self.date}"
+
 
 # Session Model
-
-
 class Session(BaseModel):
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -175,11 +168,10 @@ class Session(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Session - {self.session_title} ({self._id})"
+        return f"Session - {self.session_title}"
+
 
 # PartnerLogo Model
-
-
 class PartnerLogo(BaseModel):
     partner_logo = ConditionalImageField(
         local_upload_to='events/logos/',
@@ -201,7 +193,7 @@ class PartnerLogo(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Partner - {self.name} ({self._id})"
+        return f"Partner - {self.name}"
 
     def delete(self, *args, **kwargs):
         if self.partner_logo:
@@ -212,20 +204,17 @@ class PartnerLogo(BaseModel):
                     os.remove(self.partner_logo.path)
         super().delete(*args, **kwargs)
 
+
 # Resource Model
-
-
 class Resource(BaseModel):
     title = models.CharField(max_length=100)
     link = models.URLField(null=True, blank=True)
-
     resource = ConditionalFileField(
         local_upload_to='publications/files/',
         cloudinary_folder='website/uploads/events/files',
         null=True,
         blank=True
     )
-
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
         Event,
@@ -239,7 +228,7 @@ class Resource(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Resource - {self.title} ({self._id})"
+        return f"Resource - {self.title}"
 
     def delete(self, *args, **kwargs):
         if self.resource:
