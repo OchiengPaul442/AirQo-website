@@ -8,3 +8,4 @@ class PublicationAdmin(admin.ModelAdmin):
     list_filter = ['category']
     list_editable = ['order']
     ordering = ['order', '-id']
+    list_per_page = 10
