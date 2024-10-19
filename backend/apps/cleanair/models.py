@@ -1,6 +1,6 @@
 from django.db import models
 from django_quill.fields import QuillField
-from backend.utils.models import BaseModel
+from backend.utils.baseModel import BaseModel
 from backend.utils.fields import ConditionalFileField, ConditionalImageField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver

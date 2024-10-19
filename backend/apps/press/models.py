@@ -1,7 +1,7 @@
 import uuid
 from django.conf import settings
 from django.db import models
-from backend.utils.models import BaseModel
+from backend.utils.baseModel import BaseModel
 from cloudinary.models import CloudinaryField
 import cloudinary.uploader
 

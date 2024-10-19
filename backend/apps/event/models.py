@@ -2,7 +2,7 @@
 
 from django.db import models
 from backend import settings
-from backend.utils.models import BaseModel
+from backend.utils.baseModel import BaseModel
 from backend.utils.fields import ConditionalImageField, ConditionalFileField
 from cloudinary.uploader import destroy
 from django.db.models.signals import pre_save, pre_delete

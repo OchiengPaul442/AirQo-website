@@ -101,17 +101,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database configuration: Separate for development (SQLite) and production (Postgres)
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
-            'NAME': BASE_DIR / os.getenv('DATABASE_NAME', 'db.sqlite3'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-    }
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+#             'NAME': BASE_DIR / os.getenv('DATABASE_NAME', 'db.sqlite3'),
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+#     }
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+}
 
 # Password validation configuration
 AUTH_PASSWORD_VALIDATORS = [
