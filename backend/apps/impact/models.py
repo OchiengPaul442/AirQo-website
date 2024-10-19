@@ -1,7 +1,6 @@
 from django.db import models
 from backend.utils.models import BaseModel
 
-
 class ImpactNumber(BaseModel):
     african_cities = models.IntegerField(default=8)
     champions = models.IntegerField(default=1500)
@@ -12,7 +11,7 @@ class ImpactNumber(BaseModel):
 
     def save(self, *args, **kwargs):
         """
-        Ensure only one instance of ImpactNumber exists. If an instance exists, it updates the fields instead of creating a new one.
+        Ensure only one instance of ImpactNumber exists.
         """
         if not self.pk and ImpactNumber.objects.exists():
             instance = ImpactNumber.objects.first()
@@ -27,6 +26,5 @@ class ImpactNumber(BaseModel):
         return super().save(*args, **kwargs)
 
     class Meta:
-        app_label = 'impact'
         verbose_name = "Impact Number"
         verbose_name_plural = "Impact Numbers"
