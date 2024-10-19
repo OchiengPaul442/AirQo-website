@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.cleanair',
     'apps.africancities',
     'apps.publications',
+    'apps.press',
 ]
 
 MIDDLEWARE = [

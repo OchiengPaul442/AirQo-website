@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API routes
-    # path('api/', include('apps.press.urls')),
+    path('api/', include('apps.press.urls')),
     # path('api/', include('apps.impact.urls')),
     path('api/', include('apps.event.urls')),
     # path('api/', include('apps.highlights.urls')),
