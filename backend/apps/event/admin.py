@@ -47,17 +47,18 @@ class ProgramInline(nested_admin.NestedTabularInline):
 class EventAdmin(BaseQuillAdmin, nested_admin.NestedModelAdmin):
     list_display = (
         'title',
+        '_id',
         'start_date',
         'end_date',
         'website_category',
         'event_category',
         'order'
     )
-    search_fields = ('title', 'location_name')
+    search_fields = ('title', 'location_name', '_id')
     list_editable = ('order',)
     ordering = ('order', '-start_date')
     list_per_page = 10
-    readonly_fields = ('id', 'unique_title', 'authored_by')
+    readonly_fields = ('_id', 'created', 'modified')
     inlines = [
         InquiryInline,
         ProgramInline,

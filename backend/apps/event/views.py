@@ -1,3 +1,5 @@
+# backend/apps/event/views.py
+
 from rest_framework import viewsets
 from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 from .serializers import (
@@ -17,7 +19,7 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     A viewset that provides the standard actions for Event model.
     """
     permission_classes = [IsAuthenticatedOrReadOnly]
-    lookup_field = 'id'  # Assuming 'id' is the UUID field
+    lookup_field = '_id'  # Use '_id' as the lookup field
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -40,29 +42,29 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
 class InquiryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Inquiry.objects.select_related('event').all()
     serializer_class = InquirySerializer
-    lookup_field = 'id'
+    lookup_field = '_id'
 
 
 class ProgramViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Program.objects.select_related(
         'event').prefetch_related('sessions').all()
     serializer_class = ProgramSerializer
-    lookup_field = 'id'
+    lookup_field = '_id'
 
 
 class SessionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Session.objects.select_related('program__event').all()
     serializer_class = SessionSerializer
-    lookup_field = 'id'
+    lookup_field = '_id'
 
 
 class PartnerLogoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PartnerLogo.objects.select_related('event').all()
     serializer_class = PartnerLogoSerializer
-    lookup_field = 'id'
+    lookup_field = '_id'
 
 
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Resource.objects.select_related('event').all()
     serializer_class = ResourceSerializer
-    lookup_field = 'id'
+    lookup_field = '_id'

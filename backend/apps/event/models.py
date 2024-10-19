@@ -1,18 +1,21 @@
 # backend/apps/event/models.py
 
+import uuid
 from django.db import models
-from backend import settings
+from django.contrib.auth import get_user_model
+from django.conf import settings
 from backend.utils.baseModel import BaseModel
 from backend.utils.fields import ConditionalImageField, ConditionalFileField
 from cloudinary.uploader import destroy
-from django.db.models.signals import pre_save, pre_delete
-from django.dispatch import receiver
 from django.utils.text import slugify
-from django_quill.fields import QuillField  # Import QuillField
+from django_quill.fields import QuillField
 import os
 
+User = get_user_model()
 
 # Event Model
+
+
 class Event(BaseModel):
     title = models.CharField(max_length=100)
     title_subtext = models.CharField(max_length=90)
@@ -21,9 +24,6 @@ class Event(BaseModel):
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     registration_link = models.URLField(null=True, blank=True)
-    unique_title = models.CharField(
-        max_length=100, unique=True, null=True, blank=True
-    )
 
     class WebsiteCategory(models.TextChoices):
         AirQo = "airqo", "AirQo"
@@ -83,22 +83,14 @@ class Event(BaseModel):
 
     location_name = models.CharField(max_length=100, null=True, blank=True)
     location_link = models.URLField(null=True, blank=True)
-    event_details = QuillField(default="No details available")
+    event_details = QuillField(default="No details available yet.")
     order = models.IntegerField(default=1)
 
     class Meta:
         ordering = ["order", "-start_date"]
 
     def __str__(self):
-        return self.title
-
-    def generate_unique_title(self, postfix_index=0):
-        unique_title = slugify(self.title)
-        if postfix_index > 0:
-            unique_title = f"{unique_title}-{postfix_index}"
-        if not Event.objects.filter(unique_title=unique_title).exists():
-            return unique_title
-        return self.generate_unique_title(postfix_index=postfix_index + 1)
+        return f"{self.title} ({self._id})"
 
     def delete(self, *args, **kwargs):
         # Delete files from storage for both Cloudinary and local storage
@@ -118,14 +110,9 @@ class Event(BaseModel):
 
         super().delete(*args, **kwargs)
 
-
-@receiver(pre_save, sender=Event)
-def append_unique_title(sender, instance, **kwargs):
-    if not instance.unique_title:
-        instance.unique_title = instance.generate_unique_title()
-
-
 # Inquiry Model
+
+
 class Inquiry(BaseModel):
     inquiry = models.CharField(max_length=80)
     role = models.CharField(max_length=100, null=True, blank=True)
@@ -143,13 +130,14 @@ class Inquiry(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Inquiry - {self.inquiry}"
-
+        return f"Inquiry - {self.inquiry} ({self._id})"
 
 # Program Model
+
+
 class Program(BaseModel):
     date = models.DateField()
-    program_details = QuillField(default="No details available")
+    program_details = QuillField(default="No details available yet.")
     order = models.IntegerField(default=1)
     event = models.ForeignKey(
         Event,
@@ -163,16 +151,17 @@ class Program(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Program - {self.date}"
-
+        return f"Program - {self.date} ({self._id})"
 
 # Session Model
+
+
 class Session(BaseModel):
     start_time = models.TimeField()
     end_time = models.TimeField()
     venue = models.CharField(max_length=80, null=True, blank=True)
     session_title = models.CharField(max_length=150)
-    session_details = QuillField(default="No details available")
+    session_details = QuillField(default="No details available yet.")
     order = models.IntegerField(default=1)
     program = models.ForeignKey(
         Program,
@@ -186,10 +175,11 @@ class Session(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Session - {self.session_title}"
-
+        return f"Session - {self.session_title} ({self._id})"
 
 # PartnerLogo Model
+
+
 class PartnerLogo(BaseModel):
     partner_logo = ConditionalImageField(
         local_upload_to='events/logos/',
@@ -211,7 +201,7 @@ class PartnerLogo(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Partner - {self.name}"
+        return f"Partner - {self.name} ({self._id})"
 
     def delete(self, *args, **kwargs):
         if self.partner_logo:
@@ -222,8 +212,9 @@ class PartnerLogo(BaseModel):
                     os.remove(self.partner_logo.path)
         super().delete(*args, **kwargs)
 
-
 # Resource Model
+
+
 class Resource(BaseModel):
     title = models.CharField(max_length=100)
     link = models.URLField(null=True, blank=True)
@@ -248,7 +239,7 @@ class Resource(BaseModel):
         ordering = ["order"]
 
     def __str__(self):
-        return f"Resource - {self.title}"
+        return f"Resource - {self.title} ({self._id})"
 
     def delete(self, *args, **kwargs):
         if self.resource:

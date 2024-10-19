@@ -1,3 +1,5 @@
+# backend/apps/event/serializers.py
+
 from rest_framework import serializers
 from .models import Event, Inquiry, Program, Session, PartnerLogo, Resource
 from cloudinary.utils import cloudinary_url
@@ -9,7 +11,7 @@ class PartnerLogoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PartnerLogo
-        fields = ['id', 'name', 'partner_logo_url', 'order']
+        fields = ['_id', 'name', 'partner_logo_url', 'order']
 
     def get_partner_logo_url(self, obj):
         if obj.partner_logo:
@@ -21,16 +23,26 @@ class PartnerLogoSerializer(serializers.ModelSerializer):
 
 
 class ResourceSerializer(serializers.ModelSerializer):
+    resource_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Resource
-        fields = ['id', 'title', 'link', 'resource', 'order']
+        fields = ['_id', 'title', 'link', 'resource_url', 'order']
+
+    def get_resource_url(self, obj):
+        if obj.resource:
+            if settings.DEBUG:
+                return self.context['request'].build_absolute_uri(obj.resource.url)
+            else:
+                return cloudinary_url(obj.resource.public_id, secure=True)[0]
+        return None
 
 
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
-            'id',
+            '_id',
             'session_title',
             'start_time',
             'end_time',
@@ -47,7 +59,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id',
+            '_id',
             'date',
             'program_details',  # Keep program_details as QuillField
             'order',
@@ -59,7 +71,7 @@ class ProgramSerializer(serializers.ModelSerializer):
 class InquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inquiry
-        fields = ['id', 'inquiry', 'role', 'email', 'order']
+        fields = ['_id', 'inquiry', 'role', 'email', 'order']
 
 
 class EventListSerializer(serializers.ModelSerializer):
@@ -69,7 +81,7 @@ class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            'id',
+            '_id',
             'title',
             'title_subtext',
             'start_date',
@@ -101,7 +113,7 @@ class EventDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            'id',
+            '_id',
             'title',
             'title_subtext',
             'start_date',
@@ -109,7 +121,6 @@ class EventDetailSerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
             'registration_link',
-            'unique_title',
             'website_category',
             'event_tag',
             'event_category',
