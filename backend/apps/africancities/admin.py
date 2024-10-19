@@ -43,9 +43,7 @@ class AfricanCitiesAdmin(nested_admin.NestedModelAdmin):
         width, height = 60, 40
         from django.utils.html import format_html
 
-        if obj.country_flag and hasattr(obj.country_flag, 'url'):
-            # Make sure that the field is returning a valid URL
-            flag_url = obj.get_country_flag_url()
-            if flag_url:
-                return format_html(f'<img src="{flag_url}" width="{width}" height="{height}" />')
+        flag_url = obj.get_country_flag_url()
+        if flag_url:
+            return format_html(f'<img src="{flag_url}" width="{width}" height="{height}" />')
         return '-'

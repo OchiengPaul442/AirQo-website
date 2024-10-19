@@ -6,7 +6,8 @@ class ImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
 
     def get_image_url(self, obj):
-        return obj.get_image_url()
+        request = self.context.get('request')  # Get the request context for absolute URLs
+        return obj.get_image_url(request)
 
     class Meta:
         fields = ('id', 'image_url')
@@ -41,7 +42,8 @@ class AfricanCitySerializer(serializers.ModelSerializer):
     country_flag_url = serializers.SerializerMethodField()
 
     def get_country_flag_url(self, obj):
-        return obj.get_country_flag_url()
+        request = self.context.get('request')  # Get the request context for absolute URLs
+        return obj.get_country_flag_url(request)
 
     class Meta:
         fields = ('id', 'country_name', 'country_flag_url', 'city')

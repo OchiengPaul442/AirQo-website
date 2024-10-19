@@ -1,11 +1,10 @@
+from django.conf import settings
 from django.db import models
 from backend.utils.fields import ConditionalImageField
 from backend.utils.models import BaseModel
 
 class AfricanCountry(BaseModel):
     country_name = models.CharField(max_length=100)
-
-    # Replacing FileField and CloudinaryField with ConditionalImageField
     country_flag = ConditionalImageField(
         local_upload_to='countries/flags/',
         cloudinary_folder='website/uploads/countries/flags',
@@ -21,11 +20,20 @@ class AfricanCountry(BaseModel):
     def __str__(self):
         return self.country_name
 
-    def get_country_flag_url(self):
+    def get_country_flag_url(self, request=None):
+        """
+        Return the full URL for the country flag.
+        - For Cloudinary, return a secure HTTPS URL.
+        - For local development, return the absolute URL using request.build_absolute_uri.
+        """
         if self.country_flag:
-            return self.country_flag.url
+            if not settings.DEBUG:
+                # Cloudinary secure URL
+                return self.country_flag.url  # Already provides secure URL by default
+            else:
+                # Local development, ensure full URL
+                return request.build_absolute_uri(self.country_flag.url) if request else self.country_flag.url
         return None
-
 
 class City(BaseModel):
     city_name = models.CharField(max_length=100)
@@ -80,17 +88,15 @@ class Description(BaseModel):
 
 
 class Image(BaseModel):
-    # Replacing FileField and CloudinaryField with ConditionalImageField
     image = ConditionalImageField(
         local_upload_to='content/images/',
         cloudinary_folder='website/uploads/content/images',
         null=True,
         blank=True
     )
-
     order = models.IntegerField(default=1)
     content = models.ForeignKey(
-        Content,
+        'Content',
         null=True,
         blank=True,
         related_name="image",
@@ -103,7 +109,17 @@ class Image(BaseModel):
     def __str__(self):
         return f"Image-{self.id}"
 
-    def get_image_url(self):
+    def get_image_url(self, request=None):
+        """
+        Return the full URL for the image.
+        - For Cloudinary, return a secure HTTPS URL.
+        - For local development, return the absolute URL using request.build_absolute_uri.
+        """
         if self.image:
-            return self.image.url
+            if not settings.DEBUG:
+                # Cloudinary secure URL
+                return self.image.url  # Cloudinary already provides secure URL
+            else:
+                # Local development, ensure full URL
+                return request.build_absolute_uri(self.image.url) if request else self.image.url
         return None
