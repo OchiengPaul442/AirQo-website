@@ -4,5 +4,5 @@ from .models import FAQ
 
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
-    list_display = ['question', 'created_at', 'updated_at']
+    list_display = ['question']
     search_fields = ['question']

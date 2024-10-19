@@ -33,14 +33,14 @@ urlpatterns = [
     path('api/', include('apps.impact.urls')),
     path('api/', include('apps.event.urls')),
     path('api/', include('apps.highlights.urls')),
-    # path('api/', include('apps.career.urls')),
+    path('api/', include('apps.career.urls')),
     path('api/', include('apps.publications.urls')),
     # path('api/', include('apps.team.urls')),
     # path('api/', include('apps.board.urls')),
     # path('api/', include('apps.externalTeam.urls')),
     # path('api/', include('apps.partners.urls')),
     path('api/', include('apps.cleanair.urls')),
-    # path('api/', include('apps.FAQ.urls')),
+    path('api/', include('apps.FAQ.urls')),
     path('api/', include('apps.africancities.urls')),
 
     # Swagger URLs

@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'apps.press',
     'apps.impact',
     'apps.highlights',
+    'apps.career',
+    'apps.FAQ',
 ]
 
 MIDDLEWARE = [
