@@ -11,14 +11,14 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Highlight)
 class HighlightAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'display_tags', 'order', 'image_preview')
+    list_display = ( 'title', 'display_tags', 'order', 'image_preview')
     list_filter = ('order', 'tags')
     search_fields = ('title', 'link', 'link_title')
     filter_horizontal = ('tags',)
     list_editable = ('order',)
 
-    # Allow only order to be editable, remove tags from the form view
     fields = ('title', 'image', 'link', 'link_title', 'order')
+    list_per_page = 10
 
     def display_tags(self, obj):
         return ", ".join([tag.name for tag in obj.tags.all()])

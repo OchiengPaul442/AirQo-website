@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'apps.africancities',
     'apps.publications',
     'apps.press',
+    'apps.impact',
+    'apps.highlights',
 ]
 
 MIDDLEWARE = [

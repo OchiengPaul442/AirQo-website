@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Tag, Highlight
-from cloudinary.utils import cloudinary_url
 from django.conf import settings
 
 
@@ -18,7 +17,6 @@ class HighlightSerializer(serializers.ModelSerializer):
         write_only=True,
         source='tags'
     )
-    # SerializerMethodField to get the secure Cloudinary URL for the image
     image_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -28,7 +26,7 @@ class HighlightSerializer(serializers.ModelSerializer):
             'title',
             'tags',
             'tag_ids',
-            'image_url',  # Use the secure URL field instead of the raw image field
+            'image_url',
             'link',
             'link_title',
             'order'
@@ -36,12 +34,11 @@ class HighlightSerializer(serializers.ModelSerializer):
 
     def get_image_url(self, obj):
         if obj.image:
-            if settings.DEBUG:
-                # If in development mode, use local file URL
-                request = self.context.get('request')
-                if request:
-                    return request.build_absolute_uri(obj.image.url)
+            request = self.context.get('request')
+            if settings.DEBUG and request:
+                # Return absolute URL in local development
+                return request.build_absolute_uri(obj.image.url)
             else:
-                # In production, use Cloudinary URL
-                return cloudinary_url(obj.image.public_id, secure=True)[0]
+                # Return secure Cloudinary URL in production
+                return obj.image.url
         return None
