@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     # Custom apps
     'apps.event',
-    # 'apps.cleanair',
+    'apps.cleanair',
 ]
 
 MIDDLEWARE = [
