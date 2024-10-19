@@ -35,7 +35,7 @@ class AfricanCitiesAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
     list_display = ('country_name', 'flag_preview', 'order')
     search_fields = ('country_name',)
-    list_filter = ('created',)
+    list_editable = ('order',)
     inlines = (CityInline,)
     list_per_page = 10
 
@@ -43,6 +43,9 @@ class AfricanCitiesAdmin(nested_admin.NestedModelAdmin):
         width, height = 60, 40
         from django.utils.html import format_html
 
-        if obj.country_flag:
-            return format_html(f'<img src="{obj.get_country_flag_url()}" width="{width}" height="{height}" />')
+        if obj.country_flag and hasattr(obj.country_flag, 'url'):
+            # Make sure that the field is returning a valid URL
+            flag_url = obj.get_country_flag_url()
+            if flag_url:
+                return format_html(f'<img src="{flag_url}" width="{width}" height="{height}" />')
         return '-'

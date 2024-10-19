@@ -41,7 +41,7 @@ urlpatterns = [
     # path('api/', include('apps.partners.urls')),
     path('api/', include('apps.cleanair.urls')),
     # path('api/', include('apps.FAQ.urls')),
-    # path('api/', include('apps.africancities.urls')),
+    path('api/', include('apps.africancities.urls')),
 
     # Swagger URLs
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',

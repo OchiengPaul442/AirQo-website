@@ -1,23 +1,17 @@
-from django.conf import settings
 from django.db import models
-from cloudinary.models import CloudinaryField
+from backend.utils.fields import ConditionalImageField
 from backend.utils.models import BaseModel
-
 
 class AfricanCountry(BaseModel):
     country_name = models.CharField(max_length=100)
 
-    if settings.DEBUG:
-        country_flag = models.FileField(
-            upload_to='countries/flags/',
-            null=True,
-            blank=True
-        )
-    else:
-        country_flag = CloudinaryField(
-            "CountryFlag", overwrite=True, resource_type="image",
-            folder="website/uploads/countries/flags"
-        )
+    # Replacing FileField and CloudinaryField with ConditionalImageField
+    country_flag = ConditionalImageField(
+        local_upload_to='countries/flags/',
+        cloudinary_folder='website/uploads/countries/flags',
+        null=True,
+        blank=True
+    )
 
     order = models.IntegerField(default=1)
 
@@ -28,10 +22,9 @@ class AfricanCountry(BaseModel):
         return self.country_name
 
     def get_country_flag_url(self):
-        if settings.DEBUG:
-            return self.country_flag.url if self.country_flag else None
-        else:
-            return self.country_flag.build_url(secure=True)
+        if self.country_flag:
+            return self.country_flag.url
+        return None
 
 
 class City(BaseModel):
@@ -87,17 +80,13 @@ class Description(BaseModel):
 
 
 class Image(BaseModel):
-    if settings.DEBUG:
-        image = models.FileField(
-            upload_to='content/images/',
-            null=True,
-            blank=True
-        )
-    else:
-        image = CloudinaryField(
-            "ContentImage", overwrite=True, resource_type="image",
-            folder="website/uploads/content/images"
-        )
+    # Replacing FileField and CloudinaryField with ConditionalImageField
+    image = ConditionalImageField(
+        local_upload_to='content/images/',
+        cloudinary_folder='website/uploads/content/images',
+        null=True,
+        blank=True
+    )
 
     order = models.IntegerField(default=1)
     content = models.ForeignKey(
@@ -115,7 +104,6 @@ class Image(BaseModel):
         return f"Image-{self.id}"
 
     def get_image_url(self):
-        if settings.DEBUG:
-            return self.image.url if self.image else None
-        else:
-            return self.image.build_url(secure=True)
+        if self.image:
+            return self.image.url
+        return None
