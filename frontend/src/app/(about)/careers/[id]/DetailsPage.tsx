@@ -68,7 +68,7 @@ const DetailsPage: React.FC<any> = ({ id }) => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white border border-gray-200 rounded-lg">
+    <div className="max-w-5xl mx-auto p-8 bg-white border border-gray-200 rounded-lg mt-6">
       {/* Back Button */}
       <div className="mb-4">
         <CustomButton

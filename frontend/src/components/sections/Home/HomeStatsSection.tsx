@@ -170,7 +170,7 @@ const HomeStatsSection: React.FC = () => {
                       alt={`Partner ${index + 1}`}
                       width={120}
                       height={50}
-                      className="mix-blend-multiply"
+                      className="mix-blend-multiply w-auto h-auto transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer"
                     />
                   </div>
                 ),
@@ -224,8 +224,8 @@ const HomeStatsSection: React.FC = () => {
           </div>
 
           {/* Image Section */}
-          <div className="lg:w-1/2 w-full">
-            <div className="relative w-full h-64 lg:h-[400px] rounded-lg overflow-hidden">
+          <div className="lg:w-1/2 w-full rounded-lg">
+            <div className="relative w-full h-[400px] overflow-hidden">
               <Image
                 src={`${
                   activeTab === 'cities'
@@ -235,7 +235,7 @@ const HomeStatsSection: React.FC = () => {
                 alt="Air quality monitor installation"
                 fill
                 style={{ objectFit: 'cover' }}
-                className="rounded-lg object-contain"
+                className="rounded-lg object-contain flex justify-self-center w-full h-full max-w-[440px] transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer"
                 loading="eager"
               />
             </div>

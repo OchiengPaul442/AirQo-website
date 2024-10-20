@@ -59,7 +59,7 @@ const AfricanCities: React.FC = () => {
             onClick={() => handleCountrySelect(country)}
           >
             <Image
-              src={country.country_flag}
+              src={country.country_flag_url}
               alt={country.country_name}
               width={24}
               height={24}
@@ -117,15 +117,15 @@ const AfricanCities: React.FC = () => {
             {selectedCity.content[0].image.map((img: any) => (
               <Image
                 key={img.id}
-                src={img.image}
+                src={img.image_url}
                 alt={`City Image ${img.id}`}
                 width={500}
                 height={300}
-                className="rounded-lg shadow-md h-full max-h-[350px] object-cover"
+                className="rounded-lg shadow-md h-full max-h-[350px] object-cover w-full transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer"
               />
             ))}
           </div>
-          <div className="absolute top-12 lg:top-32 -z-40 right-0 max-w-[500px] max-h-[300px] lg:max-w-[630px] lg:max-h-[400px] flex items-center justify-center">
+          <div className="absolute top-12 lg:top-20 -z-40 right-0 max-w-[500px] max-h-[300px] lg:max-w-[630px] lg:max-h-[400px] flex items-center justify-center">
             <Image
               src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728132435/website/photos/about_us_vector_3_p0mihk.png"
               alt="Blob Overlay"

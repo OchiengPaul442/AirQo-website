@@ -210,6 +210,12 @@ QUILL_CONFIGS = {
     }
 }
 
+# Increase to 10 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 
+
+# Optionally, you may also want to increase the file upload limit:
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  
+
 # Debug logging (Optional)
 if DEBUG:
     print(f"Debug mode is: {DEBUG}")

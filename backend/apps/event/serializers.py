@@ -79,6 +79,7 @@ class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
+            'id',
             'title',
             'title_subtext',
             'start_date',
@@ -110,6 +111,7 @@ class EventDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
+            'id',
             'title',
             'title_subtext',
             'start_date',

@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiCalendar, FiClock } from 'react-icons/fi';
 
+import { convertDeltaToHtml } from '@/utils/quillUtils';
+
 const SingleEvent: React.FC<any> = ({ id }) => {
   const router = useRouter();
   const [event, setEvent] = useState<any | null>(null);
@@ -123,6 +125,11 @@ const SingleEvent: React.FC<any> = ({ id }) => {
     );
   }
 
+  // Use the utility function directly with the event details (JSON string)
+  const eventDetailsHtml = event?.event_details
+    ? convertDeltaToHtml(event.event_details)
+    : '';
+
   return (
     <div className="w-full">
       {/* Header Section */}
@@ -187,7 +194,7 @@ const SingleEvent: React.FC<any> = ({ id }) => {
       )}
 
       {/* Event Details Section */}
-      {event.event_details && (
+      {eventDetailsHtml && (
         <section className="max-w-5xl mx-auto px-4 lg:px-0 py-8">
           <h2 className="text-3xl font-semibold mb-6 pb-2">Event Details</h2>
           <div className="flex justify-between w-full items-center border-b-2 py-4 mb-6">
@@ -195,24 +202,29 @@ const SingleEvent: React.FC<any> = ({ id }) => {
               <div className="flex items-center space-x-2">
                 <FiCalendar className="text-gray-500 w-5 h-5" />
                 <p className="text-gray-600">
-                  {formatDateRange(event.start_date, event.end_date)}
+                  {event?.start_date && event?.end_date
+                    ? formatDateRange(event?.start_date, event?.end_date)
+                    : 'Date to be announced'}
                 </p>
               </div>
+
               <div className="flex items-center space-x-2">
                 <FiClock className="text-gray-500 w-5 h-5" />
                 <p className="text-gray-600">
-                  {`${format(
-                    parse(event.start_time, 'HH:mm:ss', new Date()),
-                    'HH:mm',
-                  )} - ${format(
-                    parse(event.end_time, 'HH:mm:ss', new Date()),
-                    'HH:mm',
-                  )}`}
+                  {event?.start_time && event?.end_time
+                    ? `${format(
+                        parse(event?.start_time, 'HH:mm:ss', new Date()),
+                        'HH:mm',
+                      )} - ${format(
+                        parse(event?.end_time, 'HH:mm:ss', new Date()),
+                        'HH:mm',
+                      )}`
+                    : 'Time to be announced'}
                 </p>
               </div>
             </div>
             {/* Registration Link Section */}
-            {event.registration_link && (
+            {event?.registration_link && (
               <CustomButton
                 type="button"
                 onClick={() => window.open(event.registration_link)}
@@ -224,7 +236,9 @@ const SingleEvent: React.FC<any> = ({ id }) => {
           </div>
           <div
             className="prose lg:prose-xl"
-            dangerouslySetInnerHTML={{ __html: event.event_details }}
+            dangerouslySetInnerHTML={{
+              __html: eventDetailsHtml || 'Event details coming soon.',
+            }}
           ></div>
         </section>
       )}

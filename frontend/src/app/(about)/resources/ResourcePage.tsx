@@ -14,13 +14,13 @@ const ResourcePage: React.FC = () => {
     () => [
       { name: 'Research Publications', value: 'research' },
       { name: 'Technical Reports and Policy Documents', value: 'technical' },
-      { name: 'Guides and Manuals', value: 'guide' },
+      { name: 'Guides and Manuals', value: ['guide', 'manual'] }, // Guides and Manuals combined
     ],
     [],
   );
 
   // State management
-  const [selectedTab, setSelectedTab] = useState<string>(
+  const [selectedTab, setSelectedTab] = useState<string | string[]>(
     searchParams?.get('tab') || 'research',
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -29,15 +29,24 @@ const ResourcePage: React.FC = () => {
 
   // Pagination logic
   const itemsPerPage = 4;
-  const filteredResources = publications.filter(
-    (resource) => resource.category === selectedTab,
-  );
+
+  // Filtering resources based on the selected tab
+  const filteredResources = publications.filter((resource) => {
+    if (Array.isArray(selectedTab)) {
+      // If "Guides and Manuals" is selected, show both "guide" and "manual"
+      return selectedTab.includes(resource.category);
+    } else {
+      return resource.category === selectedTab;
+    }
+  });
+
   const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
   const displayedResources = filteredResources.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
+  // Fetch publications on mount
   useEffect(() => {
     const fetchPublications = async () => {
       setLoading(true);
@@ -53,17 +62,22 @@ const ResourcePage: React.FC = () => {
     fetchPublications();
   }, []);
 
+  // Reset pagination when tab changes
   useEffect(() => {
-    if (tabs.some((tab) => tab.value === selectedTab)) {
+    if (
+      tabs.some(
+        (tab) => Array.isArray(selectedTab) || tab.value === selectedTab,
+      )
+    ) {
       setCurrentPage(1);
     }
   }, [selectedTab, tabs]);
 
   // Handle tab click
-  const handleTabClick = (tabValue: string) => {
+  const handleTabClick = (tabValue: string | string[]) => {
     setSelectedTab(tabValue);
     setCurrentPage(1);
-    const url = `/resources?tab=${tabValue}`;
+    const url = `/resources?tab=${Array.isArray(tabValue) ? tabValue.join(',') : tabValue}`;
     router.push(url);
   };
 
@@ -86,9 +100,14 @@ const ResourcePage: React.FC = () => {
           <div className="flex space-x-8 border-b overflow-x-auto border-gray-300">
             {tabs.map((tab) => (
               <button
-                key={tab.value}
+                key={typeof tab.value === 'string' ? tab.value : tab.name}
                 onClick={() => handleTabClick(tab.value)}
                 className={`pb-2 text-lg ${
+                  (Array.isArray(selectedTab) &&
+                    selectedTab.includes('guide') &&
+                    selectedTab.includes('manual') &&
+                    tab.value.includes('guide') &&
+                    tab.value.includes('manual')) ||
                   selectedTab === tab.value
                     ? 'text-black border-b-2 border-black font-semibold'
                     : 'text-gray-500'

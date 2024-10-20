@@ -12,7 +12,7 @@ const Highlight = () => {
           alt="Leader Portrait"
           width={444}
           height={469}
-          className="grayscale"
+          className="grayscale w-full h-full max-w-[444px] transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer"
           loading="lazy"
         />
       </div>

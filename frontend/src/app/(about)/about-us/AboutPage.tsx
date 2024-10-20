@@ -174,6 +174,20 @@ const AboutPage: React.FC = () => {
     );
   };
 
+  /** Navs */
+  const NavLink = ({ href, label, active = false }: any) => (
+    <a
+      href={href}
+      className={`relative pb-2 hover:text-gray-800 transition-all group ${active ? 'text-gray-800' : ''}`}
+      aria-label={label}
+    >
+      {label}
+      <span
+        className={`absolute left-0 right-0 bottom-0 h-[2px] bg-black ${active ? 'scale-x-100' : 'scale-x-0'} group-hover:scale-x-100 transition-transform duration-300 origin-left`}
+      ></span>
+    </a>
+  );
+
   return (
     <div className="pb-16 flex flex-col w-full space-y-16">
       {/* Hero Section */}
@@ -186,41 +200,16 @@ const AboutPage: React.FC = () => {
             </h1>
           </div>
           <nav className="flex justify-start items-baseline space-x-6 text-gray-400">
-            <a
-              href="#vision"
-              className="relative pb-2 hover:text-gray-800 transition-all group text-gray-800"
-            >
-              Our Vision
-              <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-black scale-x-100 transition-transform duration-300 origin-left"></span>
-            </a>
-            <a
-              href="#story"
-              className="relative pb-2 hover:text-gray-800 transition-all group"
-            >
-              Our Story
-              <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </a>
-            <a
-              href="#mission"
-              className="relative pb-2 hover:text-gray-800 transition-all group"
-            >
-              Our Mission
-              <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </a>
-            <a
-              href="#values"
-              className="relative pb-2 hover:text-gray-800 transition-all group"
-            >
-              Our Values
-              <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </a>
-            <a
-              href="#team"
-              className="relative pb-2 hover:text-gray-800 transition-all group"
-            >
-              Our Team
-              <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </a>
+            {[
+              { href: '#vision', label: 'Our Vision', active: true },
+              { href: '#story', label: 'Our Story' },
+              { href: '#mission', label: 'Our Mission' },
+              { href: '#values', label: 'Our Values' },
+              { href: '#team', label: 'Our Team' },
+              { href: '#partners', label: 'Our Partners' },
+            ].map(({ href, label, active }) => (
+              <NavLink key={href} href={href} label={label} active={active} />
+            ))}
           </nav>
         </div>
       </section>
@@ -239,7 +228,7 @@ const AboutPage: React.FC = () => {
         id="vision"
         className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[100px]"
       >
-        <div className="flex flex-col-reverse relative">
+        <div className="flex flex-col-reverse relative transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer">
           <Image
             src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728295735/website/photos/about/teamImage_ganc1y.png"
             alt="Abstract Outline"
@@ -415,7 +404,10 @@ const AboutPage: React.FC = () => {
 
       {/* Partners Section */}
       {partners && (
-        <section className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[200px]">
+        <section
+          id="partners"
+          className="max-w-5xl mx-auto w-full px-4 lg:px-0 space-y-8 scroll-mt-[200px]"
+        >
           <div className="flex flex-col lg:flex-row items-start lg:space-x-12">
             {/* Title */}
             <h2 className="text-3xl lg:text-[48px] font-medium flex-shrink-0 w-full text-left lg:w-1/3">

@@ -98,7 +98,7 @@ const PartnerDetailsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-dvh bg-gray-100">
+    <div className="min-h-dvh bg-gray-100 py-6">
       {/* Banner Section */}
       {partner.partner_image_url && (
         <div className="relative w-full h-64 md:h-96 bg-black">

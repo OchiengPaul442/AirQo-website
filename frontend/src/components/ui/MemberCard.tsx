@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Divider,
 } from '@/components/ui/';
 
 // Define types for member data
@@ -110,8 +111,8 @@ const MemberCard: React.FC<MemberCardProps> = ({
       {/* Dialog Content Section */}
       <DialogContent className="max-w-[1024px] p-6">
         {/* Header Section */}
-        <DialogHeader className="mb-4">
-          <div className="flex flex-col items-start gap-4">
+        <DialogHeader>
+          <div className="flex flex-col items-start gap-4 mt-4">
             <div>
               <DialogTitle className="text-2xl font-bold">
                 {member.name}
@@ -143,6 +144,8 @@ const MemberCard: React.FC<MemberCardProps> = ({
             </div>
           </div>
         </DialogHeader>
+
+        <Divider className="h-1" />
 
         {/* Main Content */}
         <div className="flex flex-col lg:flex-row items-start gap-6">

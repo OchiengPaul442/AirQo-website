@@ -94,7 +94,8 @@ const FeaturedCarousel = () => {
                       src={item.image_url}
                       alt={item.title}
                       fill
-                      className="object-cover"
+                      // include a scaling as user hovers over the image
+                      className="object-cover w-full h-full transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer"
                       priority
                     />
                   </div>
@@ -114,9 +115,13 @@ const FeaturedCarousel = () => {
 
                   <Link
                     href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-blue-600 font-medium flex items-center group"
                   >
-                    <span className="mr-2">{item.link_title}</span>
+                    <span className="mr-2">
+                      {item.link_title || 'Learn More'}
+                    </span>
                     <HiArrowSmallRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
