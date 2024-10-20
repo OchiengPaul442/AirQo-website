@@ -10,6 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  NoData,
   Pagination,
 } from '@/components/ui';
 
@@ -181,9 +182,7 @@ const ResourcePage = () => {
           {error && <p className="text-red-500">{error}</p>}
 
           {/* Resource Cards */}
-          {!loading && !error && paginatedResources.length === 0 && (
-            <p>No resources found for the selected category.</p>
-          )}
+          {!loading && !error && paginatedResources.length === 0 && <NoData />}
 
           {!loading && !error && paginatedResources.length > 0 && (
             <div className="space-y-6">

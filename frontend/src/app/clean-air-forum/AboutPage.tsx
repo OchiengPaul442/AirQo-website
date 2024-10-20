@@ -1,5 +1,5 @@
 'use client';
-import { Divider } from '@components/ui';
+import { Divider, NoData } from '@components/ui';
 import { useForumData } from '@context/ForumDataContext';
 import React from 'react';
 
@@ -9,7 +9,7 @@ const AboutPage = () => {
   const data = useForumData();
 
   if (!data || !data.introduction) {
-    return <p>No data found</p>;
+    return <NoData />;
   }
 
   // Render the objectives list
