@@ -13,27 +13,31 @@ const Page: React.FC = () => {
   // Memoize filtered committee members to avoid recalculations on every render
   const committeeMembers = useMemo(
     () =>
-      data.persons.filter(
+      data?.persons?.filter(
         (person: any) =>
           person.category === 'Committee Member' ||
           person.category === 'Committee Member and Key Note Speaker' ||
           person.category === 'Speaker and Committee Member',
       ),
-    [data.persons],
+    [data?.persons],
   );
 
   // Calculate the total number of pages
   const totalPages = useMemo(
-    () => Math.ceil(committeeMembers.length / membersPerPage),
-    [committeeMembers.length],
+    () => Math.ceil(committeeMembers?.length / membersPerPage),
+    [committeeMembers?.length],
   );
 
   // Get the members to display for the current page
   const displayedMembers = useMemo(() => {
     const startIdx = (currentPage - 1) * membersPerPage;
     const endIdx = startIdx + membersPerPage;
-    return committeeMembers.slice(startIdx, endIdx);
+    return committeeMembers?.slice(startIdx, endIdx);
   }, [currentPage, committeeMembers]);
+
+  if (!data) {
+    return null;
+  }
 
   // Function to handle page change
   const handlePageChange = (newPage: number) => {

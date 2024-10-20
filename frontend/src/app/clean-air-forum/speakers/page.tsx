@@ -13,6 +13,10 @@ const Page = () => {
   const [currentKeyNotePage, setCurrentKeyNotePage] = useState(1);
   const [currentSpeakersPage, setCurrentSpeakersPage] = useState(1);
 
+  if (!data) {
+    return null;
+  }
+
   // Filter keynote speakers and speakers
   const KeyNoteSpeakers = data.persons.filter(
     (person: any) =>

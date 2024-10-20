@@ -106,6 +106,10 @@ const Page = () => {
     setOpenAccordion(openAccordion === id ? null : id);
   };
 
+  if (!data) {
+    return null;
+  }
+
   if (!data || !data.programs) {
     return <p>No data available</p>;
   }

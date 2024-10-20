@@ -9,6 +9,10 @@ import { renderContent } from '@/utils/quillUtils';
 const Page = () => {
   const data = useForumData();
 
+  if (!data) {
+    return null;
+  }
+
   // Filter Co-Convening Partners
   const conveningPartners = data.partners
     ?.filter((partner: any) => partner.category === 'Co-Convening Partner')

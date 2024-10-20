@@ -68,6 +68,10 @@ const Page = () => {
   }>({});
   const [allExpanded, setAllExpanded] = useState(false);
 
+  if (!data) {
+    return null;
+  }
+
   // Toggle a specific accordion for a specific resource and session
   const handleToggleAccordion = (
     resourceIndex: number,

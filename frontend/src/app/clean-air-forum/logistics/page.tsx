@@ -7,6 +7,10 @@ import { renderContent } from '@/utils/quillUtils';
 
 const Page = () => {
   const data = useForumData();
+
+  if (!data) {
+    return null;
+  }
   return (
     <div className="max-w-5xl mx-auto px-4 lg:px-0 flex flex-col gap-6">
       <Divider className="bg-black p-0 m-0 h-[1px] w-full max-w-5xl mx-auto" />
