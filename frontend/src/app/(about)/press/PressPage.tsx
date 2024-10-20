@@ -85,9 +85,7 @@ const PressPage: React.FC = () => {
             <ArticleSkeleton />
           </div>
         ) : error ? (
-          <p className="text-lg text-red-500">
-            Failed to load articles. Please try again later.
-          </p>
+          <NoData message="Failed to load articles. Please try again later." />
         ) : displayedArticles.length > 0 ? (
           <div className="max-w-5xl mx-auto w-full px-4 lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {displayedArticles.map((article, idx) => (

@@ -179,7 +179,7 @@ const ResourcePage = () => {
 
           {/* Loading and Error States */}
           {loading && <LoadingSkeleton />}
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <NoData message={error} />}
 
           {/* Resource Cards */}
           {!loading && !error && paginatedResources.length === 0 && <NoData />}
