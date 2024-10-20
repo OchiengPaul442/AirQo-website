@@ -55,14 +55,14 @@ const PaginatedSection: React.FC<PaginatedSectionProps> = ({
                   onClick={() =>
                     !noClick && router.push(`/partners/${partner.id}`)
                   }
-                  className="flex justify-center items-center cursor-pointer w-full h-[144px] border border-gray-300 px-2 py-4"
+                  className="flex justify-center items-center cursor-pointer overflow-hidden w-full h-[144px] border border-gray-300 px-2 py-4"
                 >
                   <Image
                     src={partner.logoUrl}
                     alt={'logo'}
                     width={271}
                     height={144}
-                    className="object-contain w-full h-full mix-blend-multiply"
+                    className="object-contain w-full h-full max-h-[144px] max-w-[271px] mix-blend-multiply transition-transform duration-500 ease-in-out transform hover:scale-110"
                   />
                 </div>
               ))}

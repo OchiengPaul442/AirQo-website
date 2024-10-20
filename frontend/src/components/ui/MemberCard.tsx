@@ -13,6 +13,7 @@ import {
   DialogTrigger,
   Divider,
 } from '@/components/ui/';
+import { convertDeltaToHtml } from '@/utils/quillUtils';
 
 // Define types for member data
 interface Member {
@@ -37,6 +38,11 @@ const MemberCard: React.FC<MemberCardProps> = ({
   btnText = '',
   cardClassName,
 }) => {
+  const renderContent = (content: string) => {
+    const isHtml = content?.trim().startsWith('<');
+    return convertDeltaToHtml(isHtml ? content : convertDeltaToHtml(content));
+  };
+
   return (
     <Dialog>
       {/* Trigger for opening the dialog */}
@@ -165,13 +171,22 @@ const MemberCard: React.FC<MemberCardProps> = ({
 
           {/* Descriptions */}
           <div className="flex-1">
-            <DialogDescription className="leading-relaxed overflow-y-auto">
+            <DialogDescription className="leading-relaxed max-h-[400px] overflow-y-auto">
               {member.descriptions &&
                 member.descriptions.map((desc, idx) => (
                   <p key={idx}>{desc.description}</p>
                 ))}
               {member.bio && (
-                <div dangerouslySetInnerHTML={{ __html: member.bio }}></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: renderContent(member.bio),
+                  }}
+                ></div>
+              )}
+
+              {/* if both are empty */}
+              {!member.bio && !member.descriptions && (
+                <p className="text-gray-500">Bio is not available.</p>
               )}
             </DialogDescription>
           </div>

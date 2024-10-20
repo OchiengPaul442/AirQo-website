@@ -3,6 +3,8 @@ import { Divider } from '@components/ui';
 import { useForumData } from '@context/ForumDataContext';
 import React from 'react';
 
+import { renderContent } from '@/utils/quillUtils';
+
 const Page = () => {
   const data = useForumData();
   return (
@@ -20,7 +22,7 @@ const Page = () => {
           <div
             className="md:w-2/3 space-y-4"
             dangerouslySetInnerHTML={{
-              __html: data.glossary_details,
+              __html: renderContent(data.glossary_details),
             }}
           ></div>
         </div>

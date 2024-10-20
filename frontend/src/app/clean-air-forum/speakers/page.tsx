@@ -3,6 +3,7 @@ import { useForumData } from '@context/ForumDataContext';
 import React, { useState } from 'react';
 
 import { Divider, MemberCard, Pagination } from '@/components/ui/';
+import { renderContent } from '@/utils/quillUtils';
 
 const Page = () => {
   const data = useForumData();
@@ -54,7 +55,11 @@ const Page = () => {
       <Divider className="bg-black p-0 m-0 h-[1px] w-full max-w-5xl mx-auto" />
 
       <div className="py-4">
-        <div dangerouslySetInnerHTML={{ __html: data.speakers_text_section }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: renderContent(data.speakers_text_section),
+          }}
+        />
       </div>
 
       {/* Keynote Speakers Section */}

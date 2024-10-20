@@ -3,6 +3,8 @@ import { Divider } from '@components/ui';
 import { useForumData } from '@context/ForumDataContext';
 import React from 'react';
 
+import { renderContent } from '@/utils/quillUtils';
+
 const Page = () => {
   const data = useForumData();
   return (
@@ -18,7 +20,7 @@ const Page = () => {
           <div
             className="md:w-2/3 space-y-4"
             dangerouslySetInnerHTML={{
-              __html: data.travel_logistics_vaccination_details,
+              __html: renderContent(data.travel_logistics_vaccination_details),
             }}
           ></div>
         </div>
@@ -37,7 +39,7 @@ const Page = () => {
           <div
             className="md:w-2/3 space-y-4"
             dangerouslySetInnerHTML={{
-              __html: data.travel_logistics_visa_details,
+              __html: renderContent(data.travel_logistics_visa_details),
             }}
           ></div>
         </div>

@@ -4,6 +4,8 @@ import { Divider } from '@components/ui';
 import { useForumData } from '@context/ForumDataContext';
 import React from 'react';
 
+import { renderContent } from '@/utils/quillUtils';
+
 const Page = () => {
   const data = useForumData();
 
@@ -45,7 +47,11 @@ const Page = () => {
       {/* Partners Text Section */}
       <div className="py-4">
         <h2 className="text-2xl font-bold">Partners</h2>
-        <div dangerouslySetInnerHTML={{ __html: data.partners_text_section }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: renderContent(data.partners_text_section),
+          }}
+        />
       </div>
 
       {/* Sponsorship Opportunities Text Section */}
@@ -53,7 +59,7 @@ const Page = () => {
         <h2 className="text-2xl font-bold">Sponsorship opportunities</h2>
         <div
           dangerouslySetInnerHTML={{
-            __html: data.sponsorship_opportunities_partners,
+            __html: renderContent(data.sponsorship_opportunities_partners),
           }}
         />
       </div>

@@ -163,7 +163,7 @@ const HomeStatsSection: React.FC = () => {
                 (partner, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-center p-4 border border-gray-300"
+                    className="flex items-center justify-center h-[100px] p-4 border border-gray-300"
                   >
                     <Image
                       src={partner}

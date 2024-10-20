@@ -42,13 +42,13 @@ const AccordionItem = ({ session, isOpen, toggleAccordion }: any) => {
 
                   {/* File Download Link */}
                   <a
-                    href={file.file}
+                    href={file.file_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-red-600 flex items-center"
                   >
                     <FaFilePdf className="mr-2" />
-                    {getFileNameFromUrl(file.file)}
+                    {getFileNameFromUrl(file.file_url)}
                   </a>
                 </div>
               </div>

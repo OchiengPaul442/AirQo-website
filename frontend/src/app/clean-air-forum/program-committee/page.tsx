@@ -3,6 +3,7 @@ import { useForumData } from '@context/ForumDataContext';
 import React, { useMemo, useState } from 'react';
 
 import { Divider, MemberCard, Pagination } from '@/components/ui/';
+import { renderContent } from '@/utils/quillUtils';
 
 const Page: React.FC = () => {
   const data = useForumData();
@@ -46,7 +47,9 @@ const Page: React.FC = () => {
       <div className="py-4">
         <h2 className="text-2xl font-bold">Program Committee</h2>
         <div
-          dangerouslySetInnerHTML={{ __html: data.committee_text_section }}
+          dangerouslySetInnerHTML={{
+            __html: renderContent(data.committee_text_section),
+          }}
         />
       </div>
 
