@@ -19,11 +19,6 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
-# Swagger configuration
-SWAGGER_SETTINGS = {
-    'DEFAULT_INFO': 'backend.urls.api_info',
-}
-
 # Application definition
 INSTALLED_APPS = [
     # Django default apps
@@ -41,10 +36,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'nested_admin',
-    'drf_yasg',  # Added for Swagger
-
-    # Quill editor
-    'django_quill',  # Added django-quill-editor
+    'drf_yasg',
+    'django_quill',
 
     # Custom apps
     'apps.event',
@@ -63,9 +56,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be first
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,32 +68,24 @@ MIDDLEWARE = [
 ]
 
 # CORS Configuration
-CORS_ORIGIN_ALLOW_ALL = False  # Disallow all origins by default
-
-# Retrieve allowed origins from .env and split into a list
+CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
-
-# Retrieve regex patterns from .env and split into a list
 CORS_ORIGIN_REGEX_WHITELIST = [
     pattern.strip() for pattern in os.getenv('CORS_ORIGIN_REGEX_WHITELIST', '').split(',')
 ]
-
-# CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
-# Root URL configuration
 ROOT_URLCONF = 'backend.urls'
 
-# Templates configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'backend', 'templates')],  # Add templates directory
+        'DIRS': [os.path.join(BASE_DIR, 'backend', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # Required by admin
+                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -108,26 +93,22 @@ TEMPLATES = [
     },
 ]
 
-# WSGI application configuration
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database configuration: Separate for development (SQLite) and production (Postgres)
-# if DEBUG:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
-#             'NAME': BASE_DIR / os.getenv('DATABASE_NAME', 'db.sqlite3'),
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-#     }
-DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-}
+# Database configuration
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': BASE_DIR / os.getenv('DATABASE_NAME', 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    }
 
-# Password validation configuration
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -144,25 +125,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-
-# Define STATICFILES_DIRS to tell Django where to find additional static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'backend', 'static'),
-]
-
-# WhiteNoise configuration for serving static files in production
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'backend', 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Collect static files here for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Media files configuration (Development uses local storage, Production uses Cloudinary)
+# Media files configuration
 if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'assets')
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 else:
-    # Production media files stored in Cloudinary
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
@@ -179,44 +151,92 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        # Browsable API during development
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # Allow access without authentication
+        'rest_framework.permissions.AllowAny',
     ],
 }
 
 # Quill Editor Configuration
 QUILL_CONFIGS = {
     'default': {
-        'theme': 'snow',  # 'snow' for light mode, 'bubble' for minimalistic
+        'theme': 'snow',
         'modules': {
             'toolbar': [
                 [{'header': [1, 2, 3, 4, 5, 6, False]}],
-                ['bold', 'italic', 'underline', 'strike'],
+                ['bold', 'italic', 'underline', 'strike',
+                    'blockquote', 'code-block'],
                 [{'list': 'ordered'}, {'list': 'bullet'},
                     {'indent': '-1'}, {'indent': '+1'}],
                 [{'direction': 'rtl'}],
                 [{'size': ['small', False, 'large', 'huge']}],
                 [{'color': []}, {'background': []}],
                 [{'font': []}],
-                ['blockquote', 'code-block'],
                 ['link', 'image', 'video'],
                 ['clean'],
             ],
-            'syntax': True,  # Enable syntax highlighting
+            'clipboard': {'matchVisual': False},
         },
-    }
+        'placeholder': 'Compose an epic...',
+        'readOnly': False,
+        'bounds': '#editor',
+        'scrollingContainer': '#scrolling-container',
+    },
 }
 
-# Increase to 10 MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 
+# Quill Django configuration
+QUILL_CONFIGS['default']['django'] = {
+    'output_format': 'html',
+    'sanitize_html': True,
+    'image_upload': {
+        'allow_files': [
+            'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml',
+            'application/pdf', 'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ],
+        'max_size': 10 * 1024 * 1024,  # 10MB
+    },
+}
 
-# Optionally, you may also want to increase the file upload limit:
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  
+if 'django_quill' in INSTALLED_APPS:
+    QUILL_CONFIGS['default']['django']['quill_editor'] = {
+        'field_class': 'django_quill.fields.QuillField',
+        'widget_class': 'django_quill.widgets.QuillWidget',
+    }
 
-# Debug logging (Optional)
+# Increase upload size limits
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+
+# Swagger configuration
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'backend.urls.api_info',
+}
+
+
+# Custom upload handlers
+def local_file_upload(file):
+    from django.core.files.storage import default_storage
+    file_name = default_storage.save(f'quill_uploads/{file.name}', file)
+    return os.path.join(MEDIA_URL, file_name)
+
+
+def cloudinary_file_upload(file):
+    from django.core.files.storage import default_storage
+    file_name = default_storage.save(
+        f'website/uploads/quill_uploads/{file.name}', file)
+    return MEDIA_URL + file_name
+
+
+# Set the appropriate upload handler
+if DEBUG:
+    QUILL_UPLOAD_HANDLER = local_file_upload
+else:
+    QUILL_UPLOAD_HANDLER = cloudinary_file_upload
+
+
+# Debug logging
 if DEBUG:
     print(f"Debug mode is: {DEBUG}")
     print(f"Media files are stored in: {MEDIA_ROOT}")
