@@ -54,8 +54,15 @@ type CleanAirLayoutProps = {
 export default async function CleanAirLayout({
   children,
 }: CleanAirLayoutProps) {
-  const res = await getForumEvents();
-  const data = res ? res[0] : null;
+  let data = null;
+
+  try {
+    const res = await getForumEvents();
+    data = res ? res[0] : null;
+  } catch (error) {
+    console.error('Failed to fetch forum events:', error);
+    data = null;
+  }
 
   return (
     <ForumDataProvider data={data}>
