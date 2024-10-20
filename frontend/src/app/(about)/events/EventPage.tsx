@@ -137,7 +137,7 @@ const EventPage: React.FC = () => {
                   Read more
                 </CustomButton>
               </div>
-              <div className="flex-1 w-full mb-6 lg:mb-0">
+              <div className="flex justify-center items-center flex-1 w-full mb-6 lg:mb-0">
                 <Image
                   src={firstFeaturedEvent.event_image_url} // Full URL for event image
                   alt={firstFeaturedEvent.title}
@@ -146,7 +146,7 @@ const EventPage: React.FC = () => {
                   layout="responsive"
                   objectFit="cover"
                   priority
-                  className="rounded-lg shadow-md w-full max-h-[500px] object-cover h-auto"
+                  className="rounded-lg shadow-md w-full max-w-[500px] object-cover h-auto transition-transform duration-500 ease-in-out transform lg:hover:scale-110 cursor-pointer"
                 />
               </div>
             </div>

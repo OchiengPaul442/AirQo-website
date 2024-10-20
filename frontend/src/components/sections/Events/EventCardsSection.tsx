@@ -45,14 +45,14 @@ const EventCardsSection: React.FC<{
               style={{ maxHeight: '450px' }}
             >
               {/* Event Image */}
-              <div className="relative w-full h-[200px] mb-4 flex justify-center items-center overflow-hidden">
+              <div className="relative w-full rounded-t-lg h-[200px] mb-4 flex justify-center items-center overflow-hidden">
                 <Image
                   src={event.event_image_url}
                   alt={event.title}
                   layout="fill"
                   objectFit="cover"
                   objectPosition="center"
-                  className="rounded-t-lg"
+                  className="rounded-t-lg transition-transform duration-500 ease-in-out transform hover:scale-110 cursor-pointer"
                 />
               </div>
 

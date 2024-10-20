@@ -17,7 +17,7 @@ const BannerSection: React.FC<BannerSectionProps> = ({ data }) => {
   }
 
   return (
-    <div className="w-full pt-10 bg-white">
+    <div className="w-full pt-10 bg-white relative">
       <div className="max-w-5xl mx-auto flex flex-col-reverse md:flex-row items-center px-4 lg:px-0 justify-between gap-6">
         {/* Text Section */}
         <div className="md:w-[40%] space-y-6 flex flex-col justify-center h-full">
@@ -37,13 +37,13 @@ const BannerSection: React.FC<BannerSectionProps> = ({ data }) => {
         </div>
 
         {/* Image Section */}
-        <div className="md:w-1/2 w-full h-[350px]">
+        <div className="flex justify-center items-center md:w-1/2 h-[350px] w-full">
           <Image
             src={data.background_image}
             alt="Forum Image"
             width={600}
             height={350}
-            className="rounded-lg object-cover w-full h-full"
+            className="rounded-lg object-cover w-full h-full max-w-[500px] transition-transform duration-500 ease-in-out transform lg:hover:scale-110 cursor-pointer"
           />
         </div>
       </div>
