@@ -1,5 +1,5 @@
 'use client';
-import { CustomButton } from '@components/ui';
+import { CustomButton, NoData } from '@components/ui';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -27,15 +27,17 @@ const EventCardsSection: React.FC<{
   // Determine the events based on the selected tab
   const eventsToShow = selectedTab === 'upcoming' ? upcomingEvents : pastEvents;
   const noEventsMessage =
-    selectedTab === 'upcoming' ? 'No Upcoming Events' : 'No Past Events';
+    selectedTab === 'upcoming' ? (
+      <NoData message="No Upcoming Events" />
+    ) : (
+      <NoData message="No Past Events" />
+    );
 
   return (
     <section className="max-w-5xl mx-auto w-full mb-8 px-4 lg:px-0">
       {/* If there are no events to display */}
       {eventsToShow.length === 0 ? (
-        <div className="flex justify-center items-center py-20">
-          <p className="text-gray-600 text-xl">{noEventsMessage}</p>
-        </div>
+        noEventsMessage
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {eventsToShow.map((event) => (

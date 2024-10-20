@@ -1,5 +1,5 @@
 'use client';
-import { CustomButton, Pagination } from '@components/ui';
+import { CustomButton, NoData, Pagination } from '@components/ui';
 import { getPublications } from '@services/apiService';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -139,9 +139,7 @@ const ResourcePage: React.FC = () => {
           </div>
         ) : displayedResources.length === 0 ? (
           // No resources message
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No resources available</p>
-          </div>
+          <NoData />
         ) : (
           <div className="space-y-6">
             {displayedResources.map((resource, idx) => (

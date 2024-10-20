@@ -1,5 +1,5 @@
 'use client';
-import { CustomButton, Pagination } from '@components/ui';
+import { CustomButton, NoData, Pagination } from '@components/ui';
 import { getPressArticles } from '@services/apiService';
 import { format } from 'date-fns';
 import Image from 'next/image';
@@ -75,56 +75,58 @@ const PressPage: React.FC = () => {
       </section>
 
       {/* Articles Section */}
-      <section className="max-w-5xl mx-auto w-full px-4 lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <section>
         {loading ? (
           // Display 4 skeletons when loading
-          <>
+          <div className="max-w-5xl mx-auto w-full px-4 lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <ArticleSkeleton />
             <ArticleSkeleton />
             <ArticleSkeleton />
             <ArticleSkeleton />
-          </>
+          </div>
         ) : error ? (
-          <p className="text-lg">
+          <p className="text-lg text-red-500">
             Failed to load articles. Please try again later.
           </p>
         ) : displayedArticles.length > 0 ? (
-          displayedArticles.map((article, idx) => (
-            <div
-              key={article.id}
-              className={`p-8 lg:px-16 lg:py-12 space-y-6 rounded-lg shadow-sm transition-shadow hover:shadow-md bg-card-custom-gradient ${
-                idx === itemsPerPage ? 'lg:col-span-2' : ''
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-card-custom-gradient opacity-70 pointer-events-none"></div>
-                  <Image
-                    src={article.publisher_logo_url || '/default-logo.png'}
-                    alt={`logo`}
-                    width={100}
-                    height={30}
-                    className="object-contain mix-blend-multiply"
-                  />
-                </div>
-                <p className="text-gray-500 text-sm">
-                  {formatDate(article.date_published)}
-                </p>
-              </div>
-              <h2 className="text-2xl font-semibold">
-                {article.article_title}
-              </h2>
-              <p className="text-sm">{article.article_intro}</p>
-              <CustomButton
-                onClick={() => window.open(article.article_link, '_blank')}
-                className="text-black px-4 py-2 bg-transparent border border-black transition-colors mt-4"
+          <div className="max-w-5xl mx-auto w-full px-4 lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {displayedArticles.map((article, idx) => (
+              <div
+                key={article.id}
+                className={`p-8 lg:px-16 lg:py-12 space-y-6 rounded-lg shadow-sm transition-shadow hover:shadow-md bg-card-custom-gradient ${
+                  idx === itemsPerPage ? 'lg:col-span-2' : ''
+                }`}
               >
-                Read article →
-              </CustomButton>
-            </div>
-          ))
+                <div className="flex items-center justify-between">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-card-custom-gradient opacity-70 pointer-events-none"></div>
+                    <Image
+                      src={article.publisher_logo_url || '/default-logo.png'}
+                      alt={`logo`}
+                      width={100}
+                      height={30}
+                      className="object-contain mix-blend-multiply"
+                    />
+                  </div>
+                  <p className="text-gray-500 text-sm">
+                    {formatDate(article.date_published)}
+                  </p>
+                </div>
+                <h2 className="text-2xl font-semibold">
+                  {article.article_title}
+                </h2>
+                <p className="text-sm">{article.article_intro}</p>
+                <CustomButton
+                  onClick={() => window.open(article.article_link, '_blank')}
+                  className="text-black px-4 py-2 bg-transparent border border-black transition-colors mt-4"
+                >
+                  Read article →
+                </CustomButton>
+              </div>
+            ))}
+          </div>
         ) : (
-          <p className="text-lg">No press articles available at the moment.</p>
+          <NoData />
         )}
       </section>
 

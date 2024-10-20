@@ -1,6 +1,6 @@
 'use client';
 
-import { Accordion, CustomButton } from '@components/ui';
+import { Accordion, CustomButton, NoData } from '@components/ui';
 import { getEventDetails } from '@services/apiService';
 import { format, isSameMonth, parse } from 'date-fns';
 import Image from 'next/image';
@@ -123,6 +123,10 @@ const SingleEvent: React.FC<any> = ({ id }) => {
         <p className="text-red-500 text-lg">{error}</p>
       </div>
     );
+  }
+
+  if (!event) {
+    return <NoData />;
   }
 
   // Use the utility function directly with the event details (JSON string)

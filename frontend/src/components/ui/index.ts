@@ -54,4 +54,5 @@ export {
   navigationMenuTriggerStyle,
   NavigationMenuViewport,
 } from './navigation-menu';
+export { default as NoData } from './NoData';
 export { default as Pagination } from './Pagination';

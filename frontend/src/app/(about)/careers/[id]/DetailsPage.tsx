@@ -1,5 +1,5 @@
 'use client';
-import { CustomButton } from '@components/ui';
+import { CustomButton, NoData } from '@components/ui';
 import { getCareerDetails } from '@services/apiService';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -64,7 +64,7 @@ const DetailsPage: React.FC<any> = ({ id }) => {
   }
 
   if (!career) {
-    return <div className="text-center text-xl p-8">Career not found</div>;
+    return <NoData />;
   }
 
   return (

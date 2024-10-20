@@ -1,5 +1,5 @@
 'use client';
-import { CustomButton } from '@components/ui';
+import { CustomButton, NoData } from '@components/ui';
 import { getCareers, getDepartments } from '@services/apiService';
 import { isBefore, parseISO } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -133,9 +133,7 @@ const CareerPage: React.FC = () => {
         <section className="max-w-5xl mx-auto w-full px-4 lg:px-8 space-y-12">
           {/* Group by department and show number of open jobs */}
           {Object.keys(groupedJobsByDepartment).length === 0 ? (
-            <p className="text-center text-lg text-gray-500">
-              No open positions found.
-            </p>
+            <NoData message="No open positions found." />
           ) : (
             Object.keys(groupedJobsByDepartment).map((departmentName) => (
               <div key={departmentName} className="cursor-pointer">
