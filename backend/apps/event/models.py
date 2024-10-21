@@ -1,9 +1,9 @@
 # backend/apps/event/models.py
 from django.db import models
-from backend.utils.models import BaseModel
+from utils.models import BaseModel
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from backend.utils.fields import ConditionalImageField, ConditionalFileField
+from utils.fields import ConditionalImageField, ConditionalFileField
 from cloudinary.uploader import destroy
 from django_quill.fields import QuillField
 import os

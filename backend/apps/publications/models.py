@@ -1,8 +1,10 @@
 from django.db import models
-from backend.utils.models import BaseModel
-from backend.utils.fields import ConditionalFileField
+from utils.models import BaseModel
+from utils.fields import ConditionalFileField
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+
+
 class Publication(BaseModel):
     class CategoryTypes(models.TextChoices):
         Research = "research", "Research"

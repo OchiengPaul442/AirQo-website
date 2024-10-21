@@ -1,6 +1,6 @@
 from django.db import models
-from backend.utils.fields import ConditionalImageField
-from backend.utils.models import BaseModel
+from utils.fields import ConditionalImageField
+from utils.models import BaseModel
 
 
 class Member(BaseModel):

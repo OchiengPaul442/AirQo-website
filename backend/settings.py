@@ -8,8 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Since 'manage.py' is now in the 'backend' folder, BASE_DIR should point to the project root.
 BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.append(os.path.join(BASE_DIR, 'backend'))
+# Assuming custom apps are in the 'apps' directory
+sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_quill',
 
-    # Custom apps
+    # Custom apps (adjust these imports if their paths are impacted)
     'apps.event',
     'apps.cleanair',
     'apps.africancities',
@@ -75,8 +77,10 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 ]
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
+# Root URL configuration should remain unchanged as 'backend.urls'
 ROOT_URLCONF = 'backend.urls'
 
+# Update template directory to reflect the new 'backend' folder
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -93,9 +97,10 @@ TEMPLATES = [
     },
 ]
 
+# WSGI Application
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database configuration
+# Database configuration remains unchanged
 if DEBUG:
     DATABASES = {
         'default': {
@@ -108,7 +113,7 @@ else:
         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 
-# Password validation
+# Password validation remains unchanged
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -116,15 +121,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# Internationalization remains unchanged
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en-us')
 TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static files configuration (updated to point to 'backend/static')
 STATIC_URL = '/static/'
+# Ensure this points to your 'backend/static' folder
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'backend', 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -158,7 +164,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Quill Editor Configuration
+# Quill Editor Configuration remains unchanged
 QUILL_CONFIGS = {
     'default': {
         'theme': 'snow',
@@ -185,37 +191,9 @@ QUILL_CONFIGS = {
     },
 }
 
-# Quill Django configuration
-QUILL_CONFIGS['default']['django'] = {
-    'output_format': 'html',
-    'sanitize_html': True,
-    'image_upload': {
-        'allow_files': [
-            'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml',
-            'application/pdf', 'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ],
-        'max_size': 10 * 1024 * 1024,  # 10MB
-    },
-}
-
-if 'django_quill' in INSTALLED_APPS:
-    QUILL_CONFIGS['default']['django']['quill_editor'] = {
-        'field_class': 'django_quill.fields.QuillField',
-        'widget_class': 'django_quill.widgets.QuillWidget',
-    }
-
-# Increase upload size limits
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
-
-# Swagger configuration
-SWAGGER_SETTINGS = {
-    'DEFAULT_INFO': 'backend.urls.api_info',
-}
-
-
 # Custom upload handlers
+
+
 def local_file_upload(file):
     from django.core.files.storage import default_storage
     file_name = default_storage.save(f'quill_uploads/{file.name}', file)

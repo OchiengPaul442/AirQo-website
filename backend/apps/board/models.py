@@ -1,6 +1,6 @@
 from django.db import models
-from backend.utils.fields import ConditionalImageField
-from backend.utils.models import BaseModel
+from utils.fields import ConditionalImageField
+from utils.models import BaseModel
 
 
 class BoardMember(BaseModel):
@@ -26,7 +26,8 @@ class BoardMember(BaseModel):
 
     def get_picture_url(self):
         if self.picture:
-            return self.picture.url  # Secure URL is handled internally by Cloudinary or the file system
+            # Secure URL is handled internally by Cloudinary or the file system
+            return self.picture.url
         return None
 
 

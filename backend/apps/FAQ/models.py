@@ -1,5 +1,6 @@
 from django.db import models
-from backend.utils.models import BaseModel  
+from utils.models import BaseModel
+
 
 class FAQ(BaseModel):
     question = models.CharField(max_length=150)

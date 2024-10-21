@@ -1,8 +1,8 @@
 import cloudinary
 from django.conf import settings
 from django.db import models
-from backend.utils.models import BaseModel
-from backend.utils.fields import ConditionalImageField
+from utils.models import BaseModel
+from utils.fields import ConditionalImageField
 
 
 class Press(BaseModel):
@@ -19,6 +19,7 @@ class Press(BaseModel):
     )
 
     order = models.IntegerField(default=1)
+
     class WebsiteCategory(models.TextChoices):
         AIRQO = "airqo", "AirQo"
         CLEAN_AIR = "cleanair", "CleanAir"

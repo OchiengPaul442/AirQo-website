@@ -1,5 +1,5 @@
 from django.db import models
-from backend.utils.models import BaseModel
+from utils.models import BaseModel
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 

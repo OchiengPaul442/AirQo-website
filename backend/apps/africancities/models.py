@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db import models
-from backend.utils.fields import ConditionalImageField
-from backend.utils.models import BaseModel
+from utils.fields import ConditionalImageField
+from utils.models import BaseModel
+
 
 class AfricanCountry(BaseModel):
     country_name = models.CharField(max_length=100)
@@ -34,6 +35,7 @@ class AfricanCountry(BaseModel):
                 # Local development, ensure full URL
                 return request.build_absolute_uri(self.country_flag.url) if request else self.country_flag.url
         return None
+
 
 class City(BaseModel):
     city_name = models.CharField(max_length=100)

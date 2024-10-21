@@ -1,5 +1,6 @@
 from django.db import models
-from backend.utils.models import BaseModel
+from utils.models import BaseModel
+
 
 class ImpactNumber(BaseModel):
     african_cities = models.IntegerField(default=8)

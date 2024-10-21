@@ -1,7 +1,7 @@
 from django.db import models
 from django_quill.fields import QuillField
-from backend.utils.models import BaseModel
-from backend.utils.fields import ConditionalFileField, ConditionalImageField
+from utils.models import BaseModel
+from utils.fields import ConditionalFileField, ConditionalImageField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from enum import Enum
@@ -43,28 +43,41 @@ class ForumEvent(BaseModel):
     end_date = models.DateField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
-    introduction = QuillField(blank=True, null=True,default="No details available yet.")
-    speakers_text_section = QuillField(blank=True, null=True,default="No details available yet.")
-    committee_text_section = QuillField(blank=True, null=True,default="No details available yet.")
-    partners_text_section = QuillField(blank=True, null=True,default="No details available yet.")
+    introduction = QuillField(blank=True, null=True,
+                              default="No details available yet.")
+    speakers_text_section = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    committee_text_section = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    partners_text_section = QuillField(
+        blank=True, null=True, default="No details available yet.")
     registration_link = models.URLField(blank=True)
-    schedule_details = QuillField(blank=True, null=True,default="No details available yet.")
-    registration_details = QuillField(blank=True, null=True,default="No details available yet.")
-    sponsorship_opportunities_about = QuillField(blank=True, null=True,default="No details available yet.")
-    sponsorship_opportunities_schedule = QuillField(blank=True, null=True,default="No details available yet.")
-    sponsorship_opportunities_partners = QuillField(blank=True, null=True,default="No details available yet.")
-    sponsorship_packages = QuillField(blank=True, null=True,default="No details available yet.")
-    travel_logistics_vaccination_details = QuillField(blank=True, null=True,default="No details available yet.")
-    travel_logistics_visa_details = QuillField(blank=True, null=True,default="No details available yet.")
-    travel_logistics_accommodation_details = QuillField(blank=True, null=True,default="No details available yet.")
-    glossary_details = QuillField(blank=True, null=True,default="No details available yet.")
+    schedule_details = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    registration_details = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    sponsorship_opportunities_about = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    sponsorship_opportunities_schedule = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    sponsorship_opportunities_partners = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    sponsorship_packages = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    travel_logistics_vaccination_details = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    travel_logistics_visa_details = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    travel_logistics_accommodation_details = QuillField(
+        blank=True, null=True, default="No details available yet.")
+    glossary_details = QuillField(
+        blank=True, null=True, default="No details available yet.")
     unique_title = models.CharField(max_length=100, blank=True)
     background_image = ConditionalImageField(
         local_upload_to='events/images/', cloudinary_folder='website/uploads/events/images', null=True, blank=True)
     location_name = models.CharField(max_length=100, blank=True)
     location_link = models.URLField(blank=True)
     order = models.IntegerField(default=1)
-    
 
     class Meta:
         ordering = ['order', '-id']
@@ -156,7 +169,8 @@ class Partner(BaseModel):
 
 class Program(BaseModel):
     title = models.CharField(max_length=100)
-    sub_text = QuillField(blank=True, null=True,default="No details available yet.")
+    sub_text = QuillField(blank=True, null=True,
+                          default="No details available yet.")
     order = models.IntegerField(default=1)
     forum_event = models.ForeignKey(
         ForumEvent, null=True, blank=True, related_name="programs", on_delete=models.SET_NULL)
@@ -208,7 +222,8 @@ class Support(BaseModel):
 class Person(BaseModel):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100, blank=True)
-    bio = QuillField(blank=True, null=True,default="No details available yet.")
+    bio = QuillField(blank=True, null=True,
+                     default="No details available yet.")
     category = models.CharField(
         max_length=50, choices=CategoryChoices.choices(),
         default=CategoryChoices.SPEAKER.value)
