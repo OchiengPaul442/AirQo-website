@@ -146,7 +146,7 @@ const EventPage: React.FC = () => {
                   layout="responsive"
                   objectFit="cover"
                   priority
-                  className="rounded-lg shadow-md w-full max-w-[500px] object-cover h-auto transition-transform duration-500 ease-in-out transform lg:hover:scale-110 cursor-pointer"
+                  className="rounded-lg shadow-md w-full max-h-[400px] max-w-[500px] object-cover h-auto transition-transform duration-500 ease-in-out transform lg:hover:scale-110 cursor-pointer"
                 />
               </div>
             </div>

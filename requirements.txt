@@ -6,7 +6,6 @@ cloudinary==1.41.0
 diff-match-patch==20181111
 dj-database-url==2.2.0
 Django==4.2.16
-django-ckeditor==6.7.1
 django-cloudinary-storage==0.3.0
 django-cors-headers==4.5.0
 django-extensions==3.2.3
@@ -20,7 +19,7 @@ idna==3.10
 inflection==0.5.1
 packaging==24.1
 pillow==11.0.0
-psycopg2==2.9.10
+psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 python-monkey-business==1.1.0
 pytz==2024.2
