@@ -5,11 +5,11 @@ FROM node:18-alpine AS frontend-build
 WORKDIR /app/frontend
 
 # Copy the package.json and install dependencies
-COPY frontend/package*.json ./
+COPY ./frontend/package*.json ./
 RUN npm install
 
 # Copy the rest of the frontend source code
-COPY frontend/ ./
+COPY ./frontend/ ./
 
 # Build the Next.js application for production
 RUN npm run build
@@ -21,11 +21,11 @@ FROM python:3.11-slim AS backend
 WORKDIR /app/backend
 
 # Install dependencies for backend (Django)
-COPY backend/requirements.txt .
+COPY ./backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the backend source code
-COPY backend/ ./
+COPY ./backend/ ./
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
@@ -55,4 +55,3 @@ EXPOSE 8000 3000
 
 # Command to run backend and frontend
 CMD ["sh", "-c", "python /app/backend/manage.py runserver 0.0.0.0:8000 & npm --prefix /app/frontend run start"]
-
