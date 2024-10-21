@@ -1,19 +1,19 @@
 'use client';
 
-import PaginatedSection from '@components/sections/CleanAir/PaginatedSection';
-import {
-  getBoardMembers,
-  getExternalTeamMembers,
-  getPartners,
-  getTeamMembers,
-} from '@services/apiService';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { FaArrowRightLong } from 'react-icons/fa6';
 
-import { CustomButton, Divider, MemberCard } from '@/components/ui/';
-import { useDispatch } from '@/hooks';
+import PaginatedSection from '@/components/sections/CleanAir/PaginatedSection';
+import { CustomButton, Divider, MemberCard } from '@/components/ui';
+import { useDispatch } from '@/hooks/reduxHooks';
+import {
+  getBoardMembers,
+  getExternalTeamMembers,
+  getPartners,
+  getTeamMembers,
+} from '@/services/apiService';
 import { openModal } from '@/store/slices/modalSlice';
 
 /** Skeleton Loader Component **/

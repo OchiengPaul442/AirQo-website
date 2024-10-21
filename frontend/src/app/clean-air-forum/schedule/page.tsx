@@ -7,37 +7,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 import { renderContent } from '@/utils/quillUtils';
 
-// Define TypeScript types for the forum data
-interface Session {
-  start_time: string;
-  session_title: string;
-  session_details: string;
-}
-
-interface Program {
-  id: string;
-  title: string;
-  sub_text: string;
-  sessions: Session[];
-}
-
-interface ForumData {
-  schedule_details: string;
-  programs: Program[];
-  registration_details: string;
-  sponsorship_opportunities_schedule: string;
-}
-
-// Individual Accordion Item Component
-interface AccordionItemProps {
-  title: string;
-  subText: string;
-  sessions: Session[];
-  isOpen: boolean;
-  onToggle: () => void;
-}
-
-const AccordionItem: React.FC<AccordionItemProps> = ({
+const AccordionItem: React.FC<any> = ({
   title,
   subText,
   sessions,
@@ -71,7 +41,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
       {isOpen && (
         <div className="mt-4 pt-4">
-          {sessions.map((item, index) => (
+          {sessions.map((item: any, index: any) => (
             <div className="flex flex-col gap-4" key={index}>
               <Divider className="bg-black p-0 m-0 h-[1px] w-full max-w-5xl mx-auto" />
               <div className="grid grid-cols-12 gap-4 mb-4">
@@ -98,7 +68,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
 // Page Component that renders Accordion Items
 const Page = () => {
-  const data = useForumData() as ForumData; // Assume useForumData provides ForumData
+  const data = useForumData();
 
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
@@ -110,10 +80,6 @@ const Page = () => {
     return null;
   }
 
-  if (!data || !data.programs) {
-    return <p>No data available</p>;
-  }
-
   return (
     <div className="max-w-5xl mx-auto px-4 lg:px-0 flex flex-col gap-6">
       {/* Schedule Section */}
@@ -121,13 +87,13 @@ const Page = () => {
         <h2 className="text-2xl font-bold">Schedule</h2>
         <div
           dangerouslySetInnerHTML={{
-            __html: renderContent(data.schedule_details),
+            __html: renderContent(data?.schedule_details),
           }}
         />
       </div>
 
       {/* Programs Accordion */}
-      {data.programs.map((program) => (
+      {data?.programs.map((program: any) => (
         <AccordionItem
           key={program.id}
           title={program.title}
@@ -149,7 +115,7 @@ const Page = () => {
           <div
             className="md:w-2/3 space-y-4"
             dangerouslySetInnerHTML={{
-              __html: renderContent(data.registration_details),
+              __html: renderContent(data?.registration_details),
             }}
           />
         </div>
@@ -166,7 +132,7 @@ const Page = () => {
           <div
             className="md:w-2/3 space-y-4"
             dangerouslySetInnerHTML={{
-              __html: renderContent(data.sponsorship_opportunities_schedule),
+              __html: renderContent(data?.sponsorship_opportunities_schedule),
             }}
           />
         </div>

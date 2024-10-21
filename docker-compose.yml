@@ -1,11 +1,21 @@
-version: "3.8"
+version: "3.3" # You can adjust this to match a supported version if needed.
 
 services:
+  db:
+    image: postgres:13
+    ports:
+      - "5432:5432" # Using the default PostgreSQL port.
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-      target: backend-build
     command: bash -c "python manage.py migrate && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - "8000:8000"
@@ -18,24 +28,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: frontend-build
     ports:
       - "3000:3000"
     env_file:
       - ./frontend/.env
     depends_on:
       - backend
-
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
