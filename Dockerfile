@@ -5,7 +5,7 @@ FROM python:3.11-slim AS backend-build
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install PostgreSQL client to connect to an external database
+# Install PostgreSQL client to connect to an external database if needed
 RUN apt-get update && apt-get install -y libpq-dev
 
 # Set working directory
@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project
 COPY . .
 
-# Collect static files
+# Collect static files (if using Django's staticfiles feature)
 RUN python manage.py collectstatic --noinput
 
 # Expose backend port
@@ -47,7 +47,7 @@ COPY frontend/ .
 # Build the Next.js app for production
 RUN npm run build
 
-# Stage 3: Final Setup
+# Stage 3: Final Setup (Combine Backend and Frontend)
 FROM python:3.11-slim AS final-stage
 
 # Set environment variables
@@ -60,7 +60,7 @@ WORKDIR /app
 # Copy everything from the backend build stage
 COPY --from=backend-build /app /app
 
-# Copy the built frontend static files
+# Copy the built frontend static files into the backend's staticfiles folder (if using Django)
 COPY --from=frontend-build /app/frontend/.next /app/staticfiles/
 
 # Expose ports for both frontend and backend
