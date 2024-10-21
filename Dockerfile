@@ -1,70 +1,58 @@
-# Stage 1: Backend Setup (Django)
-FROM python:3.11-slim AS backend-build
-
-# Set environment variables for Python
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Install PostgreSQL client to connect to an external database if needed
-RUN apt-get update && apt-get install -y libpq-dev
-
-# Set working directory
-WORKDIR /app
-
-# Copy requirements.txt to the root
-COPY requirements.txt ./
-
-# Install backend dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the entire project
-COPY . .
-
-# Collect static files (if using Django's staticfiles feature)
-RUN python manage.py collectstatic --noinput
-
-# Expose backend port
-EXPOSE 8000
-
-# Command to start backend using Gunicorn
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
-
-# Stage 2: Frontend Setup (Next.js)
+# Stage 1: Build the Frontend (Next.js)
 FROM node:18-alpine AS frontend-build
 
-# Set working directory
+# Set working directory for frontend
 WORKDIR /app/frontend
 
-# Copy package.json and package-lock.json to the working directory
+# Copy the package.json and install dependencies
 COPY frontend/package*.json ./
+RUN npm install
 
-# Install frontend dependencies
-RUN npm install --production
+# Copy the rest of the frontend source code
+COPY frontend/ ./
 
-# Copy the rest of the frontend files
-COPY frontend/ .
-
-# Build the Next.js app for production
+# Build the Next.js application for production
 RUN npm run build
 
-# Stage 3: Final Setup (Combine Backend and Frontend)
-FROM python:3.11-slim AS final-stage
+# Stage 2: Backend (Django) Setup
+FROM python:3.11-slim AS backend
+
+# Set working directory for backend
+WORKDIR /app/backend
+
+# Install dependencies for backend (Django)
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the backend source code
+COPY backend/ ./
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Stage 3: Final Image (Combining Frontend & Backend)
+FROM python:3.11-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set working directory
+# Create app directories
 WORKDIR /app
 
-# Copy everything from the backend build stage
-COPY --from=backend-build /app /app
+# Copy backend files from the backend build stage
+COPY --from=backend /app/backend /app/backend
 
-# Copy the built frontend static files into the backend's staticfiles folder (if using Django)
-COPY --from=frontend-build /app/frontend/.next /app/staticfiles/
+# Copy frontend build files from the frontend build stage
+COPY --from=frontend-build /app/frontend/.next /app/frontend/.next
+COPY --from=frontend-build /app/frontend/public /app/frontend/public
 
-# Expose ports for both frontend and backend
+# Install backend dependencies
+COPY backend/requirements.txt backend/requirements.txt
+RUN pip install --no-cache-dir -r backend/requirements.txt
+
+# Expose ports for backend (Django) and frontend (Next.js)
 EXPOSE 8000 3000
 
-# Command to run both backend and frontend concurrently
-CMD ["bash", "-c", "gunicorn backend.wsgi:application --bind 0.0.0.0:8000 & npm run start --prefix frontend"]
+# Command to run backend and frontend
+CMD ["sh", "-c", "python /app/backend/manage.py runserver 0.0.0.0:8000 & npm --prefix /app/frontend run start"]
+
