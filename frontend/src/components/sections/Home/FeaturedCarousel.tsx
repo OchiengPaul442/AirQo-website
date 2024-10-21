@@ -1,8 +1,9 @@
-import { getHighlights } from '@services/apiService';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HiArrowSmallLeft, HiArrowSmallRight } from 'react-icons/hi2';
+
+import { getHighlights } from '@/services/apiService';
 
 const FeaturedCarousel = () => {
   const [highlights, setHighlights] = useState<any[]>([]);

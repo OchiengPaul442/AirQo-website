@@ -1,6 +1,5 @@
 'use client';
 
-import { getCleanAirResources } from '@services/apiService';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
@@ -13,6 +12,7 @@ import {
   NoData,
   Pagination,
 } from '@/components/ui';
+import { getCleanAirResources } from '@/services/apiService';
 
 // Define the structure of the fetched resource
 interface FetchedResource {

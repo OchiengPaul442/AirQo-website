@@ -1,10 +1,10 @@
 'use client';
-import { CustomButton, NoData, Pagination } from '@components/ui';
-import { getPressArticles } from '@services/apiService';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
+import { CustomButton, NoData, Pagination } from '@/components/ui';
+import { getPressArticles } from '@/services/apiService';
 import { PressArticle } from '@/types';
 
 const PressPage: React.FC = () => {

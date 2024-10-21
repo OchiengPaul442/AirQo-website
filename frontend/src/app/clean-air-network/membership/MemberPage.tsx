@@ -1,11 +1,12 @@
 // pages/members.tsx
 'use client';
 
-import PaginatedSection from '@components/sections/CleanAir/PaginatedSection';
-import RegisterBanner from '@components/sections/CleanAir/RegisterBanner';
-import { getPartners } from '@services/apiService';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+
+import PaginatedSection from '@/components/sections/CleanAir/PaginatedSection';
+import RegisterBanner from '@/components/sections/CleanAir/RegisterBanner';
+import { getPartners } from '@/services/apiService';
 
 const SkeletonPaginatedSection: React.FC = () => {
   return (

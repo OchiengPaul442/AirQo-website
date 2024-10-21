@@ -1,8 +1,9 @@
 'use client';
-import ContentSection from '@components/sections/CleanAir/ContentSection';
-import FeaturedEvent from '@components/sections/CleanAir/FeaturedEvent';
 import Image from 'next/image';
 import React from 'react';
+
+import ContentSection from '@/components/sections/CleanAir/ContentSection';
+import FeaturedEvent from '@/components/sections/CleanAir/FeaturedEvent';
 
 const CleanAirPage = () => {
   const goals = [

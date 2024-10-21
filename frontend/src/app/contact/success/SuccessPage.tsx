@@ -1,10 +1,11 @@
 'use client';
-import { CustomButton } from '@components/ui';
 import SuccessImage from '@public/assets/images/success/successImage.png';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+
+import { CustomButton } from '@/components/ui';
 
 const SuccessPage: React.FC = () => {
   const router = useRouter();

@@ -1,9 +1,10 @@
 'use client';
-import { CustomButton, NoData, Pagination } from '@components/ui';
-import { getPublications } from '@services/apiService';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
+
+import { CustomButton, NoData, Pagination } from '@/components/ui';
+import { getPublications } from '@/services/apiService';
 
 const ResourcePage: React.FC = () => {
   const router = useRouter();

@@ -1,4 +1,10 @@
 'use client';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FiChevronDown } from 'react-icons/fi';
+import { IoLocationSharp } from 'react-icons/io5';
+
 import {
   CustomButton,
   Dialog,
@@ -8,13 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
   Pagination,
-} from '@components/ui';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FiChevronDown } from 'react-icons/fi';
-import { IoLocationSharp } from 'react-icons/io5';
-
+} from '@/components/ui';
 import { useDispatch } from '@/hooks';
 import { setSelectedCountry } from '@/store/slices/countrySlice';
 

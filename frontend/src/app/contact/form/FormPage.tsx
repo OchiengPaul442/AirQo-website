@@ -1,11 +1,11 @@
 'use client';
 
-import { CustomButton } from '@components/ui';
 import { motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 
+import { CustomButton } from '@/components/ui';
 import { postContactUs } from '@/services/externalService';
 
 const FormPage: React.FC = () => {

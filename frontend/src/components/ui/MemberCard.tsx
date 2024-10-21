@@ -1,4 +1,3 @@
-import { cn } from '@lib/utils';
 import PlaceholderImage from '@public/assets/images/placeholder.webp';
 import Image from 'next/image';
 import React from 'react';
@@ -13,6 +12,7 @@ import {
   DialogTrigger,
   Divider,
 } from '@/components/ui/';
+import { cn } from '@/lib/utils';
 import { convertDeltaToHtml } from '@/utils/quillUtils';
 
 // Define types for member data

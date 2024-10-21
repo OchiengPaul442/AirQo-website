@@ -1,11 +1,12 @@
 'use client';
 
-import { CustomButton } from '@components/ui';
-import { getCleanAirEvents } from '@services/apiService';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiCalendar, FiClock } from 'react-icons/fi';
+
+import { CustomButton } from '@/components/ui';
+import { getCleanAirEvents } from '@/services/apiService';
 
 const FeaturedEvent: React.FC = () => {
   const router = useRouter();

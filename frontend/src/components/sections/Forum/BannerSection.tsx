@@ -1,9 +1,10 @@
-import { CustomButton } from '@components/ui';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from 'react-icons/fa';
+
+import { CustomButton } from '@/components/ui';
 
 import TabNavigation from './TabNavigation';
 

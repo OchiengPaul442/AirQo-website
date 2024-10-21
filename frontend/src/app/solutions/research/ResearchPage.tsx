@@ -1,10 +1,11 @@
 'use client';
 
-import { CustomButton, Divider } from '@components/ui';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+
+import { CustomButton, Divider } from '@/components/ui';
 
 // Define motion variants for different animations
 const containerVariants = {

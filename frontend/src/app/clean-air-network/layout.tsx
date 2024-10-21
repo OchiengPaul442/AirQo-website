@@ -1,9 +1,10 @@
-import ActionButtons2 from '@components/layouts/ActionButtons2';
-import Footer from '@components/layouts/Footer';
-import Navbar from '@components/layouts/Navbar';
-import TabNavigation from '@components/sections/CleanAir/TabNavigation';
 import { Metadata } from 'next';
 import React from 'react';
+
+import ActionButtons2 from '@/components/layouts/ActionButtons2';
+import Footer from '@/components/layouts/Footer';
+import Navbar from '@/components/layouts/Navbar';
+import TabNavigation from '@/components/sections/CleanAir/TabNavigation';
 
 export const metadata: Metadata = {
   title: 'Clean Air Network | AirQo Africa',

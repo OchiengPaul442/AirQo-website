@@ -1,6 +1,7 @@
-import { getAfricanCountries } from '@services/apiService';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+
+import { getAfricanCountries } from '@/services/apiService';
 
 const AfricanCities: React.FC = () => {
   const [countries, setCountries] = useState<any[]>([]);

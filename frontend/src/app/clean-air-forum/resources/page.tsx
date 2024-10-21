@@ -1,8 +1,9 @@
 'use client';
-import { Divider } from '@components/ui';
-import { useForumData } from '@context/ForumDataContext';
 import React, { useState } from 'react';
 import { FaChevronDown, FaChevronUp, FaFilePdf } from 'react-icons/fa';
+
+import { Divider } from '@/components/ui';
+import { useForumData } from '@/context/ForumDataContext';
 
 // Helper function to extract the file name from the URL
 const getFileNameFromUrl = (url: string) => {

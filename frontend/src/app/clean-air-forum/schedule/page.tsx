@@ -1,10 +1,10 @@
 'use client';
-import { Divider } from '@components/ui';
-import { useForumData } from '@context/ForumDataContext';
 import { format } from 'date-fns';
 import React, { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
+import { Divider } from '@/components/ui';
+import { useForumData } from '@/context/ForumDataContext';
 import { renderContent } from '@/utils/quillUtils';
 
 const AccordionItem: React.FC<any> = ({

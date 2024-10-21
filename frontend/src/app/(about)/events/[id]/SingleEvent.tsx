@@ -1,13 +1,13 @@
 'use client';
 
-import { Accordion, CustomButton, NoData } from '@components/ui';
-import { getEventDetails } from '@services/apiService';
 import { format, isSameMonth, parse } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiCalendar, FiClock } from 'react-icons/fi';
 
+import { Accordion, CustomButton, NoData } from '@/components/ui';
+import { getEventDetails } from '@/services/apiService';
 import { convertDeltaToHtml } from '@/utils/quillUtils';
 
 const SingleEvent: React.FC<any> = ({ id }) => {

@@ -1,8 +1,8 @@
 'use client';
-import { Divider, NoData } from '@components/ui';
-import { useForumData } from '@context/ForumDataContext';
 import React from 'react';
 
+import { Divider, NoData } from '@/components/ui';
+import { useForumData } from '@/context/ForumDataContext';
 import { renderContent } from '@/utils/quillUtils';
 
 const AboutPage = () => {

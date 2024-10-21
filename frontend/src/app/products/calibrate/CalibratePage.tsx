@@ -1,9 +1,10 @@
 'use client';
 
-import { CustomButton } from '@components/ui';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
+
+import { CustomButton } from '@/components/ui';
 
 // Define motion variants for different animations
 const containerVariants = {

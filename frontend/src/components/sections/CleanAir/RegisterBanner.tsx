@@ -1,6 +1,7 @@
 'use client';
-import { CustomButton } from '@components/ui';
 import Image from 'next/image';
+
+import { CustomButton } from '@/components/ui';
 
 const RegisterBanner = () => {
   return (

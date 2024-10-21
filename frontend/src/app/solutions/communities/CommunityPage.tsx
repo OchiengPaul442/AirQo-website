@@ -1,11 +1,11 @@
 'use client';
 
-import { CustomButton } from '@components/ui';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+import { CustomButton } from '@/components/ui';
 import { useDispatch } from '@/hooks';
 import { openModal } from '@/store/slices/modalSlice';
 

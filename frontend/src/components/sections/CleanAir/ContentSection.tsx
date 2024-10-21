@@ -1,9 +1,10 @@
 'use client';
-import { CustomButton } from '@components/ui';
-import { cn } from '@lib/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { ReactNode } from 'react';
+
+import { CustomButton } from '@/components/ui';
+import { cn } from '@/lib/utils';
 
 interface ContentSectionProps {
   subtitle?: string;

@@ -1,10 +1,11 @@
 'use client';
-import { CustomButton, NoData } from '@components/ui';
-import { getCareerDetails } from '@services/apiService';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
+
+import { CustomButton, NoData } from '@/components/ui';
+import { getCareerDetails } from '@/services/apiService';
 
 const DetailsPage: React.FC<any> = ({ id }) => {
   const [career, setCareer] = useState<any>(null);

@@ -10,9 +10,10 @@ import Network from '@public/assets/svgs/ImpactNumbers/Network.svg';
 import Partners from '@public/assets/svgs/ImpactNumbers/Partners.svg';
 import Publications from '@public/assets/svgs/ImpactNumbers/Publications.svg';
 import Records from '@public/assets/svgs/ImpactNumbers/Records.svg';
-import { getImpactNumbers } from '@services/apiService';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+
+import { getImpactNumbers } from '@/services/apiService';
 
 import { CustomButton } from '../../ui';
 

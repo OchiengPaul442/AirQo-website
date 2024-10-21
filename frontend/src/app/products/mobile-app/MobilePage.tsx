@@ -1,9 +1,10 @@
 'use client';
 
-import AppDownloadSection from '@components/sections/Home/AppDownloadSection';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
+
+import AppDownloadSection from '@/components/sections/Home/AppDownloadSection';
 
 // Define motion variants for different animations
 const containerVariants = {

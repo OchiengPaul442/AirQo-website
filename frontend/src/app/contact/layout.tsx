@@ -1,6 +1,7 @@
-import Navbar from '@components/layouts/Navbar';
 import { Metadata } from 'next';
 import React from 'react';
+
+import Navbar from '@/components/layouts/Navbar';
 
 export const metadata: Metadata = {
   title: 'Contact Us | AirQo - Get in Touch for Air Quality Solutions',

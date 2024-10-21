@@ -1,7 +1,7 @@
 'use client';
-import { CustomButton } from '@components/ui';
 import React, { useState } from 'react';
 
+import { CustomButton } from '@/components/ui';
 import { subscribeToNewsletter } from '@/services/externalService';
 
 const NewsLetter: React.FC = () => {

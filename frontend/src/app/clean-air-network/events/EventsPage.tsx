@@ -1,14 +1,13 @@
 'use client';
 
-import EventCard from '@components/sections/CleanAir/EventCard';
-import EventSkeleton from '@components/sections/CleanAir/EventSkeleton';
-import RegisterBanner from '@components/sections/CleanAir/RegisterBanner';
-import { getCleanAirEvents } from '@services/apiService';
 import { format, isAfter, isBefore } from 'date-fns';
 import Image from 'next/image';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
+import EventCard from '@/components/sections/CleanAir/EventCard';
+import EventSkeleton from '@/components/sections/CleanAir/EventSkeleton';
+import RegisterBanner from '@/components/sections/CleanAir/RegisterBanner';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +15,7 @@ import {
   DropdownMenuTrigger,
   Pagination,
 } from '@/components/ui';
+import { getCleanAirEvents } from '@/services/apiService';
 
 const months = [
   'January',

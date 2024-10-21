@@ -1,12 +1,13 @@
 'use client';
-import EventCardsSection from '@components/sections/Events/EventCardsSection';
-import { CustomButton } from '@components/ui';
-import { getAirQoEvents } from '@services/apiService';
 import { format, isSameMonth, parse } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiCalendar, FiClock } from 'react-icons/fi';
+
+import EventCardsSection from '@/components/sections/Events/EventCardsSection';
+import { CustomButton } from '@/components/ui';
+import { getAirQoEvents } from '@/services/apiService';
 
 const EventPage: React.FC = () => {
   const router = useRouter();

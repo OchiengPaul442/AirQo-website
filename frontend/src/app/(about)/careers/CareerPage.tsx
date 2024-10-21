@@ -1,10 +1,11 @@
 'use client';
-import { CustomButton, NoData } from '@components/ui';
-import { getCareers, getDepartments } from '@services/apiService';
 import { isBefore, parseISO } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
+
+import { CustomButton, NoData } from '@/components/ui';
+import { getCareers, getDepartments } from '@/services/apiService';
 
 const CareerPage: React.FC = () => {
   const router = useRouter();

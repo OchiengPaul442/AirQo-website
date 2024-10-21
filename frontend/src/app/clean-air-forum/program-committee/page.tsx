@@ -1,8 +1,8 @@
 'use client';
-import { useForumData } from '@context/ForumDataContext';
 import React, { useMemo, useState } from 'react';
 
 import { Divider, MemberCard, Pagination } from '@/components/ui/';
+import { useForumData } from '@/context/ForumDataContext';
 import { renderContent } from '@/utils/quillUtils';
 
 const Page: React.FC = () => {

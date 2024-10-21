@@ -1,6 +1,7 @@
-import MainLayout from '@components/layouts/MainLayout';
 import { Metadata } from 'next';
 import React from 'react';
+
+import MainLayout from '@/components/layouts/MainLayout';
 
 export const metadata: Metadata = {
   title: 'AirQo Solutions | Air Quality for African Cities and Communities',

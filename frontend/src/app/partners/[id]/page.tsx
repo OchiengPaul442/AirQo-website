@@ -1,9 +1,10 @@
 'use client';
 
-import { getPartnerDetails } from '@services/apiService';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+
+import { getPartnerDetails } from '@/services/apiService';
 
 // Define the types for the partner and description data
 interface PartnerDescription {

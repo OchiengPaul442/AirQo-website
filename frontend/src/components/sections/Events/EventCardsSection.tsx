@@ -1,10 +1,11 @@
 'use client';
-import { CustomButton, NoData } from '@components/ui';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FiCalendar } from 'react-icons/fi';
+
+import { CustomButton, NoData } from '@/components/ui';
 
 const EventCardsSection: React.FC<{
   selectedTab: string;
