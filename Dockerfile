@@ -36,6 +36,11 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
+# Install Node.js and npm in the final stage to run frontend
+RUN apt-get update && apt-get install -y curl \
+  && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+  && apt-get install -y nodejs
+
 # Create app directories
 WORKDIR /app
 
@@ -53,5 +58,9 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 # Expose ports for backend (Django) and frontend (Next.js)
 EXPOSE 8000 3000
 
-# Command to run backend and frontend
-CMD ["sh", "-c", "python /app/backend/manage.py runserver 0.0.0.0:8000 & npm --prefix /app/frontend run start"]
+# Copy the script that starts both services
+COPY start_services.sh /app/start_services.sh
+RUN chmod +x /app/start_services.sh
+
+# Command to run backend first, then frontend
+CMD ["/app/start_services.sh"]

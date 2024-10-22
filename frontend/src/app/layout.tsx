@@ -1,5 +1,5 @@
 'use client';
-import '@/Styles/globals.scss';
+import '@/styles/globals.scss';
 
 import localFont from 'next/font/local';
 import { useEffect, useState } from 'react';
