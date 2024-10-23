@@ -26,7 +26,6 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
     container_name: django-backend
     env_file:
       - ./backend/.env
@@ -43,7 +42,6 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
     container_name: nextjs-frontend
     env_file:
       - ./frontend/.env
@@ -52,11 +50,8 @@ services:
     depends_on:
       - backend
     networks:
-      - frontend-network
       - backend-network
 
 networks:
   backend-network:
-    driver: bridge
-  frontend-network:
     driver: bridge
