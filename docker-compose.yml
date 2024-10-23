@@ -1,5 +1,3 @@
-######## For development purposes only.#######
-# `docker-compose` is a tool for defining and running multi-container Docker applications.
 # Ensure to install Docker and Docker Compose before running this file.
 # This file is used to define the services and their configurations for the AirQo-website project.
 # It is used by the docker-compose command to start and manage the containers.
@@ -31,7 +29,6 @@ services:
     container_name: django-backend
     env_file:
       - ./backend/.env
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "backend.wsgi:application"]
     volumes:
       - ./backend:/app
     ports:
@@ -57,7 +54,7 @@ services:
       - frontend-network
       - backend-network
 
-  # This service is used to run the database if you have local development setup db.
+  # For development purposes only.
   # db:
   #   image: postgres:13
   #   container_name: postgres-db

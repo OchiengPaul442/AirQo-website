@@ -4,9 +4,9 @@ FROM node:18-alpine
 # Set the working directory
 WORKDIR /app
 
-# Copy the package files and install dependencies
+# Copy the package files and install dependencies (only copy package.json and lock files first to cache node_modules)
 COPY package*.json ./
-RUN npm install
+RUN npm install --frozen-lockfile
 
 # Copy the rest of the frontend code
 COPY . .

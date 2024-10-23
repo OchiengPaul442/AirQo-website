@@ -4,11 +4,11 @@ FROM python:3.9-slim
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy requirements and install dependencies
+# Copy requirements and install dependencies (This layer can be cached if requirements don't change)
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the backend code into the container
+# Copy the rest of the backend code into the container (only after installing dependencies)
 COPY . .
 
 # Ensure environment variables are read and some Django-specific settings
