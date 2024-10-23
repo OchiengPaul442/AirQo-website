@@ -23,36 +23,63 @@
 #   docker-compose ps
 
 version: "3.3"
+
 services:
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend:/app/backend
+      context: ./backend
+    container_name: django-backend
     env_file:
       - ./backend/.env
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "backend.wsgi:application"]
+    volumes:
+      - ./backend:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - backend-network
 
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/app/frontend
+      context: ./frontend
+    container_name: nextjs-frontend
     env_file:
       - ./frontend/.env
+    volumes:
+      - ./frontend:/app
     ports:
       - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - frontend-network
+      - backend-network
 
-  db:
-    image: postgres:13
-    env_file:
-      - ./backend/.env
-    ports:
-      - "5432:5432"
+  # This service is used to run the database if you have local development setup db.
+  # db:
+  #   image: postgres:13
+  #   container_name: postgres-db
+  #   env_file:
+  #     - ./backend/.env
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "2023:2023"
+  #   networks:
+  #     - backend-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -p 2023"]
+  #     interval: 10s
+  #     retries: 5
+  #     start_period: 30s
+
+volumes:
+  postgres_data:
+
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
