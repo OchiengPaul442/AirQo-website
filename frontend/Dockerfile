@@ -21,5 +21,8 @@ RUN npm run build
 # Expose the frontend port (default Next.js is 3000)
 EXPOSE 3000
 
+# Run the frontend service as root
+USER root
+
 # Wait for the backend to be ready, then start the frontend
-CMD ["/app/wait-for-it.sh", "django-backend:8000", "--", "npm", "run", "start"]
+CMD ["/app/wait-for-it.sh", "django-backend", "8000", "--", "npm", "run", "start"]

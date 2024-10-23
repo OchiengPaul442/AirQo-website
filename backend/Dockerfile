@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the backend code into the container (only after installing dependencies)
+# Copy the rest of the backend code into the container
 COPY . .
 
 # Ensure environment variables are read and some Django-specific settings
@@ -23,6 +23,9 @@ COPY entrypoint.sh /app/entrypoint.sh
 
 # Add execution permissions to entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
+
+# Run the entrypoint script as root
+USER root
 
 # Run the entrypoint script
 ENTRYPOINT ["/app/entrypoint.sh"]
