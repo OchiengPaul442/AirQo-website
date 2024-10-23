@@ -25,4 +25,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Wait for the backend to be ready, then start the frontend
-CMD ["/app/wait-for-it.sh", "django-backend", "8000", "--", "npm", "run", "start"]
+CMD ["/bin/bash", "/app/wait-for-it.sh", "django-backend:8000", "--", "npm", "run", "start"]
