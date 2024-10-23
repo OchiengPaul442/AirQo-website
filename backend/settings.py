@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# Since 'manage.py' is now in the 'backend' folder, BASE_DIR should point to the project root.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Assuming custom apps are in the 'apps' directory
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
@@ -23,7 +23,6 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 INSTALLED_APPS = [
-    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +40,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_quill',
 
-    # Custom apps (adjust these imports if their paths are impacted)
+    # Custom apps
     'apps.event',
     'apps.cleanair',
     'apps.africancities',
@@ -77,10 +76,10 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 ]
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
-# Root URL configuration should remain unchanged as 'backend.urls'
+# Root URL configuration
 ROOT_URLCONF = 'backend.urls'
 
-# Update template directory to reflect the new 'backend' folder
+# Template configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -100,7 +99,7 @@ TEMPLATES = [
 # WSGI Application
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database configuration remains unchanged
+# Database configuration
 if DEBUG:
     DATABASES = {
         'default': {
@@ -113,7 +112,7 @@ else:
         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 
-# Password validation remains unchanged
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -121,16 +120,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization remains unchanged
+# Internationalization
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en-us')
 TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files configuration (updated to point to 'backend/static')
+# Static files configuration
 STATIC_URL = '/static/'
-# Ensure this points to your 'backend/static' folder
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'backend', 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -164,7 +162,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Quill Editor Configuration remains unchanged
+# Quill Editor Configuration
 QUILL_CONFIGS = {
     'default': {
         'theme': 'snow',
@@ -172,9 +170,9 @@ QUILL_CONFIGS = {
             'toolbar': [
                 [{'header': [1, 2, 3, 4, 5, 6, False]}],
                 ['bold', 'italic', 'underline', 'strike',
-                    'blockquote', 'code-block'],
+                 'blockquote', 'code-block'],
                 [{'list': 'ordered'}, {'list': 'bullet'},
-                    {'indent': '-1'}, {'indent': '+1'}],
+                 {'indent': '-1'}, {'indent': '+1'}],
                 [{'direction': 'rtl'}],
                 [{'size': ['small', False, 'large', 'huge']}],
                 [{'color': []}, {'background': []}],
@@ -212,7 +210,6 @@ if DEBUG:
     QUILL_UPLOAD_HANDLER = local_file_upload
 else:
     QUILL_UPLOAD_HANDLER = cloudinary_file_upload
-
 
 # Debug logging
 if DEBUG:
