@@ -71,11 +71,17 @@ MIDDLEWARE = [
 
 # CORS Configuration
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
-CORS_ORIGIN_REGEX_WHITELIST = [
-    pattern.strip() for pattern in os.getenv('CORS_ORIGIN_REGEX_WHITELIST', '').split(',')
-]
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+# Handle CORS_ALLOWED_ORIGINS
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv(
+    'CORS_ALLOWED_ORIGINS', '').split(',')]
+
+# Handle CORS_ORIGIN_REGEX_WHITELIST
+CORS_ORIGIN_REGEX_WHITELIST = [regex.strip() for regex in os.getenv(
+    'CORS_ORIGIN_REGEX_WHITELIST', '').split(',')]
+
+# Handle CSRF_TRUSTED_ORIGINS
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv(
+    'CSRF_TRUSTED_ORIGINS', '').split(',')]
 
 # Root URL configuration
 ROOT_URLCONF = 'core.urls'
