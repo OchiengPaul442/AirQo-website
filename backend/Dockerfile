@@ -1,22 +1,26 @@
 # Backend Dockerfile
 FROM python:3.9-slim
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
 # Copy requirements and install dependencies
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the backend code
+# Copy the rest of the backend code into the container
 COPY . .
 
-# Ensure environment variables are read
+# Ensure environment variables are read and some Django-specific settings
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Expose the Django application port (change if needed)
+# Expose the port the Django app will run on
 EXPOSE 8000
 
-# Run the Django app using gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "backend.wsgi:application"]
+# Copy and set entrypoint
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Run the entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
