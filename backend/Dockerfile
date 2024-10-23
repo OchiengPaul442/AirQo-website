@@ -20,6 +20,8 @@ EXPOSE 8000
 
 # Copy and set entrypoint
 COPY entrypoint.sh /app/entrypoint.sh
+
+# Add execution permissions to entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 # Run the entrypoint script

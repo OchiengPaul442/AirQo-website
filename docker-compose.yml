@@ -33,8 +33,6 @@ services:
       - ./backend:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     networks:
       - backend-network
 
@@ -53,27 +51,6 @@ services:
     networks:
       - frontend-network
       - backend-network
-
-  # For development purposes only.
-  # db:
-  #   image: postgres:13
-  #   container_name: postgres-db
-  #   env_file:
-  #     - ./backend/.env
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "2023:2023"
-  #   networks:
-  #     - backend-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -p 2023"]
-  #     interval: 10s
-  #     retries: 5
-  #     start_period: 30s
-
-volumes:
-  postgres_data:
 
 networks:
   backend-network:
