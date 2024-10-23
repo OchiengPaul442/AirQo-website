@@ -71,6 +71,7 @@ MIDDLEWARE = [
 
 # CORS Configuration
 CORS_ORIGIN_ALLOW_ALL = False
+
 # Handle CORS_ALLOWED_ORIGINS
 CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv(
     'CORS_ALLOWED_ORIGINS', '').split(',')]
@@ -82,6 +83,13 @@ CORS_ORIGIN_REGEX_WHITELIST = [regex.strip() for regex in os.getenv(
 # Handle CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv(
     'CSRF_TRUSTED_ORIGINS', '').split(',')]
+
+# Only allow CSRF cookie over HTTPS (recommended for production)
+if DEBUG:
+    CSRF_COOKIE_SECURE = False
+else:
+    CSRF_COOKIE_SECURE = True
+
 
 # Root URL configuration
 ROOT_URLCONF = 'core.urls'
