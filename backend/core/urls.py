@@ -36,7 +36,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # API routes
+    # API routes from custom apps in the 'apps' folder
     path('api/', include('apps.press.urls')),
     path('api/', include('apps.impact.urls')),
     path('api/', include('apps.event.urls')),

@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Adjusting BASE_DIR to point to the backend folder level
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Assuming custom apps are in the 'apps' directory
+# Add the apps directory to the Python path
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -77,13 +78,13 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 # Root URL configuration
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'core.urls'
 
 # Template configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'backend', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,7 +98,7 @@ TEMPLATES = [
 ]
 
 # WSGI Application
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database configuration
 if DEBUG:
@@ -128,8 +129,9 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files configuration
+# Point STATICFILES_DIRS to the correct path for the 'static' folder inside 'backend'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'backend', 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -170,9 +172,9 @@ QUILL_CONFIGS = {
             'toolbar': [
                 [{'header': [1, 2, 3, 4, 5, 6, False]}],
                 ['bold', 'italic', 'underline', 'strike',
-                 'blockquote', 'code-block'],
+                    'blockquote', 'code-block'],
                 [{'list': 'ordered'}, {'list': 'bullet'},
-                 {'indent': '-1'}, {'indent': '+1'}],
+                    {'indent': '-1'}, {'indent': '+1'}],
                 [{'direction': 'rtl'}],
                 [{'size': ['small', False, 'large', 'huge']}],
                 [{'color': []}, {'background': []}],
