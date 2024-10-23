@@ -14,7 +14,7 @@ sys.path.append(str(BASE_DIR))
 def main():
     """Run administrative tasks."""
     # Ensure DJANGO_SETTINGS_MODULE points to 'backend.settings'
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
     try:
         from django.core.management import execute_from_command_line
