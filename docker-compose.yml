@@ -44,7 +44,7 @@ services:
       context: ./frontend
     container_name: nextjs-frontend
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.production
     ports:
       - "3000:3000"
     depends_on:
