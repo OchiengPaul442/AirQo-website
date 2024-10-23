@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Run migrations
+# Run Django migrations
 python manage.py migrate --noinput
 
 # Collect static files
 python manage.py collectstatic --noinput
 
-# Start the application
-gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+# Start Gunicorn
+exec gunicorn backend.wsgi:application --bind 0.0.0.0:8000 --workers 3 --log-level info

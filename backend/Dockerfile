@@ -4,7 +4,7 @@ FROM python:3.9-slim
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy requirements and install dependencies (This layer can be cached if requirements don't change)
+# Copy requirements and install dependencies
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -15,16 +15,16 @@ COPY . .
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Run Django collectstatic command to gather static files (for production)
+RUN python manage.py collectstatic --noinput
+
 # Expose the port the Django app will run on
 EXPOSE 8000
-
-# Copy and set entrypoint
-COPY entrypoint.sh /app/entrypoint.sh
 
 # Add execution permissions to entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Run the entrypoint script as root
+# Set the correct permissions to run as root (optional)
 USER root
 
 # Run the entrypoint script
