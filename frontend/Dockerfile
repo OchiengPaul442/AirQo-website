@@ -1,7 +1,7 @@
 # Frontend Dockerfile
 FROM node:18-alpine
 
-# Install bash for wait-for-it script
+# Install bash and curl for wait-for-it script
 RUN apk add --no-cache bash curl
 
 # Set the working directory
@@ -22,11 +22,14 @@ RUN chmod +x /app/wait-for-it.sh
 ARG NEXT_PUBLIC_DJANGO_API_URL
 ENV NEXT_PUBLIC_DJANGO_API_URL=${NEXT_PUBLIC_DJANGO_API_URL}
 
+# Wait for the backend to be ready before building
+RUN /bin/bash /app/wait-for-it.sh backend:8000 -- echo "Backend is up, proceeding with build."
+
 # Build the Next.js app
 RUN npm run build
 
 # Expose the frontend port (default Next.js is 3000)
 EXPOSE 3000
 
-# Wait for the backend to be ready, then start the frontend
-CMD ["/bin/bash", "/app/wait-for-it.sh", "backend:8000", "--", "npm", "run", "start"]
+# Start the frontend
+CMD ["npm", "run", "start"]
