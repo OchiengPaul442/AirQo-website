@@ -1,8 +1,11 @@
 # Frontend Dockerfile
 FROM node:18-alpine
 
-# Install bash and curl for wait-for-it script
+# Install bash and dockerize
 RUN apk add --no-cache bash curl
+RUN wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-v0.6.1.tar.gz \
+    && rm dockerize-alpine-linux-amd64-v0.6.1.tar.gz
 
 # Set the working directory
 WORKDIR /app
@@ -14,16 +17,12 @@ RUN npm install --frozen-lockfile
 # Copy the rest of the frontend code
 COPY . .
 
-# Copy and set permissions for wait-for-it.sh
-COPY wait-for-it.sh /app/wait-for-it.sh
-RUN chmod +x /app/wait-for-it.sh
-
 # Accept the build argument and set it as an environment variable
 ARG NEXT_PUBLIC_DJANGO_API_URL
 ENV NEXT_PUBLIC_DJANGO_API_URL=${NEXT_PUBLIC_DJANGO_API_URL}
 
 # Wait for the backend to be ready before building
-RUN /bin/bash /app/wait-for-it.sh backend:8000 -- echo "Backend is up, proceeding with build."
+RUN dockerize -wait tcp://backend:8000 -timeout 60s
 
 # Build the Next.js app
 RUN npm run build
