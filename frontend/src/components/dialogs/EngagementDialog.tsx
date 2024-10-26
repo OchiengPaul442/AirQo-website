@@ -45,7 +45,8 @@ const options: EngagementOption[] = [
   },
   {
     title: "I'm a Developer.",
-    description: 'Interested in air quality data API',
+    description:
+      'Interested in establishing an Air Quality Network, utilizing the AirQo API, or both.',
     icon: '💻',
     category: 'developers',
   },
@@ -419,7 +420,9 @@ const EngagementDialog = () => {
                         <h3 className="font-bold text-gray-900">
                           {item.title}
                         </h3>
-                        <p className="text-gray-500">{item.description}</p>
+                        <p className="text-gray-500 text-sm">
+                          {item.description}
+                        </p>
                       </div>
                     </motion.div>
                   ))
