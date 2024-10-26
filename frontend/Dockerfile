@@ -14,9 +14,12 @@ RUN npm install --frozen-lockfile
 # Copy the rest of the frontend code
 COPY . .
 
-# Download wait-for-it.sh for waiting on backend service
-COPY wait-for-it.sh /app/wait-for-it.sh
-RUN chmod +x /app/wait-for-it.sh
+# Get the environment variables from build arguments
+ARG NEXT_PUBLIC_DJANGO_API_URL
+ENV NEXT_PUBLIC_DJANGO_API_URL=${NEXT_PUBLIC_DJANGO_API_URL}
+
+RUN echo "NEXT_PUBLIC_DJANGO_API_URL is $NEXT_PUBLIC_DJANGO_API_URL"
+
 
 # Build the Next.js app
 RUN npm run build
@@ -25,4 +28,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Wait for the backend to be ready, then start the frontend
-CMD ["/bin/bash", "/app/wait-for-it.sh", "django-backend:8000", "--", "npm", "run", "start"]
+CMD ["/bin/bash", "/app/wait-for-it.sh", "backend:8000", "--", "npm", "run", "start"]
