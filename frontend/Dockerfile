@@ -2,7 +2,7 @@
 FROM node:18-alpine
 
 # Install bash for wait-for-it script
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash curl
 
 # Set the working directory
 WORKDIR /app
@@ -14,12 +14,13 @@ RUN npm install --frozen-lockfile
 # Copy the rest of the frontend code
 COPY . .
 
-# Get the environment variables from build arguments
+# Copy and set permissions for wait-for-it.sh
+COPY wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
+
+# Accept the build argument and set it as an environment variable
 ARG NEXT_PUBLIC_DJANGO_API_URL
 ENV NEXT_PUBLIC_DJANGO_API_URL=${NEXT_PUBLIC_DJANGO_API_URL}
-
-RUN echo "NEXT_PUBLIC_DJANGO_API_URL is $NEXT_PUBLIC_DJANGO_API_URL"
-
 
 # Build the Next.js app
 RUN npm run build
