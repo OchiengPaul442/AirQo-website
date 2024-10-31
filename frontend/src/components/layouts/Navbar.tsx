@@ -1,11 +1,13 @@
 'use client';
+import { motion, useAnimation } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { RiCloseLargeFill } from 'react-icons/ri';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RiCloseFill } from 'react-icons/ri';
 import { TbChevronDown, TbMenu } from 'react-icons/tb';
 
+import TabNavigation from '@/components/sections/CleanAir/TabNavigation';
 import { CustomButton } from '@/components/ui';
 import {
   NavigationMenu,
@@ -89,13 +91,29 @@ const menuItems: MenuItems = {
   ],
 };
 
-// Helper component for rendering dropdown items
-interface DropdownMenuContentProps {
-  title: string;
-  items: MenuItem[];
+// Custom hook to track scroll direction
+function useScrollDirection() {
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(
+    null,
+  );
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrollDirection(currentScrollY > lastScrollY ? 'down' : 'up');
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  return scrollDirection;
 }
 
-const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
+// Helper component for rendering dropdown items
+const DropdownMenuContent: React.FC<{ title: string; items: MenuItem[] }> = ({
   title,
   items,
 }) => (
@@ -136,42 +154,58 @@ const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const scrollDirection = useScrollDirection();
+  const controls = useAnimation();
+  const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
+  const toggleExpandedMenu = useCallback(
+    (menuName: string) =>
+      setExpandedMenu((prev) => (prev === menuName ? null : menuName)),
+    [],
+  );
 
-  const toggleExpandedMenu = (menuName: string) => {
-    setExpandedMenu(expandedMenu === menuName ? null : menuName);
-  };
+  const handleLinkClick = useCallback(() => {
+    setMenuOpen(false);
+    setExpandedMenu(null);
+  }, []);
+
+  useEffect(() => {
+    if (scrollDirection === 'down') {
+      controls.start({ y: '-100%', transition: { duration: 0.3 } });
+    } else if (scrollDirection === 'up') {
+      controls.start({ y: '0%', transition: { duration: 0.3 } });
+    }
+  }, [scrollDirection, controls]);
 
   return (
-    <div>
-      {pathname !== '/clean-air-network/about' && <NotificationBanner />}
+    <motion.nav
+      animate={controls}
+      className="w-full bg-white sticky top-0 left-0 z-50"
+    >
+      {!pathname.startsWith('/clean-air-network') && <NotificationBanner />}
       <nav className="w-full bg-white p-4">
         <div className="flex items-center justify-between max-w-5xl mx-auto">
           {/* Logo Section */}
-          <div className="flex items-center">
-            <Link href="/" passHref>
-              <Image
-                src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728138368/website/Logos/logo_rus4my.png"
-                alt="AirQo"
-                width={71}
-                height={48}
-                className="h-10 w-auto cursor-pointer"
-              />
-            </Link>
-          </div>
+          <Link href="/" passHref className="flex items-center">
+            <Image
+              src="https://res.cloudinary.com/dbibjvyhm/image/upload/v1728138368/website/Logos/logo_rus4my.png"
+              alt="AirQo"
+              width={71}
+              height={48}
+              className="h-10 w-auto cursor-pointer"
+            />
+          </Link>
 
-          {/* Menu Button for Mobile and Tablet */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="text-gray-800 focus:outline-none"
-            >
-              {menuOpen ? <RiCloseLargeFill size={24} /> : <TbMenu size={30} />}
-            </button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMenu}
+            className="text-gray-800 focus:outline-none md:hidden"
+          >
+            {menuOpen ? <RiCloseFill size={24} /> : <TbMenu size={30} />}
+          </button>
 
-          {/* Navigation Menu - Desktop */}
+          {/* Desktop Navigation */}
           <NavigationMenu className="hidden md:flex space-x-6 items-center">
             <NavigationMenuList className="space-x-3">
               {Object.entries(menuItems).map(([title, items]) => (
@@ -182,15 +216,12 @@ const Navbar: React.FC = () => {
                   <DropdownMenuContent title={title} items={items} />
                 </NavigationMenuItem>
               ))}
-
-              {/* Navigation Links */}
               <CustomButton
                 onClick={() => dispatch(openModal())}
                 className="text-blue-600 bg-blue-50 transition rounded-none"
               >
                 Get involved
               </CustomButton>
-
               <CustomButton
                 onClick={() => router.push('/explore-data')}
                 className="rounded-none"
@@ -198,19 +229,17 @@ const Navbar: React.FC = () => {
                 Explore data
               </CustomButton>
             </NavigationMenuList>
-
-            {/* Viewport */}
             <NavigationMenuViewport />
           </NavigationMenu>
 
-          {/* Navigation Menu - Mobile & Tablet */}
+          {/* Mobile Navigation */}
           {menuOpen && (
-            <div className="absolute top-28 left-0 w-full bg-white shadow-lg p-4 md:hidden z-40">
+            <div className="absolute top-[107px] left-0 w-full bg-white shadow-lg p-4 md:hidden z-40">
               {Object.entries(menuItems).map(([title, items]) => (
                 <div key={title} className="mb-4">
                   <button
                     onClick={() => toggleExpandedMenu(title)}
-                    className="text-gray-800 font-medium w-full text-left focus:outline-none flex items-center justify-between"
+                    className="text-gray-800 font-medium w-full text-left flex items-center justify-between"
                   >
                     {title}
                     <TbChevronDown
@@ -218,14 +247,13 @@ const Navbar: React.FC = () => {
                     />
                   </button>
                   <div
-                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
-                      expandedMenu === title ? 'max-h-screen' : 'max-h-0'
-                    }`}
+                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${expandedMenu === title ? 'max-h-screen' : 'max-h-0'}`}
                   >
                     {items.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
+                        onClick={handleLinkClick}
                         className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition rounded"
                       >
                         {item.title}
@@ -234,17 +262,20 @@ const Navbar: React.FC = () => {
                   </div>
                 </div>
               ))}
-
-              {/* Navigation Links - Mobile */}
               <CustomButton
-                onClick={() => alert('Primary Button Clicked')}
+                onClick={() => {
+                  dispatch(openModal());
+                  handleLinkClick();
+                }}
                 className="w-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition rounded-none mb-2"
               >
                 Get involved
               </CustomButton>
-
               <CustomButton
-                onClick={() => alert('Primary Button Clicked')}
+                onClick={() => {
+                  router.push('/explore-data');
+                  handleLinkClick();
+                }}
                 className="w-full rounded-none"
               >
                 Explore data
@@ -253,7 +284,8 @@ const Navbar: React.FC = () => {
           )}
         </div>
       </nav>
-    </div>
+      {pathname.startsWith('/clean-air-network') && <TabNavigation />}
+    </motion.nav>
   );
 };
 

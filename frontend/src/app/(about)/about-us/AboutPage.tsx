@@ -199,7 +199,7 @@ const AboutPage: React.FC = () => {
               About
             </h1>
           </div>
-          <nav className="flex justify-start items-baseline space-x-6 text-gray-400">
+          <nav className="flex justify-start items-baseline space-x-6 text-gray-400 overflow-x-auto w-full">
             {[
               { href: '#vision', label: 'Our Vision', active: true },
               { href: '#story', label: 'Our Story' },

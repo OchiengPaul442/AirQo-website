@@ -200,12 +200,12 @@ const EventsPage: React.FC = () => {
 
           {/* Text */}
           <div className="text-left">
-            <p className="text-[24px] text-gray-700 mb-4">
+            <p className="text-xl lg:text-[24px] text-gray-700 mb-4">
               The CLEAN-Air Network provides a platform for facilitating
               engagement activities including conferences, webinars, workshops,
               training, and community campaigns.
             </p>
-            <p className="text-[24px] text-gray-700">
+            <p className="text-xl lg:text-[24px] text-gray-700">
               Partners will have access to shared resources in the form of
               social media toolkits, press release templates, digital banners,
               etc. that can be customized to suit every activity.

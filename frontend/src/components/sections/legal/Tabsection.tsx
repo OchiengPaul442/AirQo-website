@@ -26,7 +26,7 @@ const TabSection = () => {
         <h1 className="text-3xl font-bold mb-6">Legal Information</h1>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 space-x-8">
+        <div className="flex border-b border-gray-200 overflow-x-auto w-full space-x-8">
           {tabs.map((tab) => (
             <button
               key={tab.value}

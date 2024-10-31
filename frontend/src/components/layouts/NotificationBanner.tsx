@@ -20,7 +20,7 @@ const NotificationBanner: React.FC = () => {
         {/* CLEAN-AIR Network Link */}
         <div
           onClick={() => router.push('/clean-air-network')}
-          className="flex items-center space-x-2 cursor-pointer"
+          className="items-center space-x-2 hidden md:flex cursor-pointer"
         >
           <span className="text-sm font-medium">
             Join the CLEAN-AIR Network
@@ -32,6 +32,14 @@ const NotificationBanner: React.FC = () => {
           >
             Learn more <FaArrowRightLong className="ml-2 w-4 h-4" />
           </motion.span>
+        </div>
+        <div
+          onClick={() => router.push('/clean-air-network')}
+          className="items-center space-x-2 flex md:hidden cursor-pointer"
+        >
+          <span className="text-[10px] text-blue-600 hover:text-blue-800 font-medium">
+            Join the CLEAN-AIR Network
+          </span>
         </div>
       </div>
     </div>

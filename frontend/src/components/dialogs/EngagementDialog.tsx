@@ -349,7 +349,7 @@ const EngagementDialog = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-5xl max-h-full mx-auto p-0 overflow-hidden">
+      <DialogContent className="max-w-5xl max-h-full mx-auto p-0 overflow-x-hidden overflow-y-auto md:overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           {/* Left Side - Breadcrumb and Text with Animation */}
           <motion.div

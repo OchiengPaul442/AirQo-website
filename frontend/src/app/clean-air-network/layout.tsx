@@ -4,7 +4,6 @@ import React from 'react';
 import ActionButtons2 from '@/components/layouts/ActionButtons2';
 import Footer from '@/components/layouts/Footer';
 import Navbar from '@/components/layouts/Navbar';
-import TabNavigation from '@/components/sections/CleanAir/TabNavigation';
 
 export const metadata: Metadata = {
   title: 'Clean Air Network | AirQo Africa',
@@ -53,10 +52,7 @@ const CleanAirLayout: React.FC<CleanAirLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Navbar */}
-      <header className="sticky top-0 z-50">
-        <Navbar />
-        <TabNavigation />
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <main className="flex-1 pb-8">{children}</main>

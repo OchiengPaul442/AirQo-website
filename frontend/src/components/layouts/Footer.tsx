@@ -215,7 +215,7 @@ const Footer = () => {
       <div className="border-t border-gray-200 my-8"></div>
 
       {/* Footer Bottom Section */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
+      <div className="flex flex-col text-sm lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
         {/* Footer Bottom Links */}
         <div className="text-center lg:text-left text-gray-600">
           &copy; {new Date().getFullYear()} AirQo &nbsp;|&nbsp;{' '}

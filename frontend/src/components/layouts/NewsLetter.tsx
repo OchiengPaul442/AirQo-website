@@ -86,7 +86,7 @@ const NewsLetter: React.FC = () => {
                 type="text"
                 name="firstName"
                 placeholder="First name"
-                className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500"
+                className="max-w-[250px] md:max-w-full flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500"
                 required
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -95,18 +95,18 @@ const NewsLetter: React.FC = () => {
                 type="text"
                 name="lastName"
                 placeholder="Last name"
-                className="flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500 mt-4 md:mt-0"
+                className="max-w-[250px] md:max-w-full flex-1 p-3 outline-none focus:ring-2 focus:ring-blue-500 mt-4 md:mt-0"
                 required
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </div>
-            <div className="flex w-full">
+            <div className="flex flex-col gap-4 md:flex-row md:gap-0 md:flex w-full">
               <input
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                className="flex-grow p-3 outline-none focus:ring-2 focus:ring-blue-500"
+                className="max-w-[250px] md:max-w-full flex-grow p-3 outline-none focus:ring-2 focus:ring-blue-500"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

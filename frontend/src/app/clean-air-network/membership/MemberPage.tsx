@@ -121,12 +121,12 @@ const MemberPage: React.FC = () => {
 
           {/* Text */}
           <div className="text-left">
-            <p className="text-2xl lg:text-3xl text-gray-700 mb-4">
+            <p className="text-xl lg:text-3xl text-gray-700 mb-4">
               We have a growing list of partners from diverse disciplines across
               different parts of the world, reflecting the multidisciplinarity
               of tackling urban air pollution.
             </p>
-            <p className="text-4xl lg:text-5xl font-semibold leading-tight">
+            <p className="text-2xl lg:text-5xl font-semibold leading-tight">
               Leveraging the unique expertise and resources of implementing
               partners to advance capacity for air quality management in Africa.
             </p>

@@ -20,7 +20,7 @@ const TabNavigation: React.FC = () => {
   };
 
   return (
-    <div className="border-y pt-4 bg-white border-gray-200">
+    <div className="border-y pt-4 overflow-x-auto bg-white border-gray-200">
       <div className="flex space-x-8 max-w-5xl mx-auto px-4 lg:px-0">
         {tabs.map((tab) => (
           <button

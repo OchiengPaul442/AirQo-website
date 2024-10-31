@@ -5,7 +5,7 @@ import { CustomButton } from '@/components/ui';
 
 const RegisterBanner = () => {
   return (
-    <section className="max-w-5xl mx-auto w-full px-4 lg:px-0">
+    <section className="max-w-5xl mx-auto w-full px-2 lg:px-0">
       <div className="flex flex-col lg:flex-row items-center bg-card-custom-gradient py-12 px-12 gap-6 rounded-lg">
         {/* Image Section */}
         <div className="flex-shrink-0">
@@ -20,8 +20,8 @@ const RegisterBanner = () => {
         </div>
 
         {/* Text Section */}
-        <div className="ml-6">
-          <p className="text-[28px] leading-[42px] font-medium">
+        <div className="lg:ml-6">
+          <p className="text-sm lg:text-[28px] lg:leading-[42px] font-medium">
             Individuals actively involved in air quality work in Africa are
             welcome to join the CLEAN-Air Africa Network.
           </p>
@@ -29,7 +29,7 @@ const RegisterBanner = () => {
           {/* Button */}
           <CustomButton
             onClick={() => {}}
-            className="mt-4 inline-block text-white"
+            className="mt-4 p-3 inline-block text-white"
           >
             Register here →
           </CustomButton>
