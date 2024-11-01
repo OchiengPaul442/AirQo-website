@@ -35,12 +35,14 @@ const CountrySelectorDialog: React.FC = () => {
   const [airqloudData, setAirqloudData] = useState<AirqloudCountry[]>([]);
   const [userCountry, setUserCountry] = useState<string | null>(null);
   const itemsPerPage = 9;
+
+  // Calculate total pages
   const totalPages = useMemo(
     () => Math.ceil(airqloudData.length / itemsPerPage),
     [airqloudData.length, itemsPerPage],
   );
 
-  // Caching flags to avoid redundant fetches
+  // Cache for flags to avoid redundant fetches
   const flagCache = useMemo(() => new Map<string, string>(), []);
 
   // Function to fetch the flag based on the country's long name with caching
@@ -235,96 +237,115 @@ const CountrySelectorDialog: React.FC = () => {
           <FiChevronDown size={16} className="text-gray-600" />
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl p-0 flex flex-col gap-2 w-full">
+      <DialogContent className="max-w-2xl p-0 flex flex-col h-full w-full">
         <DialogHeader className="border-b flex justify-center px-4 py-6 w-full h-[40px] border-gray-300">
           <DialogTitle className="text-xl">Country AirQloud</DialogTitle>
         </DialogHeader>
 
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="p-4"
-        >
-          <h1 className="text-gray-700 text-4xl font-bold">
-            Our growing network in Africa
-          </h1>
-          <p className="text-xl mt-2">
-            View AirQo developments in your country
-          </p>
-        </motion.div>
+        <div className="flex-grow flex flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="p-4"
+          >
+            <h1 className="text-gray-700 text-4xl font-bold">
+              Our growing network in Africa
+            </h1>
+            <p className="text-xl mt-2">
+              View AirQo developments in your country
+            </p>
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="space-y-5 p-4 overflow-y-auto max-h-[450px]"
-        >
-          <h3 className="text-lg font-semibold">Selected Country</h3>
-          <div className="flex items-center space-x-2 ">
-            {selectedCountryData?.flag && (
-              <Image
-                src={selectedCountryData.flag}
-                alt={selectedCountryData.long_name}
-                width={48}
-                height={36}
-                className="rounded-md"
-              />
-            )}
-            <span>{selectedCountryData?.long_name}</span>
-          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="space-y-5 p-4 overflow-y-auto"
+          >
+            {airqloudData.length > 0 ? (
+              <>
+                <h3 className="text-lg font-semibold">Selected Country</h3>
+                <div className="flex items-center space-x-2 ">
+                  {selectedCountryData?.flag && (
+                    <Image
+                      src={selectedCountryData.flag}
+                      alt={selectedCountryData.long_name}
+                      width={48}
+                      height={36}
+                      className="rounded-md"
+                    />
+                  )}
+                  <span>
+                    {selectedCountryData?.long_name.replace('_', ' ')}
+                  </span>
+                </div>
 
-          <h3 className="text-lg font-semibold">Select Country</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {paginatedCountries.map((country) => (
-              <motion.button
-                key={country._id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`flex items-center justify-start space-x-2 p-2 rounded-lg border w-full h-[60px] ${
-                  selectedCountryData?.name === country.name
-                    ? 'bg-blue-100 border-blue-600'
-                    : 'bg-gray-100 border-gray-300'
-                }`}
-                onClick={() => setSelectedCountryData(country)}
-              >
-                {country.flag && (
-                  <Image
-                    src={country.flag}
-                    alt={country.long_name}
-                    width={30}
-                    height={24}
-                    className="rounded-md"
-                  />
+                <h3 className="text-lg font-semibold">Select Country</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {paginatedCountries.map((country) => (
+                    <motion.button
+                      key={country._id}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`flex items-center justify-start space-x-2 p-2 rounded-lg border w-full h-[60px] ${
+                        selectedCountryData?.name === country.name
+                          ? 'bg-blue-100 border-blue-600'
+                          : 'bg-gray-100 border-gray-300'
+                      }`}
+                      onClick={() => setSelectedCountryData(country)}
+                    >
+                      {country.flag && (
+                        <Image
+                          src={country.flag}
+                          alt={country.long_name}
+                          width={30}
+                          height={24}
+                          className="rounded-md"
+                        />
+                      )}
+                      {/* Tooltip for truncated country names */}
+                      <span title={country.long_name}>
+                        {formatCountryName(country.long_name)}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+
+                {/* Pagination component */}
+                {totalPages > 1 && (
+                  <div className="mt-2">
+                    <Pagination
+                      totalPages={totalPages}
+                      currentPage={currentPage}
+                      onPageChange={setCurrentPage}
+                    />
+                  </div>
                 )}
-                {/* Tooltip for truncated country names */}
-                <span title={country.long_name}>
-                  {formatCountryName(country.long_name)}
-                </span>
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Pagination component */}
-          {totalPages > 1 && (
-            <div className="mt-2">
-              <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
-              />
-            </div>
-          )}
-        </motion.div>
+              </>
+            ) : (
+              // Friendly interface when no data is available
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-lg text-gray-600">
+                  No countries available at the moment.
+                </p>
+                <p className="text-gray-500">Please try again later.</p>
+              </div>
+            )}
+          </motion.div>
+        </div>
 
         <DialogFooter className="mt-6 flex flex-row justify-end items-center p-4 w-full border-t border-gray-300 gap-4">
           <CustomButton
-            className="text-gray-600 h-[60px] border bg-transparent border-gray-300 hover:bg-gray-100"
+            className="text-gray-600 h-[40px] p-3 text-center flex justify-center items-center border bg-transparent border-gray-300 hover:bg-gray-100"
             onClick={() => setIsOpen(false)}
           >
             Cancel
           </CustomButton>
-          <CustomButton className="text-white h-[60px]" onClick={handleSave}>
+          <CustomButton
+            className="text-white h-[40px] p-3 text-center flex justify-center items-center"
+            onClick={handleSave}
+          >
             Save
           </CustomButton>
         </DialogFooter>
